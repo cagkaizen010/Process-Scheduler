@@ -1,4 +1,3 @@
-#include <cstdio>
 
 #include "Scheduler.h"
 
@@ -12,13 +11,45 @@ Scheduler::Scheduler(SchedulingAlgorithm algo, int pid, std::string processName 
 void Scheduler::addProcess(std::shared_ptr<Process> process){
     this->readyQueue.push(process);
     this->processList.push_back(process);
-    // this->processMap[process->getName()] = process;
+    this->processMap[process->getName()] = process;
+}
+
+void Scheduler::stop(){
+    this->running = false;
+}
+
+std::shared_ptr<Process> Scheduler::findProcess(std::string processName){
+
+    if(this->processMap.find(processName)!= this->processMap.end()) return this-> processMap[processName];
+    else return nullptr;
 }
 
 std::vector<Scheduler::ProcessInfo> Scheduler::getRunningProcessInfo() const{
-    std::vector<ProcessInfo> processList;
+    std::vector<ProcessInfo> ptList;
+    // for(ProcessList i: this->processList  )
 
-    for (int i = 0; i < this->processList.size(); i++){
-        if(this->processList[i]->getState() == Process:ProcessState::RUNNING)
+    for(int i = 0; i < this->processList.size(); i++){
+        if(this->processList[i]->getState() == Process::ProcessState::RUNNING ){
+            ProcessInfo pt{ this->processList[i]->getName(),
+                            this->processList[i]->getPID(),
+                            this->processList[i]->getCPUCoreID(),
+                            this->processList[i]->getCommandCounter(),
+                            this->processList[i]->getLinesOfCode(),
+                            this->processList[i]->getRemainingTime()  
+                        };
+            ptList.push_back(pt);
+        }
     }
+    return ptList;
 }
+
+std::string Scheduler::getName() {
+    return this->processName;
+}
+
+std::string Scheduler::getLatestMsg() {
+    std::string displayMsg = this->outputBuffer.str();
+    this->outputBuffer.str(std::string());
+    return displayMsg;
+}
+

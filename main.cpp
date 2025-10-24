@@ -9,6 +9,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <chrono>
 #include <unordered_map>
 
 std::atomic<bool> is_running{true};
@@ -31,7 +32,6 @@ void keyboard_handler_thread_func() {
 std::unordered_map<std::string, std::string> initialize() {
 	std::string param;
 	std::vector<std::string> params;
-	std::stringstream ss;
 	std::ifstream file("config.txt");
 
 	std::unordered_map<std::string, std::string> settings;
@@ -45,18 +45,16 @@ std::unordered_map<std::string, std::string> initialize() {
 	
 	for(std::string p : params){
 		std::vector<std::string> args;
-		std::cout << p<< std::endl;
+		std::stringstream ss(p);
+		// std::cout << p<< std::endl;
 		
-		while (ss >> p) args.push_back(p);
-		// while (ss >> p) std::cout << p << std::endl;
+		while (ss >> p) {
+			args.push_back(p);
+		}
 
-
-		for (std::string i : args)
-			std::cout << i<< std::endl;
-		// settings[args.front()].push_back( args.back()); 	
+		settings[args.at(0)] = args.at(1); 	
 
 	}
-		// std::cout << p << std::endl;
 
 	return settings;
 }
@@ -83,17 +81,19 @@ int main() {
 		if (!command_line.empty()){
 			std::stringstream ss(command_line);
 			std::vector<std::string> args;
-			std::string arg;
 
-			while(ss >> arg) args.push_back(arg);
+			std::string temp;
+			while(ss >> temp) args.push_back(temp);
 			
 			// for(const auto& i : args)
 			// 	std::cout << i << std::endl;
-
-			
 		}
 
 		cpuCycles++;
+		std::cout << cpuCycles<< std::endl;
+
+		// Slow down cycles for behavior observability.
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 
 	std::cout << "Exiting...";
