@@ -27,7 +27,6 @@ class Process {
         std::vector<std::string> logs;
 
 
-
         // Basic Process Instructions
         void PRINT(std::string msg = "Hello from Process " );
         void DECLARE(int var, int value = 0);

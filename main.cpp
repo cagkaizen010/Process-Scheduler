@@ -12,6 +12,10 @@
 #include <chrono>
 #include <unordered_map>
 
+// #include "./Config/config.h"
+// #include "./ConsoleUI/ConsoleUI.h"
+#include "ConsoleUI/ConsoleUI.h"
+
 std::atomic<bool> is_running{true};
 
 std::queue<std::string> command_queue;
@@ -62,10 +66,15 @@ std::unordered_map<std::string, std::string> initialize() {
 // --- Main Function (Command Interpreter Thread) ---
 int main() {
 
+	std::unique_ptr<ConsoleUI> ui = std::make_unique<ConsoleUI>();;
+	ui->run();
+
 	std::thread keyboard_handler_thread(keyboard_handler_thread_func);
+
 	int cpuCycles = 0;
 
 	initialize();
+
 
 	while (is_running) {
 
@@ -85,6 +94,8 @@ int main() {
 			std::string temp;
 			while(ss >> temp) args.push_back(temp);
 			
+			
+
 			// for(const auto& i : args)
 			// 	std::cout << i << std::endl;
 		}

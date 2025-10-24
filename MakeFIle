@@ -1,0 +1,20 @@
+# Compiler and flags
+CC = g++
+CFLAGS = -I./ConsoleUI  # Include the ConsoleUI folder for headers
+
+# File locations
+SOURCES = main.cpp ConsoleUI/ConsoleUI.cpp
+OBJECTS = $(SOURCES:.cpp=.o)
+EXEC = app  # Name of the output executable
+
+# Default target to compile and link
+$(EXEC): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(EXEC)
+
+# Rule to compile each .cpp file to .o object files
+%.o: %.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Clean up generated object files and executable
+clean:
+	rm -f $(OBJECTS) $(EXEC)
