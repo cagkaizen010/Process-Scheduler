@@ -9,6 +9,8 @@ void BaseScreen::process(){
         this->refreshed = true;
         this->printProcessInfo();
     }
+}
 
-    
+void BaseScreen::printProcessInfo() const {
+    std::cout<<("Test");
 }
