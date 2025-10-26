@@ -3,9 +3,9 @@ CC = g++
 CFLAGS = -I./ConsoleUI  # Include the ConsoleUI folder for headers
 
 # File locations
-SOURCES = main.cpp ConsoleUI/ConsoleUI.cpp
+SOURCES = main.cpp ConsoleUI/ConsoleUI.cpp Config/config.cpp Process/Process.cpp Screen/Screen.cpp CPU/Scheduler.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-EXEC = app  # Name of the output executable
+EXEC = main # Name of the output executable
 
 # Default target to compile and link
 $(EXEC): $(OBJECTS)
@@ -15,6 +15,6 @@ $(EXEC): $(OBJECTS)
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean up generated object files and executable
+# Clean up generated OBject files and executable
 clean:
 	rm -f $(OBJECTS) $(EXEC)

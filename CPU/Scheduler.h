@@ -4,6 +4,7 @@
 #include <queue>
 #include <unordered_map>
 #include <sstream>
+#include <memory>
 
 #include "../Process/Process.h"
 

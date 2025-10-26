@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <memory>
 #include "../Process/Process.h"
 
 class BaseScreen{
