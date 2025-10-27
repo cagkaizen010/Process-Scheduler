@@ -3,7 +3,10 @@ CC = g++
 CFLAGS = -I./ConsoleUI  # Include the ConsoleUI folder for headers
 
 # File locations
-SOURCES = main.cpp ConsoleUI/ConsoleUI.cpp Config/config.cpp Process/Process.cpp Screen/Screen.cpp CPU/Scheduler.cpp
+CONSOLE_SOURCE = ConsoleUI\ConsoleUI.cpp ConsoleUI\AConsoleUI\AConsoleUI.cpp ConsoleUI\ProcessUI\ProcessUI.cpp ConsoleUI\MainMenuUI\MainMenuUI.cpp
+SOURCES = main.cpp $(CONSOLE_SOURCE) Config/config.cpp Process/Process.cpp Screen/Screen.cpp CPU/Scheduler.cpp Threads/Threads.cpp 
+
+
 OBJECTS = $(SOURCES:.cpp=.o)
 EXEC = main # Name of the output executable
 
@@ -14,6 +17,7 @@ $(EXEC): $(OBJECTS)
 # Rule to compile each .cpp file to .o object files
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
+
 
 # Clean up generated OBject files and executable
 clean:
