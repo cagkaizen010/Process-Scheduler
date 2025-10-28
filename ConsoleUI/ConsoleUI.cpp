@@ -1,31 +1,20 @@
-#ifndef CONSOLEUI_H
-#define CONSOLEUI_H
+#include "./ConsoleUI.h"
 
-#include "../CPU/Scheduler.h"
+ConsoleUI* ConsoleUI::ptrConsoleUI = nullptr;
 
-#include <cstdio>
-#include <memory>
-#include <unordered_map>
-#include <string>
+ConsoleUI* ConsoleUI::getPtr() {
+    return ConsoleUI::ptrConsoleUI; 
+}
 
-typedef std::shared_ptr<ConsoleUI> ConsoleUI_;
+void ConsoleUI::initialize() {
+    ptrConsoleUI = new ConsoleUI();
+}
 
-class ConsoleUI {
-    public:
-        ConsoleUI();
-        ~ConsoleUI() = default;
+ConsoleUI::ConsoleUI(){
+    this->_mainMenuConsole = std::make_shared<MainMenuUI>(MainMenuUI(this));
+    this->_currentConsole = this->_mainMenuConsole;
+}
 
-
-    private:
-        static ConsoleUI* ptrConsoleUI;
-
-        std::unordered_map<std::string, ConsoleUI_> _ConsoleUIMap;
-
-        // Define Abstract Template of ConsoleUI object.
-        ConsoleUI_ _currentConsole = nullptr;
-        ConsoleUI_ _mainMenuConsole = nullptr;
-
-        Scheduler* _scheduler = nullptr;
-};
-
-#endif
+ConsoleUI::~ConsoleUI(){
+    // Destructor
+}

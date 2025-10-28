@@ -3,7 +3,7 @@
 // #include "./CPU/Scheduler.h"
 
 
-AConsoleUI::AConsoleUI(){
+AConsoleUI::AConsoleUI(std::string name){
     // std::cout<< "ConsoleUI Object created." << std::endl;
 }
 

@@ -9,12 +9,14 @@
 
 class AConsoleUI {
     public:
-        AConsoleUI();
+        AConsoleUI(std::string );
         ~AConsoleUI() = default;
         virtual void run();
         virtual void stop();
-    private:
+    protected:
         virtual void display();
+
+        std::string _name;
         
 };
 

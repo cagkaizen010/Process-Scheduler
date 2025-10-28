@@ -6,7 +6,6 @@ CFLAGS = -I./ConsoleUI  # Include the ConsoleUI folder for headers
 CONSOLE_SOURCE = ConsoleUI\ConsoleUI.cpp ConsoleUI\AConsoleUI\AConsoleUI.cpp ConsoleUI\ProcessUI\ProcessUI.cpp ConsoleUI\MainMenuUI\MainMenuUI.cpp
 SOURCES = main.cpp $(CONSOLE_SOURCE) Config/config.cpp Process/Process.cpp Screen/Screen.cpp CPU/Scheduler.cpp Threads/Threads.cpp 
 
-
 OBJECTS = $(SOURCES:.cpp=.o)
 EXEC = main # Name of the output executable
 
