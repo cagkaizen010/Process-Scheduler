@@ -11,7 +11,8 @@ void ConsoleUI::initialize() {
 }
 
 ConsoleUI::ConsoleUI(){
-    this->_mainMenuConsole = std::make_shared<MainMenuUI>(MainMenuUI(this));
+    MainMenuUI temp(this);
+    this->_mainMenuConsole = std::make_shared<MainMenuUI>(temp);
     this->_currentConsole = this->_mainMenuConsole;
 }
 
