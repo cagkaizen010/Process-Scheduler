@@ -50,7 +50,6 @@ void Config::initialize() {
             continue; 
         }
 
-        // Use sequential if/else if checks instead of std::unordered_map
         if (key == "num-cpu") {
             try {
                 this->_numCpu = std::stoi(value);
@@ -91,12 +90,4 @@ void Config::initialize() {
     }
 
     inputFile.close();
-}
-
-// Main function to demonstrate the usage
-int main() {
-    Config programConfig;
-    programConfig.initialize();
-    programConfig.printConfig();
-    return 0;
 }
