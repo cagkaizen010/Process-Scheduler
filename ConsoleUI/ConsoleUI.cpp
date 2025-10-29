@@ -7,15 +7,18 @@ ConsoleUI* ConsoleUI::getPtr() {
 }
 
 void ConsoleUI::initialize() {
-    ptrConsoleUI = new ConsoleUI();
+    ConsoleUI::ptrConsoleUI = new ConsoleUI();
 }
 
 ConsoleUI::ConsoleUI(){
-    MainMenuUI temp(this);
-    this->_mainMenuConsole = std::make_shared<MainMenuUI>(temp);
+    this->_mainMenuConsole = std::make_shared<MainMenuUI>(MainMenuUI(this));
     this->_currentConsole = this->_mainMenuConsole;
 }
 
 ConsoleUI::~ConsoleUI(){
     // Destructor
+}
+
+void ConsoleUI::start() {
+    this->_currentConsole->run();
 }

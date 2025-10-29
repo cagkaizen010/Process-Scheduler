@@ -19,7 +19,7 @@ class ConsoleUI {
         static void destroy();
 
         ConsoleUI();
-        ~ConsoleUI() = default;
+        ~ConsoleUI() ;
 
         void start();
 

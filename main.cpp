@@ -16,6 +16,7 @@
 // #include "./ConsoleUI/ConsoleUI.h"
 #include "ConsoleUI/ConsoleUI.h"
 
+
 std::atomic<bool> is_running{true};
 
 std::queue<std::string> command_queue;
@@ -64,65 +65,72 @@ std::unordered_map<std::string, std::string> initialize() {
 }
 
 // --- Main Function (Command Interpreter Thread) ---
-int main() {
+// int main() {
 
-	// std::unique_ptr<ConsoleUI> ui = std::make_unique<ConsoleUI>();;
-	// ui->run();
+// 	// std::unique_ptr<ConsoleUI> ui = std::make_unique<ConsoleUI>();;
+// 	// ui->run();
 
-	Config configObject;
+// 	// Config configObject;
 
-	std::thread keyboard_handler_thread(keyboard_handler_thread_func);
+// 	std::thread keyboard_handler_thread(keyboard_handler_thread_func);
 
-	int cpuCycles = 0;
+// 	int cpuCycles = 0;
 
-	initialize();
+// 	initialize();
 
 
-	while (is_running) {
+// 	while (is_running) {
 
-		std::string command_line;
-		{
-			std::unique_lock<std::mutex> lock(command_queue_mutex);
-			if(!command_queue.empty()){
-				command_line = command_queue.front();
-				command_queue.pop();
-			}
-		}
+// 		std::string command_line;
+// 		{
+// 			std::unique_lock<std::mutex> lock(command_queue_mutex);
+// 			if(!command_queue.empty()){
+// 				command_line = command_queue.front();
+// 				command_queue.pop();
+// 			}
+// 		}
 
-		if (!command_line.empty()){
-			std::stringstream ss(command_line);
-			std::vector<std::string> args;
+// 		if (!command_line.empty()){
+// 			std::stringstream ss(command_line);
+// 			std::vector<std::string> args;
 
-			std::string temp;
-			while(ss >> temp) args.push_back(temp);
+// 			std::string temp;
+// 			while(ss >> temp) args.push_back(temp);
 			
-			if (args[0] == "exit") 
-			{
-				is_running=false;
-				printf("Press enter to continue..");
-			}
+// 			if (args[0] == "exit") 
+// 			{
+// 				is_running=false;
+// 				printf("Press enter to continue..");
+// 			}
 
-			// for(const auto& i : args)
-			// 	std::cout << i << std::endl;
-		}
+// 			// for(const auto& i : args)
+// 			// 	std::cout << i << std::endl;
+// 		}
 
-		cpuCycles++;
-		// std::cout << cpuCycles<< std::endl;
+// 		cpuCycles++;
+// 		// std::cout << cpuCycles<< std::endl;
 
-		// Slow down cycles for behavior observability.
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-	}
-
-
-	if(keyboard_handler_thread.joinable()) {
-		keyboard_handler_thread.join();
-	}
-	else {
-		keyboard_handler_thread.detach();
-		// printf("THIS ISNT WORKING");
-	}
-	std::cout << "Exiting...";
+// 		// Slow down cycles for behavior observability.
+// 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+// 	}
 
 
-	return 0;
+// 	if(keyboard_handler_thread.joinable()) {
+// 		keyboard_handler_thread.join();
+// 	}
+// 	else {
+// 		keyboard_handler_thread.detach();
+// 		// printf("THIS ISNT WORKING");
+// 	}
+// 	std::cout << "Exiting...";
+
+
+// 	return 0;
+// }
+
+int main() {
+	ConsoleUI::initialize();
+	ConsoleUI* consoleUI = ConsoleUI::getPtr();
+	consoleUI->start();
+	return 1;
 }
