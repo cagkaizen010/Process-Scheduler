@@ -12,7 +12,7 @@
 #include <chrono>
 #include <unordered_map>
 
-// #include "./Config/config.h"
+#include "./Config/config.h"
 // #include "./ConsoleUI/ConsoleUI.h"
 #include "ConsoleUI/ConsoleUI.h"
 
@@ -68,6 +68,8 @@ int main() {
 
 	// std::unique_ptr<ConsoleUI> ui = std::make_unique<ConsoleUI>();;
 	// ui->run();
+
+	Config configObject;
 
 	std::thread keyboard_handler_thread(keyboard_handler_thread_func);
 
