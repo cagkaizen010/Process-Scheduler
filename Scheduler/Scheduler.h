@@ -1,3 +1,6 @@
+#ifndef SCHEDULER_H
+#define SCHEDULER_H
+
 #include <cstdio>
 #include <iostream>
 #include <vector>
@@ -55,3 +58,5 @@ class Scheduler{
 
         bool running = true;
 };
+
+#endif

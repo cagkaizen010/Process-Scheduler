@@ -1,6 +1,4 @@
-#include <cstdio>
-
-#include "process.h"
+#include "Process.h"
 
 Process::Process(ProcessState state, std::string name, int pid){
     this->state = state;
@@ -8,9 +6,7 @@ Process::Process(ProcessState state, std::string name, int pid){
     this->pid= pid;
 }
 
-void Process::PRINT(std::string msg ){
-    std::cout << msg << std::endl;
-}
+
 
 std::string Process::getName(){
     return "getName() placeholder";

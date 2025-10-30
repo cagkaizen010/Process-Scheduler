@@ -1,3 +1,6 @@
+#ifndef PROCESS_H
+#define PROCESS_H
+
 #include <cstdio>
 #include <iostream>
 #include <vector>
@@ -27,13 +30,10 @@ class Process {
         std::vector<std::string> logs;
 
 
-        // Basic Process Instructions
-        void PRINT(std::string msg = "Hello from Process " );
-        void DECLARE(int var, int value = 0);
-        void ADD(int var, int var2 = 0, int var3 = 0);
-        void SUBTRACT(int var, int var2 = 0, int var3 = 0);
     private:
         ProcessState state;
         std::string name;
         int pid;
 };
+
+#endif

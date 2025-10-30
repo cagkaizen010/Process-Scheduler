@@ -1,3 +1,6 @@
+#ifndef SCREEN_H
+#define SCREEN_H
+
 #include <cstdio>
 #include <iostream>
 #include <string>
@@ -15,3 +18,5 @@ class BaseScreen{
         std::shared_ptr<Process> attachedProcess;
         bool refreshed = false;
 };
+
+#endif 
