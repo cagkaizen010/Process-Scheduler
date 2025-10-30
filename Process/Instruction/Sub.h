@@ -1,0 +1,22 @@
+#ifndef SUB_H
+#define SUB_H
+
+#include "./Instruction.h"
+
+class Instruction;
+
+class Sub : public Instruction {
+    public:
+        Sub(int, int, int);
+        ~Sub() = default;
+
+        void execute() override;
+    private:
+        int var;
+        int var1;
+        int var2;
+};
+
+
+
+#endif

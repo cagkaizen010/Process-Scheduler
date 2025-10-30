@@ -6,3 +6,6 @@ Declare::Declare(int var, int value) : Instruction(DECLARE){
     this->value = value;
 }
 
+void Declare::execute() {
+    this->var = this->value;   
+}

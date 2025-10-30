@@ -1,11 +1,5 @@
 #include "MainMenuUI.h"
 
-// void MainMenuUI::InputHandler(ConsoleUI* consoleUI) {
-//     this->_commandMap["test"] = [consoleUI](_Argument args){
-//         printf("FUck You!");
-//     };
-// }
-
 MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _consoleUI(consoleUI) {
     // this->InputHandler(consoleUI);
 
