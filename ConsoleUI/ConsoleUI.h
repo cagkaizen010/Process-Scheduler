@@ -1,7 +1,7 @@
 #ifndef CONSOLEUI_H
 #define CONSOLEUI_H
 
-#include "../CPU/Scheduler.h"
+#include "../Scheduler/Scheduler.h"
 #include "./MainMenuUI/MainMenuUI.h"
 #include "./AConsoleUI/AConsoleUI.h"
 

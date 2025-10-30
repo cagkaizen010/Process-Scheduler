@@ -1,5 +1,9 @@
 #include "config.h"
 
+Config::Config(){
+    this->initialize();
+}
+
 void Config::initialize() {
     std::ifstream inputFile("config.txt");
     

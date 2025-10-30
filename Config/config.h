@@ -1,3 +1,6 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -5,18 +8,25 @@
 
 class Config {
 private:
-    int _numCpu;
-    std::string _scheduler;
-    int _quantumCycle;
-    float _batchProcessFreq;
-    int _minIns;
-    int _maxIns;
-    float _delaysPerExec;
+    int _numCpu;                // CPU
+    std::string _scheduler;     // Scheduler
+    int _quantumCycle;          // Scheduler
+    float _batchProcessFreq;    // CPU
+    int _minIns;                // Process
+    int _maxIns;                // Process
+    float _delaysPerExec;       // CPU
     
 public:
-    Config() {}
-    ~Config() {}
-    
+    Config(); 
+    ~Config() = default; 
+
+    int get_numCpu(){return _numCpu;}
+    std::string get_scheduler(){return _scheduler;}
+    int get_quantumCycle(){return _quantumCycle;} 
+    float get_batchProcessFreq(){return _batchProcessFreq;}
+    int get_minIns(){return _minIns;}
+    int get_maxIns(){return _maxIns;}
+    float get_delaysPerExec(){return _delaysPerExec;}
     void initialize();
     
 //     void printConfig() const {
@@ -31,3 +41,4 @@ public:
 //     }
 };
 
+#endif
