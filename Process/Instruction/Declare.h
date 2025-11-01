@@ -1,17 +1,22 @@
 #ifndef DECLARE_H 
 #define DECLARE_H
 
+#include <cstdio>
+#include <iostream>
+#include <string>
 #include "./Instruction.h"
 
 class Instruction;
 class Declare: public Instruction {
     public:
-        Declare(int, int );
+        Declare(std::string, int);
+        // Declare()  ;
         ~Declare() = default;
 
-        void execute() override;
+        void execute() override ;
+        std::string getInstructionType() override;
     private:
-        int var;
+        std::string var;
         int value;
 };
 

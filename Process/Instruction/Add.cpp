@@ -11,3 +11,6 @@ void Add::execute() {
 }
 
 
+std::string Add::getInstructionType() {
+    return "Add";
+}

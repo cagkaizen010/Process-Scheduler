@@ -11,6 +11,7 @@ class Sub : public Instruction {
         ~Sub() = default;
 
         void execute() override;
+        std::string getInstructionType() override;
     private:
         int var;
         int var1;

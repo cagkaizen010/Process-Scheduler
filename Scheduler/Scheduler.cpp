@@ -29,9 +29,8 @@ std::vector<Scheduler::ProcessInfo> Scheduler::getRunningProcessInfo() const{
     // for(ProcessList i: this->processList  )
 
     for(int i = 0; i < this->processList.size(); i++){
-        if(this->processList[i]->getState() == Process::ProcessState::RUNNING ){
-            ProcessInfo pt{ this->processList[i]->getName(),
-                            this->processList[i]->getPID(),
+        if(this->processList[i]->getStatus() == ProcessState::READY){
+            ProcessInfo pt{ this->processList[i]->getID(),
                             this->processList[i]->getCPUCoreID(),
                             this->processList[i]->getCommandCounter(),
                             this->processList[i]->getLinesOfCode(),

@@ -66,6 +66,13 @@
                 "fstream": "cpp",
                 "list": "cpp",
                 "xhash": "cpp",
-                "functional": "cpp"
+                "functional": "cpp",
+                "coroutine": "cpp",
+                "random": "cpp",
+                "array": "cpp",
+                "map": "cpp",
+                "source_location": "cpp",
+                "span": "cpp",
+                "xtree": "cpp"
         }
 }

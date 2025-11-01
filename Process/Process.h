@@ -1,39 +1,52 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
+#include <random>
 #include <cstdio>
 #include <iostream>
+#include <memory>
 #include <vector>
+#include <string>
+
+#include "./Instruction/Instruction.h"
+#include "./Instruction/Declare.h"
+#include "./Instruction/Add.h"
+#include "./Instruction/Sub.h"
+#include "./Instruction/Print.h"
+
+enum ProcessState{
+    NEW,
+    READY,
+    RUNNING,
+    WAITING,
+    TERMINATED
+};
+
+struct ProcessControlBlock{
+    int pid;
+    std::string pname;
+    int progCounter=0;
+    ProcessState pstate=NEW;
+};
+
+typedef std::vector<std::shared_ptr<Instruction>> InstructionSet;
 
 class Process {
     public:
-        enum ProcessState{
-            RUNNING,
-            WAITING,
-            READY,
-            TERMINATED,
-            NEW
-        };
-        Process(ProcessState, std::string, int);
+        
+        Process(ProcessControlBlock, InstructionSet );
 
-        void updateState();
+        // void print(std::string msg);
+        ProcessState getStatus();
+        int getID();
+        void setID(int pid);
 
-        ProcessState getState();
-        int getPID();
-        std::string getName();
-        int getCPUCoreID();
-        int getCommandCounter();
-        int getLinesOfCode();
-        int getRemainingTime();
-
-        std::vector<std::string> instructions;
-        std::vector<std::string> logs;
-
-
+        void generateInstruction();
+        void listInstructions();
+        
     private:
-        ProcessState state;
-        std::string name;
-        int pid;
+        ProcessControlBlock pcb;
+        InstructionSet text; 
 };
 
 #endif

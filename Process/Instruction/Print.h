@@ -15,6 +15,7 @@ class Print : public Instruction {
         ~Print() = default ;
 
         void execute() override;
+        std::string getInstructionType() override;
     private:
         std::string msg;
 };

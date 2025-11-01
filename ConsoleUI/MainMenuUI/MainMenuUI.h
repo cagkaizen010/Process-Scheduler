@@ -5,10 +5,13 @@
 #include "../AConsoleUI/AConsoleUI.h"
 // #include "../ConsoleUI.h"
 #include "../../Config/config.h"
+#include "../../Process/Process.h"
+#include "../../Process/Instruction/Declare.h"
 #include <unordered_map>
 #include <functional>
 #include <vector>
 #include <string>
+#include <memory>
 #include <sstream>
 // #include <iostream>
 

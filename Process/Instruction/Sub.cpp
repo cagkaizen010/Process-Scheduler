@@ -9,3 +9,7 @@ Sub::Sub(int var, int var1, int var2) : Instruction(SUB){
 void Sub::execute() {
     this->var = this->var1 - this->var2;
 }
+
+std::string Sub::getInstructionType() {
+    return "Subtract";
+}

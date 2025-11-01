@@ -8,3 +8,7 @@ void Print::execute() {
 
     std::cout << msg << std::endl;
 }
+
+std::string Print::getInstructionType(){
+    return "Print";
+}

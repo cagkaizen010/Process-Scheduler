@@ -6,10 +6,26 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
 
     this->_commandMap["screen"] = [consoleUI](_Argument args){
         std::cout << "Inside screen command!" << std::endl;
+
     };
 
     this->_commandMap["scheduler-start"] = [consoleUI](_Argument args){
         std::cout << "Inside scheduler-start command!" << std::endl;
+        // ProcessControlBlock pcb;
+
+        // auto pcb = std::make_unique<ProcessControlBlock>(ProcessControlBlock{ 1,"p1",0,READY});
+        ProcessControlBlock pcb = ProcessControlBlock{ 1,"p1",0,READY};
+
+        // Declare inst_1 = Declare();
+
+        // // std::vector<std::unique_ptr<Instruction>> *text;
+        std::vector<std::shared_ptr<Instruction>> text;
+        // text.emplace_back(std::make_unique<Declare>());
+
+        // Making process and generating instruction
+        Process p1 = Process(pcb, text);
+        p1.generateInstruction();
+        p1.listInstructions();
     };
 
     this->_commandMap["scheduler-stop"] = [consoleUI](_Argument args){
