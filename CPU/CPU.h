@@ -1,18 +1,27 @@
 #ifndef CPU_H
 #define CPU_H
+
+#include "../Process/Instruction/Instruction.h"
+
+// Executes the instruction inside the Process
+
 class CPU {
     public:
 
-        void setNumCPU(int);
-        void setBatchProcessFreq(int);
-        void setDelaysPerExec(int);
-    private:
+        enum CPUStatus{
+            READY,
+            BUSY
+        };
         CPU();
         ~CPU() = default;
 
-        int numCPU;
-        float batchProcessFreq;
-        float delaysPerExec;
+        void changeStatus(CPUStatus status);
+        void CPUExecute(Instruction* inst);
+    private:
+        CPUStatus status;       
+
 };
+
+
 
 #endif

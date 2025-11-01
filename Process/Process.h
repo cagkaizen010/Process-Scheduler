@@ -22,6 +22,8 @@ enum ProcessState{
     TERMINATED
 };
 
+
+// Eventually, implement progCounter functionality
 struct ProcessControlBlock{
     int pid;
     std::string pname;
@@ -40,10 +42,12 @@ class Process {
         ProcessState getStatus();
         int getID();
         void setID(int pid);
+        bool isEmpty();
 
         void generateInstruction();
         void listInstructions();
-        
+        void deleteTopInstruction();
+        std::shared_ptr<Instruction> getInstruction();
     private:
         ProcessControlBlock pcb;
         InstructionSet text; 

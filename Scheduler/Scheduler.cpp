@@ -46,6 +46,7 @@ std::string Scheduler::getName() {
     return this->processName;
 }
 
+// Might not be needed
 std::string Scheduler::getLatestMsg() {
     std::string displayMsg = this->outputBuffer.str();
     this->outputBuffer.str(std::string());

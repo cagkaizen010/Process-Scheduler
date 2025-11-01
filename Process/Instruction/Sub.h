@@ -8,7 +8,7 @@ class Instruction;
 class Sub : public Instruction {
     public:
         Sub(int, int, int);
-        ~Sub() = default;
+        ~Sub() override= default;
 
         void execute() override;
         std::string getInstructionType() override;

@@ -7,10 +7,11 @@ class Instruction;
 class Add : public Instruction {
     public:
         Add(int, int, int);
-        ~Add() = default;
+        ~Add() override = default;
 
-        void execute() override;
-        std::string getInstructionType() override;
+
+        void execute() override ;
+        std::string getInstructionType() override ;
 
     private:
         int var;

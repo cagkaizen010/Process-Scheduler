@@ -8,13 +8,13 @@
 
 class Config {
 private:
-    int _numCpu;                // CPU
+    int _numCpu;                // Scheduler 
     std::string _scheduler;     // Scheduler
     int _quantumCycle;          // Scheduler
-    float _batchProcessFreq;    // CPU
+    float _batchProcessFreq;    // Scheduler
     int _minIns;                // Process
     int _maxIns;                // Process
-    float _delaysPerExec;       // CPU
+    float _delaysPerExec;       // Scheduler
     
 public:
     Config(); 

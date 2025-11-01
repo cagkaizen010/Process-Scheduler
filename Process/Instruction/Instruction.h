@@ -8,11 +8,11 @@ enum InstructionType{
 
 class Instruction {
     public:
-        virtual void execute() ;
-        virtual std::string getInstructionType() ;
+        virtual void execute() =0;
+        virtual std::string getInstructionType() =0; 
         // Instruction();
         Instruction(InstructionType inst_type);
-        ~Instruction() = default;
+        virtual ~Instruction() = default;
     private:
         InstructionType instructionType;
 };

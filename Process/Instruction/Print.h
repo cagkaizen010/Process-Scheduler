@@ -12,7 +12,7 @@ class Instruction;
 class Print : public Instruction {
     public:
         Print(std::string);
-        ~Print() = default ;
+        ~Print() override = default ;
 
         void execute() override;
         std::string getInstructionType() override;

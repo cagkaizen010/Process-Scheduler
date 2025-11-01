@@ -6,4 +6,3 @@ Instruction::Instruction(InstructionType inst_type)  {
 
 
 
-

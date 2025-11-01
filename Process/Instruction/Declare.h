@@ -11,7 +11,7 @@ class Declare: public Instruction {
     public:
         Declare(std::string, int);
         // Declare()  ;
-        ~Declare() = default;
+        ~Declare() override = default;
 
         void execute() override ;
         std::string getInstructionType() override;

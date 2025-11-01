@@ -11,6 +11,12 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
 
     this->_commandMap["scheduler-start"] = [consoleUI](_Argument args){
         std::cout << "Inside scheduler-start command!" << std::endl;
+        
+    };
+    this->_commandMap["t"] = [consoleUI](_Argument args){
+
+        std::cout << "RUNNING TEST COMMAND" << std::endl;
+
         // ProcessControlBlock pcb;
 
         // auto pcb = std::make_unique<ProcessControlBlock>(ProcessControlBlock{ 1,"p1",0,READY});
@@ -23,9 +29,19 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
         // text.emplace_back(std::make_unique<Declare>());
 
         // Making process and generating instruction
+        // Process p1 = Process(pcb, text);
+        // p1.generateInstruction();
+        // p1.listInstructions();
+
+        // Utilizing CPU and Process
+        CPU cpu1 = CPU();
         Process p1 = Process(pcb, text);
-        p1.generateInstruction();
-        p1.listInstructions();
+        while(!p1.isEmpty()){
+            cpu1.CPUExecute(p1.getInstruction().get());
+            p1.listInstructions();
+            p1.deleteTopInstruction();
+            std::cout << "----" << std::endl;
+        }
     };
 
     this->_commandMap["scheduler-stop"] = [consoleUI](_Argument args){
@@ -45,6 +61,9 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
 void MainMenuUI::run() {
     std::string inputString;
 
+    // Remove this after testing
+    this->_active = true;
+    this->_initialized=true;
 
     while(!this->_initialized){
         std::cout << ":\\> ";

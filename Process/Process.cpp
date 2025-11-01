@@ -29,6 +29,7 @@ static std::string getRandomString(size_t length) {
 Process::Process( ProcessControlBlock pcb, InstructionSet text)  {
     this->pcb = pcb;
     this->text = text;
+    this->generateInstruction();
 }
 
 int Process::getID(){
@@ -37,6 +38,11 @@ int Process::getID(){
 
 void Process::setID(int pid){
     this->pcb.pid = pid;
+}
+
+bool Process::isEmpty(){
+    if (this->text.size() == 0) return true;
+    else return false;
 }
 
 void Process::generateInstruction(){
@@ -60,9 +66,15 @@ void Process::generateInstruction(){
     }
 }
 
+
 void Process::listInstructions() {
-    for( std::shared_ptr<Instruction> i : text){
-        // i->execute();
+    for( std::shared_ptr<Instruction> i : text)
         std::cout << i->getInstructionType() << std::endl;
-    }
 }
+
+void Process::deleteTopInstruction(){
+    this->text.erase(text.begin());
+}
+
+std::shared_ptr<Instruction> Process::getInstruction() {
+    return this->text.front();}
