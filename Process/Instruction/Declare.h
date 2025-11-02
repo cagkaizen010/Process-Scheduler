@@ -13,7 +13,7 @@ class Declare: public Instruction {
         // Declare()  ;
         ~Declare() override = default;
 
-        void execute() override ;
+        void execute(int cpu) override ;
         std::string getInstructionType() override;
     private:
         std::string var;

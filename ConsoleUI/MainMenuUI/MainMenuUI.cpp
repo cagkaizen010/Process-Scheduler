@@ -1,12 +1,23 @@
-#include "MainMenuUI.h"
+#include "./MainMenuUI.h"
 
 MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _consoleUI(consoleUI) {
     // this->InputHandler(consoleUI);
 
-
     this->_commandMap["screen"] = [consoleUI](_Argument args){
-        std::cout << "Inside screen command!" << std::endl;
 
+        if(args.at(1) == "-s")
+            consoleUI->createNewConsole(args.at(2));
+        else if(args.at(1) == "-r")
+            consoleUI->switchConsole(args.at(2));
+        else if(args.at(1) == "-ls")
+            std::cout<< "Implement consoleUI->_scheduler->printStatus()" << std::endl;
+        else {
+            std::cout << "Invalid input" << std::endl;
+            std::cout << "args.at(0): " << args.at(0) << std::endl;
+            std::cout << "args.at(1): " << args.at(1) << std::endl;
+            return;
+        }
+            
     };
 
     this->_commandMap["scheduler-start"] = [consoleUI](_Argument args){
@@ -17,9 +28,7 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
 
         std::cout << "RUNNING TEST COMMAND" << std::endl;
 
-        // ProcessControlBlock pcb;
 
-        // auto pcb = std::make_unique<ProcessControlBlock>(ProcessControlBlock{ 1,"p1",0,READY});
         ProcessControlBlock pcb = ProcessControlBlock{ 1,"p1",0,READY};
 
         // Declare inst_1 = Declare();
@@ -62,19 +71,41 @@ void MainMenuUI::run() {
     std::string inputString;
 
     // Remove this after testing
-    this->_active = true;
-    this->_initialized=true;
+    // this->_active = true;
+    // this->_initialized=true;
 
     while(!this->_initialized){
+        std::cout << "Input 'initialize' to begin..." << std::endl;
         std::cout << ":\\> ";
         std::getline(std::cin, inputString);
 
         if(inputString == "initialize"){
             Config config = Config();
-            this->_active=true;
-            this->_initialized=true;
-            std::cout<< this->_active << "Initialization finished." << std::endl;
+            config.initialize();
 
+            Scheduler::initialize(
+                config.get_numCpu(),
+                config.get_scheduler(),
+                config.get_quantumCycle(),
+                config.get_batchProcessFreq(),
+                config.get_minIns(),
+                config.get_maxIns(),
+                config.get_delaysPerExec()
+            );
+
+            Scheduler* s= Scheduler::get();
+
+            this->_consoleUI->_scheduler = s;
+
+            std::string sType = config.get_scheduler();
+
+            if (sType == "fcfs"){
+                s->startFCFS(config.get_delaysPerExec());
+            }
+
+            std::cout<< this->_active << "Initialization finished." << std::endl;
+            this->_initialized=true;
+            this->_active=true;
             // std::cout<<std::to_string(config.get_numCpu());
         }
         std::cout<<std::endl;
@@ -110,6 +141,10 @@ void MainMenuUI::run() {
 
 void MainMenuUI::stop() {
     this->_active = false;
+}
+
+void MainMenuUI::display(){
+    std::cout << "MainMenuUI" << std::endl;
 }
 
 void MainMenuUI::openingMessage() {

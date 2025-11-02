@@ -10,7 +10,7 @@ class Add : public Instruction {
         ~Add() override = default;
 
 
-        void execute() override ;
+        void execute(int cpu) override ;
         std::string getInstructionType() override ;
 
     private:

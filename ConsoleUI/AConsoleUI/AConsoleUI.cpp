@@ -8,14 +8,14 @@ AConsoleUI::AConsoleUI(std::string name){
 }
 
 void AConsoleUI::run(){
-    std::cout <<"Inside AConsoleUI" << std::endl;
-    printf("yes");
+    this->_active=true;
 
 
 }
 
 void AConsoleUI::stop(){
-
+    if(this->isActive())
+        this->_active = false;
 }
 
 void AConsoleUI::display(){

@@ -12,8 +12,8 @@ class AConsoleUI {
         AConsoleUI(std::string );
         ~AConsoleUI() = default;
 
-        virtual void run();
-        virtual void stop();
+        virtual void run() =0;
+        virtual void stop() = 0;
 
         bool isActive(){
             return this->_active;
@@ -22,7 +22,7 @@ class AConsoleUI {
             return this->_removable;
         }
     protected:
-        virtual void display();
+        virtual void display() ;
 
         std::string _name;
 

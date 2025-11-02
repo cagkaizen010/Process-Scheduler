@@ -1,17 +1,54 @@
 
 #include "Scheduler.h"
+Scheduler::Scheduler() {
 
-Scheduler::Scheduler(SchedulingAlgorithm algo, int pid, std::string processName ){
-    this->algo = algo;
-    this->pid = pid;
-    this->processName = processName;
-    this->running = true;
 }
 
+Scheduler* Scheduler::_staticSchedulerPtr = nullptr;
+Scheduler* Scheduler::get(){
+    return _staticSchedulerPtr;
+}
+
+void Scheduler::initialize(int cpuNum, std::string scheduler, int quantumCycles, int batchProcessFreq, int minIns, int maxIns, int delaysPerExec){
+    _staticSchedulerPtr = new Scheduler();
+
+    for(int i = 0; i < cpuNum; i++)
+        _staticSchedulerPtr-> _CPUList.push_back(std::make_shared<CPU>());
+
+    _staticSchedulerPtr->batchProcessFreq = batchProcessFreq;
+    _staticSchedulerPtr->minIns= minIns;
+    _staticSchedulerPtr->maxIns= maxIns;
+}
+
+// Scheduler::Scheduler(SchedulingAlgorithm algo, int pid, std::string processName ){
+//     this->algo = algo;
+//     this->pid = pid;
+//     this->processName = processName;
+//     this->running = true;
+// }
+
 void Scheduler::addProcess(std::shared_ptr<Process> process){
-    this->readyQueue.push(process);
-    this->processList.push_back(process);
-    this->processMap[process->getName()] = process;
+    this->_readyQueue.push(process);
+    this->_processList.push_back(process);
+    this->_processMap[process->getName()] = process;
+}
+
+void Scheduler::startFCFS(float delayTime){
+    while (this->running){
+        for (std::shared_ptr<CPU> i: _CPUList){
+            if (i->checkStatus() == CPU::READY){
+                if(this->_readyQueue.size() > 0){
+                    i->setProcess(this->_readyQueue.front());
+                    _readyQueue.pop();
+                    this->running=true;
+                }
+            }
+        }
+    }
+}
+
+void Scheduler::startRR(float delayTime, int quantumCycles){
+
 }
 
 void Scheduler::stop(){
@@ -20,26 +57,23 @@ void Scheduler::stop(){
 
 std::shared_ptr<Process> Scheduler::findProcess(std::string processName){
 
-    if(this->processMap.find(processName)!= this->processMap.end()) return this-> processMap[processName];
+    if(this->_processMap.find(processName)!= this->_processMap.end()) return this-> _processMap[processName];
     else return nullptr;
 }
 
-std::vector<Scheduler::ProcessInfo> Scheduler::getRunningProcessInfo() const{
-    std::vector<ProcessInfo> ptList;
-    // for(ProcessList i: this->processList  )
+// std::vector<Scheduler::ProcessInfo> Scheduler::getRunningProcessInfo() const{
+//     return ;
+// }
 
-    for(int i = 0; i < this->processList.size(); i++){
-        if(this->processList[i]->getStatus() == ProcessState::READY){
-            ProcessInfo pt{ this->processList[i]->getID(),
-                            this->processList[i]->getCPUCoreID(),
-                            this->processList[i]->getCommandCounter(),
-                            this->processList[i]->getLinesOfCode(),
-                            this->processList[i]->getRemainingTime()  
-                        };
-            ptList.push_back(pt);
+void Scheduler::printStatus() {
+    for(std::shared_ptr<CPU> i : _CPUList){
+        if(i->checkStatus()==CPU::READY){
+            std::cout <<"Idle\tCore: " << std::to_string(i->getID()) << std::endl;
+        }
+        else{
+            std::cout << i->getID()<< std::endl;
         }
     }
-    return ptList;
 }
 
 std::string Scheduler::getName() {

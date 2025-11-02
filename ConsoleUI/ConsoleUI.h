@@ -4,6 +4,7 @@
 #include "../Scheduler/Scheduler.h"
 #include "./MainMenuUI/MainMenuUI.h"
 #include "./AConsoleUI/AConsoleUI.h"
+#include "./ProcessUI/ProcessUI.h"
 
 #include <cstdio>
 #include <memory>
@@ -22,11 +23,15 @@ class ConsoleUI {
         ~ConsoleUI() ;
 
         void start();
+        void createNewConsole(std::string consoleName, AConsoleUI_ console = nullptr);
+        void switchConsole(std::string consoleName);
 
 
+        void setScheduler(Scheduler* );  
     private:
         static ConsoleUI* ptrConsoleUI;
 
+        // Current running consoles?
         std::unordered_map<std::string, AConsoleUI_> _ConsoleUIMap;
 
         // Define Abstract Template of ConsoleUI object.

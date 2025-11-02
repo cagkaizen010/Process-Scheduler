@@ -3,7 +3,7 @@
 
 
 #include "../AConsoleUI/AConsoleUI.h"
-// #include "../ConsoleUI.h"
+#include "../ConsoleUI.h"
 #include "../../Config/config.h"
 #include "../../Process/Process.h"
 #include "../../Process/Instruction/Declare.h"
@@ -23,9 +23,10 @@ class MainMenuUI : public AConsoleUI {
     public:
         MainMenuUI(ConsoleUI* consoleUI);
         ~MainMenuUI() = default;
-        void run() ;
-        void stop() ;
+        void run() override;
+        void stop() override;
     private:
+        void display() override ;
         // void InputHandler(ConsoleUI* consoleUI);
 
         std::unordered_map<std::string, std::function<void(_Argument)>> _commandMap;

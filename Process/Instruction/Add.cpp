@@ -6,7 +6,7 @@ Add::Add(int var, int var1, int var2) : Instruction(ADD){
     this->var2=var2;
 }
 
-void Add::execute() {
+void Add::execute(int cpu) {
     this->var = this->var1 + this->var2;   
 }
 

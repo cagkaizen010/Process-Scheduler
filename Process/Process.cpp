@@ -41,8 +41,47 @@ void Process::setID(int pid){
 }
 
 bool Process::isEmpty(){
-    if (this->text.size() == 0) return true;
-    else return false;
+    // if (this->text.size() == 0) return true;
+    // else return false;
+
+    if (this->text.size() <= this->pcb.progCounter )
+        return true;
+    else return false; 
+
+}
+
+
+std::string Process::getName(){
+    return this->pcb.pname;
+}
+void Process::setName(std::string name){
+    this->pcb.pname = name;
+}
+
+int Process::getProgramCounter(){
+    return this->pcb.progCounter;
+}
+void Process::incrementProgramCounter(int progCounter){
+    this->pcb.progCounter = this->getProgramCounter()+1;
+}
+
+ProcessState Process::getState() {
+    return this->pcb.pstate;
+}
+
+void Process::setState(ProcessState state) {
+    this->pcb.pstate = state;
+}
+
+void Process::setCPUCoreID(int coreID){
+    this->pcb.CPUCoreID = coreID;
+}
+int Process::getCPUCoreID(){
+    return this->pcb.CPUCoreID;
+}
+
+int Process::getInstructionSetSize() {
+    return this->text.size();
 }
 
 void Process::generateInstruction(){
@@ -78,3 +117,10 @@ void Process::deleteTopInstruction(){
 
 std::shared_ptr<Instruction> Process::getInstruction() {
     return this->text.front();}
+
+void Process::execute() {
+    if(!this->isEmpty()){
+        this->text.at(pcb.progCounter)->execute(pcb.CPUCoreID);
+        this->pcb.progCounter++;
+    }
+}

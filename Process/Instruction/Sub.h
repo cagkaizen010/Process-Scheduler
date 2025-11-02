@@ -10,7 +10,7 @@ class Sub : public Instruction {
         Sub(int, int, int);
         ~Sub() override= default;
 
-        void execute() override;
+        void execute(int cpu) override;
         std::string getInstructionType() override;
     private:
         int var;

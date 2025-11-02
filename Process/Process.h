@@ -27,6 +27,7 @@ enum ProcessState{
 struct ProcessControlBlock{
     int pid;
     std::string pname;
+    int CPUCoreID;
     int progCounter=0;
     ProcessState pstate=NEW;
 };
@@ -39,17 +40,32 @@ class Process {
         Process(ProcessControlBlock, InstructionSet );
 
         // void print(std::string msg);
-        ProcessState getStatus();
         int getID();
         void setID(int pid);
         bool isEmpty();
 
+        std::string getName();
+        void setName(std::string);
+
+        int getProgramCounter();
+        void incrementProgramCounter(int progCounter);
+
+        ProcessState getState();
+        void setState(ProcessState );
+
+        void setCPUCoreID(int coreID);
+        int getCPUCoreID();
+
+        int getInstructionSetSize();
         void generateInstruction();
         void listInstructions();
         void deleteTopInstruction();
         std::shared_ptr<Instruction> getInstruction();
+
+        void execute();
     private:
         ProcessControlBlock pcb;
+
         InstructionSet text; 
 };
 

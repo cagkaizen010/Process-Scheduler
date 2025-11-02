@@ -4,7 +4,7 @@ Print::Print(std::string msg) : Instruction(PRINT){
     this->msg = msg;
 }
 
-void Print::execute() {
+void Print::execute(int cpu) {
 
     std::cout << msg << std::endl;
 }

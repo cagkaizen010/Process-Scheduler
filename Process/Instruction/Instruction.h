@@ -8,7 +8,7 @@ enum InstructionType{
 
 class Instruction {
     public:
-        virtual void execute() =0;
+        virtual void execute(int cpu) =0;
         virtual std::string getInstructionType() =0; 
         // Instruction();
         Instruction(InstructionType inst_type);
