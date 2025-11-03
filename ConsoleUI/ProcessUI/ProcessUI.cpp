@@ -1,7 +1,7 @@
 #include "ProcessUI.h"
 
 ProcessUI::ProcessUI(std::shared_ptr<Process> process) :
-    AConsoleUI(_process->getName()),
+    AConsoleUI(process->getName()),
     _process(process) {}
 
 void ProcessUI::run() {
@@ -10,6 +10,7 @@ void ProcessUI::run() {
         return;
     }
 
+    // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     system("cls");
     this->_active = true;
     if(this->_pastDisplays == "")
@@ -21,6 +22,7 @@ void ProcessUI::run() {
     while(this->_active){
         std::cout << getProcessName << ":\\> ";
         std::getline(std::cin, inputString);
+
         if (inputString == "exit"){
             this->stop();
             return;
@@ -37,6 +39,8 @@ void ProcessUI::run() {
 }
 
 void ProcessUI::stop() {
+    std::cout << "Exiting from process: " << this->_process->getName() << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     if (this->_process->isEmpty()) this->_removable= true;
     this->_active = false;
 }

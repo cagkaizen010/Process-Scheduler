@@ -1,5 +1,14 @@
 
 #include "Scheduler.h"
+
+int Scheduler::getRandomInt(int min, int max) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(min, max);
+    return distrib(gen);
+}
+
+
 Scheduler::Scheduler() {
 
 }
@@ -27,13 +36,44 @@ void Scheduler::initialize(int cpuNum, std::string scheduler, int quantumCycles,
 //     this->running = true;
 // }
 
+void Scheduler::schedulerTest(){
+    this->_schedulerRunning = true;   
+    std::thread t(&Scheduler::schedulerRun, this);
+    t.detach();
+}
+
+void Scheduler::schedulerRun() {
+        int randNum = getRandomInt(1, 100);
+
+        ProcessControlBlock pcb = ProcessControlBlock{randNum, "process_" + std::to_string(randNum)};
+        // std::vector<std::shared_ptr<Instruction>> text;
+    while(this->_schedulerRunning){
+        std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
+        p->generateInstruction();
+        
+        this->addProcess(p);
+        // std::cout << "ProcessQueue: " << this->_readyQueue.front()->getName() << std::endl;
+        // std::cout << "ProcessList: ";
+        // std::cout << "ProcessMap: ";
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(int(this->batchProcessFreq*1000)));
+    }
+}
+
 void Scheduler::addProcess(std::shared_ptr<Process> process){
     this->_readyQueue.push(process);
     this->_processList.push_back(process);
     this->_processMap[process->getName()] = process;
+    // std::cout << process->getName() + " added to _readyQueue" << std::endl;
+    // std::cout << process->getName() + " added to _processList" << std::endl;
+    // std::cout << process->getName() + " added to _processMap" << std::endl;
+
+
 }
 
 void Scheduler::startFCFS(float delayTime){
+    std::cout <<"FCFS is running" << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     while (this->running){
         for (std::shared_ptr<CPU> i: _CPUList){
             if (i->checkStatus() == CPU::READY){
@@ -71,9 +111,19 @@ void Scheduler::printStatus() {
             std::cout <<"Idle\tCore: " << std::to_string(i->getID()) << std::endl;
         }
         else{
-            std::cout << i->getID()<< std::endl;
+            // std::cout << i->getProcessName()+"\tCore: "<< std::to_string(i->getID())<< std::endl;
+            std::cout << "List the busy processors" << std::endl;
         }
     }
+}
+
+void Scheduler::processSMI() {
+    std::cout << "PROCESS SMI" << std::endl;
+
+    // for(std::shared_ptr<CPU> i : _CPUList)
+    //     std::cout << i->getProcessName() << std::endl;
+    
+
 }
 
 std::string Scheduler::getName() {

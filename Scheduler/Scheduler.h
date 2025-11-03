@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <sstream>
 #include <memory>
+#include <thread>
+#include <chrono>
 
 #include "../Process/Process.h"
 #include "../CPU/CPU.h"
@@ -41,15 +43,22 @@ class Scheduler{
         Scheduler();
         ~Scheduler() = default; 
 
+        void schedulerTest();
+        void schedulerRun();
+        void schedulerStop();
+
         void addProcess(std::shared_ptr<Process>);
         std::shared_ptr<Process> findProcess(std::string );
         void startFCFS(float);
+        void runFCFS();
         void startRR(float, int);
+        void runRR();
 
         void run();
         void stop(); 
 
         void printStatus() ;
+        void processSMI();
         // virtual void init() = 0;
         // virtual void execute() = 0;
 
@@ -64,6 +73,7 @@ class Scheduler{
 
     private:
         static Scheduler* _staticSchedulerPtr ;
+        static int getRandomInt(int, int);
 
         
 
@@ -88,7 +98,8 @@ class Scheduler{
         
 
 
-        bool running = true;
+        bool _schedulerRunning = false;
+        bool running = false;
 
         friend class ConsoleUI;
 };

@@ -2,6 +2,7 @@
 #define CPU_H
 
 #include <memory>
+#include <thread>
 
 #include "../Process/Instruction/Instruction.h"
 #include "../Process/Process.h"
@@ -18,14 +19,16 @@ class CPU {
         ~CPU() = default;
 
         void setProcess(std::shared_ptr<Process> process);
+        std::string getProcessName();
         CPUStatus checkStatus();
 
         int getID();
 
         void toggleStatus();
-        void CPUExecute(Instruction* inst);
     private:
         CPUStatus status = CPUStatus::READY;       
+        void CPURun();
+        void CPUExecute();
         int _id;
         bool halt = false;
         static int dynamicID;

@@ -5,12 +5,14 @@
 
 AConsoleUI::AConsoleUI(std::string name){
     // std::cout<< "ConsoleUI Object created." << std::endl;
+    this->_name = name;
 }
 
 void AConsoleUI::run(){
+    std::cout << "Console " << this->_name << " is now running" << std::endl; 
+
     this->_active=true;
-
-
+    this->stop();
 }
 
 void AConsoleUI::stop(){

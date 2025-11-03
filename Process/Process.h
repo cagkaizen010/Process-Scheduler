@@ -7,12 +7,16 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <thread>
+#include <chrono>
 
 #include "./Instruction/Instruction.h"
 #include "./Instruction/Declare.h"
 #include "./Instruction/Add.h"
 #include "./Instruction/Sub.h"
 #include "./Instruction/Print.h"
+
+
 
 enum ProcessState{
     NEW,
@@ -36,8 +40,10 @@ typedef std::vector<std::shared_ptr<Instruction>> InstructionSet;
 
 class Process {
     public:
-        
-        Process(ProcessControlBlock, InstructionSet );
+
+        Process(ProcessControlBlock );
+
+        std::string randStr();
 
         // void print(std::string msg);
         int getID();
@@ -64,6 +70,7 @@ class Process {
 
         void execute();
     private:
+        static int getRandomInt(int, int);
         ProcessControlBlock pcb;
 
         InstructionSet text; 

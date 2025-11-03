@@ -27,22 +27,33 @@ void ConsoleUI::start() {
 }
 
 void ConsoleUI::createNewConsole(std::string consoleName, AConsoleUI_ console){
+    if(this->_ConsoleUIMap.find(consoleName) != this->_ConsoleUIMap.end()){
+        std::cout << "Process already running" << std::endl;
+        return;
+    }
+     std::cout << "Inside createNewConsole, _consoleMap size is" << this->_ConsoleUIMap.size()  << std::endl;
+
     bool isFound = false;
-    std::cout << "Current console: " << console << std::endl;
+    std::cout << "Current console: " << consoleName<< std::endl;
     if (console == nullptr){
-        // std::cout << "Current console is nullptr" << std::endl;
+        std::cout << "Current console is nullptr" << std::endl;
         if(this->_scheduler == nullptr) 
             std::cout << "Implement scheduler first" << std::endl;
          
         std::vector<std::shared_ptr<Process>> tempList = this->_scheduler->_processList;
         // Implement scheduler first.
 
-        // std::cout << "tempList created" << std::endl;
+        std::cout << "_processList: " << tempList.size() << std::endl;
         for(std::shared_ptr<Process> i : tempList){
-            if(consoleName == i->getName() && ~!(i->getState()==ProcessState::TERMINATED)) {
+            std::cout << "i->getName(): " << i->getName()<< std::endl;
+            std::cout << "i->getState(): " << i->getState()<< std::endl;
+            if(consoleName == i->getName() && !(i->getState()==ProcessState::TERMINATED)) {
 
                 // Implement ProcessUI for this to work, type its accepting is a Process
+
                 console = std::make_shared<ProcessUI>(i);
+
+                
                 isFound=true;
                 break;
             }
@@ -51,11 +62,15 @@ void ConsoleUI::createNewConsole(std::string consoleName, AConsoleUI_ console){
         if (isFound) this->_ConsoleUIMap[consoleName] = console;
         this->switchConsole(consoleName);
     }
-    else this->_ConsoleUIMap[consoleName] = console;
+    else {
+        this->_ConsoleUIMap[consoleName] = console;
+        std::cout<<"else block" << std::endl;
+    }
 }
 
 void ConsoleUI::switchConsole(std::string consoleName) {
     // Check for the console's existence, or release console if marked removable.
+    std::cout<< "---------------" << std::endl;
     std::cout<< "_ConsoleUIMap.size(): "  <<this->_ConsoleUIMap.size()<< std::endl;
     if(this->_ConsoleUIMap.find(consoleName) == this->_ConsoleUIMap.end()){
         std::cout << "Process " << consoleName << " is not found" << std::endl;

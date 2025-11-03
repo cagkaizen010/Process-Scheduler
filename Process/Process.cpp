@@ -1,8 +1,8 @@
 #include "Process.h"
 
-static int getRandomInt(int min, int max) {
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
+int Process::getRandomInt(int min, int max) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
     std::uniform_int_distribution<> distrib(min, max);
     return distrib(gen);
 }
@@ -26,10 +26,15 @@ static std::string getRandomString(size_t length) {
     return result;
 }
 
-Process::Process( ProcessControlBlock pcb, InstructionSet text)  {
+// int Process::randInt() {
+//     return getRandomInt(1, 100);
+// }
+
+Process::Process( ProcessControlBlock pcb)  {
     this->pcb = pcb;
-    this->text = text;
+    // this->text = text;
     this->generateInstruction();
+    // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 }
 
 int Process::getID(){
@@ -87,7 +92,7 @@ int Process::getInstructionSetSize() {
 void Process::generateInstruction(){
 
     int randomNumber;
-
+    // std::cout << "Generating instructions.." << std::endl;
     for (int i = 0; i < 10; i++){
         randomNumber = getRandomInt(1, 4);
 
@@ -103,6 +108,7 @@ void Process::generateInstruction(){
         if(randomNumber == 4)
             this->text.emplace_back(std::make_unique<Print>(getRandomString(10)));
     }
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 }
 
 

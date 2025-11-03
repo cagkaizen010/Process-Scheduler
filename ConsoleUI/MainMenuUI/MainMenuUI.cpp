@@ -10,7 +10,8 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
         else if(args.at(1) == "-r")
             consoleUI->switchConsole(args.at(2));
         else if(args.at(1) == "-ls")
-            std::cout<< "Implement consoleUI->_scheduler->printStatus()" << std::endl;
+            // std::cout<< "Implement consoleUI->_scheduler->printStatus()" << std::endl;
+            consoleUI->_scheduler->printStatus();
         else {
             std::cout << "Invalid input" << std::endl;
             std::cout << "args.at(0): " << args.at(0) << std::endl;
@@ -22,7 +23,7 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
 
     this->_commandMap["scheduler-start"] = [consoleUI](_Argument args){
         std::cout << "Inside scheduler-start command!" << std::endl;
-        
+        consoleUI->_scheduler->schedulerTest();
     };
     this->_commandMap["t"] = [consoleUI](_Argument args){
 
@@ -34,7 +35,7 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
         // Declare inst_1 = Declare();
 
         // // std::vector<std::unique_ptr<Instruction>> *text;
-        std::vector<std::shared_ptr<Instruction>> text;
+        // std::vector<std::shared_ptr<Instruction>> text;
         // text.emplace_back(std::make_unique<Declare>());
 
         // Making process and generating instruction
@@ -44,9 +45,9 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
 
         // Utilizing CPU and Process
         CPU cpu1 = CPU();
-        Process p1 = Process(pcb, text);
+        Process p1 = Process(pcb );
         while(!p1.isEmpty()){
-            cpu1.CPUExecute(p1.getInstruction().get());
+            // cpu1.CPUExecute(p1.getInstruction().get());
             p1.listInstructions();
             p1.deleteTopInstruction();
             std::cout << "----" << std::endl;
@@ -59,6 +60,7 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
 
     this->_commandMap["process-smi"] = [consoleUI](_Argument args){
         std::cout << "Inside process-smi command!" << std::endl;
+        consoleUI->_scheduler->processSMI();
     };
     
     this->_commandMap["report-util"] = [consoleUI](_Argument args){
@@ -97,13 +99,19 @@ void MainMenuUI::run() {
 
             this->_consoleUI->_scheduler = s;
 
-            std::string sType = config.get_scheduler();
+            if(this->_consoleUI->_scheduler == nullptr){
+                std::cout << "initialized scheduler is null..." << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            } 
 
+            std::string sType = config.get_scheduler();
+            std::cout << sType << std::endl;
             if (sType == "fcfs"){
                 s->startFCFS(config.get_delaysPerExec());
             }
 
             std::cout<< this->_active << "Initialization finished." << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             this->_initialized=true;
             this->_active=true;
             // std::cout<<std::to_string(config.get_numCpu());
@@ -111,6 +119,7 @@ void MainMenuUI::run() {
         std::cout<<std::endl;
     }
 
+    this->_active=true;
     system("cls");
     this->openingMessage();
     while (this->_active){

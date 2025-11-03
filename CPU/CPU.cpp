@@ -4,12 +4,17 @@ int CPU::dynamicID = 0;
 CPU::CPU() {
     this->_id=CPU::dynamicID;
     CPU::dynamicID++;
+    std::thread tickThread(&CPU::CPURun, this);
+    tickThread.detach();
 }
 
 void CPU::setProcess(std::shared_ptr<Process> process){
-    if(this->_process!= nullptr) this->_process->setCPUCoreID(-1);
+    this->_process = process;
+    this->status = (process == nullptr) ? CPU::READY : CPU::BUSY;
+}
 
-    
+std::string CPU::getProcessName() {
+    return this->_process->getName();
 }
 
 CPU::CPUStatus CPU::checkStatus(){
@@ -27,10 +32,32 @@ void CPU::toggleStatus(){
         this->status = CPUStatus::BUSY;
 }
 
-void CPU::CPUExecute(Instruction* inst){
+
+void CPU::CPURun(){
+    this->halt = false;
     this->status = CPUStatus::BUSY;
-    inst->execute(0);
+    while(!this->halt){
+        // this->CPUExecute();
+        if (this->_process != nullptr ){
+            std::cout << "CPU " <<this->getID()<< " is processing"<< std::endl;
+            this->_process->setCPUCoreID(this->_id);
+            this->_process->execute();
+            if(this->_process->getState() == ProcessState::TERMINATED){
+                this->setProcess(nullptr);
+                // this->status= CPUStatus::READY;
+                this->halt = true;
+            }
+        }
+        // else std::cout << "CPU "<< this->getID() << " free"<< std::endl;
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+    this->status = CPUStatus::READY;
 }
+
+// void CPU::CPUExecute(){
+    // this->status = CPUStatus::BUSY;
+// }
 
 
 
