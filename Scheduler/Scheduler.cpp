@@ -1,5 +1,6 @@
 
 #include "Scheduler.h"
+#include <fstream>
 
 int Scheduler::getRandomInt(int min, int max) {
     std::random_device rd;
@@ -43,7 +44,7 @@ void Scheduler::schedulerTest(){
 }
 
 void Scheduler::schedulerRun() {
-        int randNum = getRandomInt(1, 100);
+        int randNum = getRandomInt(1, 3);
 
         ProcessControlBlock pcb = ProcessControlBlock{randNum, "process_" + std::to_string(randNum)};
         // std::vector<std::shared_ptr<Instruction>> text;
@@ -124,6 +125,26 @@ void Scheduler::processSMI() {
     //     std::cout << i->getProcessName() << std::endl;
     
 
+}
+
+void Scheduler::reportUtil() {
+    std::cout << "PROCESS SMI" << std::endl;
+
+    std::ofstream outputFile("csopesy-log.txt", std::ios::app);
+    if (!outputFile.is_open()) {
+        std::cerr << "Error: Could not open console_log.txt for writing." << std::endl;
+        return;
+    }
+
+    for(std::shared_ptr<CPU> i : _CPUList){
+        if(i->checkStatus()==CPU::READY){
+            outputFile <<"Idle\tCore: " << std::to_string(i->getID()) << std::endl;
+        }
+        else{
+            outputFile << "List the busy processors" << std::endl;
+        }
+    }
+    std::cout << "Report generated at csopesy-log.txt successfully." << std::endl;
 }
 
 std::string Scheduler::getName() {

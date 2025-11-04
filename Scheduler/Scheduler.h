@@ -59,6 +59,7 @@ class Scheduler{
 
         void printStatus() ;
         void processSMI();
+        void reportUtil();
         // virtual void init() = 0;
         // virtual void execute() = 0;
 

@@ -65,6 +65,7 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
     
     this->_commandMap["report-util"] = [consoleUI](_Argument args){
         std::cout << "Inside report-util command!" << std::endl;
+        consoleUI->_scheduler->reportUtil();
     };
 
 }
