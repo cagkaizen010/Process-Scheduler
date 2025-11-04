@@ -144,6 +144,7 @@ void Scheduler::reportUtil() {
             outputFile << "List the busy processors" << std::endl;
         }
     }
+    std::cout << "Report generated at csopesy-log.txt successfully." << std::endl;
 }
 
 std::string Scheduler::getName() {
