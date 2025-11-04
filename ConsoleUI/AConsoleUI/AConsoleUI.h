@@ -16,6 +16,7 @@ class AConsoleUI {
 
         virtual void run() =0;
         virtual void stop() = 0;
+        std::string getName(){return _name;};
 
         bool isActive(){
             return this->_active;

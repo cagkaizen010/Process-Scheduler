@@ -43,11 +43,10 @@ void Scheduler::schedulerTest(){
 }
 
 void Scheduler::schedulerRun() {
-        int randNum = getRandomInt(1, 100);
-
-        ProcessControlBlock pcb = ProcessControlBlock{randNum, "process_" + std::to_string(randNum)};
         // std::vector<std::shared_ptr<Instruction>> text;
     while(this->_schedulerRunning){
+        int randNum = getRandomInt(1, 100);
+        ProcessControlBlock pcb = ProcessControlBlock{randNum, "process_" + std::to_string(randNum)};
         std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
         p->generateInstruction();
         
@@ -71,10 +70,20 @@ void Scheduler::addProcess(std::shared_ptr<Process> process){
 
 }
 
+void Scheduler::runFCFS(float delayTime) {
+    int setDelay = 25;
+    if(!this->running ){
+        this->running = true;
+        std::thread t(&Scheduler::startFCFS, this, delayTime);
+        t.detach();
+
+    }
+};
 void Scheduler::startFCFS(float delayTime){
     std::cout <<"FCFS is running" << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     while (this->running){
+
         for (std::shared_ptr<CPU> i: _CPUList){
             if (i->checkStatus() == CPU::READY){
                 if(this->_readyQueue.size() > 0){
@@ -111,8 +120,8 @@ void Scheduler::printStatus() {
             std::cout <<"Idle\tCore: " << std::to_string(i->getID()) << std::endl;
         }
         else{
-            // std::cout << i->getProcessName()+"\tCore: "<< std::to_string(i->getID())<< std::endl;
-            std::cout << "List the busy processors" << std::endl;
+            std::cout << i->getProcessName()+"\tCore: "<< std::to_string(i->getID())<< std::endl;
+            // std::cout << "List the busy processors" << std::endl;
         }
     }
 }

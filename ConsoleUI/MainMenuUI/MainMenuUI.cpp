@@ -30,7 +30,7 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
         std::cout << "RUNNING TEST COMMAND" << std::endl;
 
 
-        ProcessControlBlock pcb = ProcessControlBlock{ 1,"p1",0,READY};
+        // ProcessControlBlock pcb = ProcessControlBlock{ 1,"p1",0,READY};
 
         // Declare inst_1 = Declare();
 
@@ -43,15 +43,15 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
         // p1.generateInstruction();
         // p1.listInstructions();
 
-        // Utilizing CPU and Process
-        CPU cpu1 = CPU();
-        Process p1 = Process(pcb );
-        while(!p1.isEmpty()){
-            // cpu1.CPUExecute(p1.getInstruction().get());
-            p1.listInstructions();
-            p1.deleteTopInstruction();
-            std::cout << "----" << std::endl;
-        }
+        // // Utilizing CPU and Process
+        // CPU cpu1 = CPU();
+        // Process p1 = Process(pcb );
+        // while(!p1.isEmpty()){
+        //     // cpu1.CPUExecute(p1.getInstruction().get());
+        //     p1.listInstructions();
+        //     p1.deleteTopInstruction();
+        //     std::cout << "----" << std::endl;
+        // }
     };
 
     this->_commandMap["scheduler-stop"] = [consoleUI](_Argument args){
@@ -107,7 +107,7 @@ void MainMenuUI::run() {
             std::string sType = config.get_scheduler();
             std::cout << sType << std::endl;
             if (sType == "fcfs"){
-                s->startFCFS(config.get_delaysPerExec());
+                s->runFCFS(config.get_delaysPerExec());
             }
 
             std::cout<< this->_active << "Initialization finished." << std::endl;

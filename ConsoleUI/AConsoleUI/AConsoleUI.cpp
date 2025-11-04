@@ -12,7 +12,7 @@ void AConsoleUI::run(){
     std::cout << "Console " << this->_name << " is now running" << std::endl; 
 
     this->_active=true;
-    this->stop();
+    // this->stop();
 }
 
 void AConsoleUI::stop(){

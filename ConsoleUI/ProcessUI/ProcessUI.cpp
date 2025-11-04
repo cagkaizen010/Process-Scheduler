@@ -5,16 +5,18 @@ ProcessUI::ProcessUI(std::shared_ptr<Process> process) :
     _process(process) {}
 
 void ProcessUI::run() {
-    if(this->_process->isEmpty()){
-        this->_removable = true;
-        return;
-    }
+    // Commented because program runs too fast
+    // if(this->_process->isEmpty()){
+    //     this->_removable = true;
+    //     return;
+    // }
 
     // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     system("cls");
     this->_active = true;
     if(this->_pastDisplays == "")
         this->display();
+    else std::cout << this->_pastDisplays;
 
     std::string inputString;
     std::string getProcessName = this->_process->getName();

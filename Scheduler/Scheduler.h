@@ -50,7 +50,7 @@ class Scheduler{
         void addProcess(std::shared_ptr<Process>);
         std::shared_ptr<Process> findProcess(std::string );
         void startFCFS(float);
-        void runFCFS();
+        void runFCFS(float);
         void startRR(float, int);
         void runRR();
 

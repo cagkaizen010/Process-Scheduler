@@ -10,6 +10,9 @@ CPU::CPU() {
 
 void CPU::setProcess(std::shared_ptr<Process> process){
     this->_process = process;
+
+    // bool tempCPUStatus = (process == nullptr) ? CPU::READY : CPU::BUSY;
+    // std::cout << "Setting CPU Process to: " << std::to_string(tempCPUStatus) << std::endl;
     this->status = (process == nullptr) ? CPU::READY : CPU::BUSY;
 }
 
@@ -35,23 +38,23 @@ void CPU::toggleStatus(){
 
 void CPU::CPURun(){
     this->halt = false;
-    this->status = CPUStatus::BUSY;
+    // this->status = CPUStatus::BUSY;
     while(!this->halt){
         // this->CPUExecute();
         if (this->_process != nullptr ){
-            std::cout << "CPU " <<this->getID()<< " is processing"<< std::endl;
+            // std::cout << "CPU " <<this->getID()<< " is processing"<< std::endl;
             this->_process->setCPUCoreID(this->_id);
             this->_process->execute();
-            if(this->_process->getState() == ProcessState::TERMINATED){
+            if( this->_process->getState() == ProcessState::TERMINATED){
                 this->setProcess(nullptr);
-                // this->status= CPUStatus::READY;
-                this->halt = true;
+                this->status= CPUStatus::READY;
             }
         }
         // else std::cout << "CPU "<< this->getID() << " free"<< std::endl;
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(25));
     }
+    std::cout << "CPU is now ready" << std::endl;
     this->status = CPUStatus::READY;
 }
 

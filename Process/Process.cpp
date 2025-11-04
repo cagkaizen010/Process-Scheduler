@@ -93,7 +93,7 @@ void Process::generateInstruction(){
 
     int randomNumber;
     // std::cout << "Generating instructions.." << std::endl;
-    for (int i = 0; i < 10; i++){
+    for (int i = 0; i < 2; i++){
         randomNumber = getRandomInt(1, 4);
 
         if(randomNumber == 1) 
@@ -108,7 +108,7 @@ void Process::generateInstruction(){
         if(randomNumber == 4)
             this->text.emplace_back(std::make_unique<Print>(getRandomString(10)));
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(25));
 }
 
 

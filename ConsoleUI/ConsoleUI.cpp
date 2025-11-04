@@ -31,22 +31,14 @@ void ConsoleUI::createNewConsole(std::string consoleName, AConsoleUI_ console){
         std::cout << "Process already running" << std::endl;
         return;
     }
-     std::cout << "Inside createNewConsole, _consoleMap size is" << this->_ConsoleUIMap.size()  << std::endl;
 
     bool isFound = false;
-    std::cout << "Current console: " << consoleName<< std::endl;
     if (console == nullptr){
-        std::cout << "Current console is nullptr" << std::endl;
-        if(this->_scheduler == nullptr) 
-            std::cout << "Implement scheduler first" << std::endl;
          
         std::vector<std::shared_ptr<Process>> tempList = this->_scheduler->_processList;
         // Implement scheduler first.
 
-        std::cout << "_processList: " << tempList.size() << std::endl;
         for(std::shared_ptr<Process> i : tempList){
-            std::cout << "i->getName(): " << i->getName()<< std::endl;
-            std::cout << "i->getState(): " << i->getState()<< std::endl;
             if(consoleName == i->getName() && !(i->getState()==ProcessState::TERMINATED)) {
 
                 // Implement ProcessUI for this to work, type its accepting is a Process
@@ -70,8 +62,6 @@ void ConsoleUI::createNewConsole(std::string consoleName, AConsoleUI_ console){
 
 void ConsoleUI::switchConsole(std::string consoleName) {
     // Check for the console's existence, or release console if marked removable.
-    std::cout<< "---------------" << std::endl;
-    std::cout<< "_ConsoleUIMap.size(): "  <<this->_ConsoleUIMap.size()<< std::endl;
     if(this->_ConsoleUIMap.find(consoleName) == this->_ConsoleUIMap.end()){
         std::cout << "Process " << consoleName << " is not found" << std::endl;
         return;
@@ -88,9 +78,12 @@ void ConsoleUI::switchConsole(std::string consoleName) {
     this->_currentConsole = this->_ConsoleUIMap[consoleName];
     this->_currentConsole->run();   
 
+
     while(this->_currentConsole->isActive()){
-        std::cout << consoleName << " is RUNNING" <<  std::endl;
+        // std::cout << consoleName << " is RUNNING" <<  std::endl;
     }
+    // std::cout << "break";
+    // std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
     if(this->_currentConsole->removable())
         this->_ConsoleUIMap.erase(consoleName);
