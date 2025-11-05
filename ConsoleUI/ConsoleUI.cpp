@@ -35,15 +35,24 @@ void ConsoleUI::createNewConsole(std::string consoleName, AConsoleUI_ console){
     bool isFound = false;
     if (console == nullptr){
          
-        std::vector<std::shared_ptr<Process>> tempList = this->_scheduler->_processList;
+        std::vector<std::shared_ptr<CPU>> tempList = this->_scheduler->_CPUList;
         // Implement scheduler first.
 
-        for(std::shared_ptr<Process> i : tempList){
-            if(consoleName == i->getName() && !(i->getState()==ProcessState::TERMINATED)) {
+            std::cout << "Listning currently running processes." << std::endl;
+            std::cout << tempList.size() << std::endl;
+            for(std::shared_ptr<CPU> cpu: tempList){
+                std::cout << cpu->getProcessName() << std::endl;
+            }
+
+            // std::cout << this->_scheduler->_processList.size() << std::endl;
+        for(std::shared_ptr<CPU> cpu : tempList){
+            // if ( )std::cout << i->getName() << std::endl;
+
+            if(consoleName == cpu->getProcessName() && !(cpu->checkStatus()==CPU::READY)) {
 
                 // Implement ProcessUI for this to work, type its accepting is a Process
 
-                console = std::make_shared<ProcessUI>(i);
+                console = std::make_shared<ProcessUI>(cpu->getProcess());
 
                 
                 isFound=true;
@@ -52,6 +61,7 @@ void ConsoleUI::createNewConsole(std::string consoleName, AConsoleUI_ console){
         }
 
         if (isFound) this->_ConsoleUIMap[consoleName] = console;
+
         this->switchConsole(consoleName);
     }
     else {

@@ -5,15 +5,20 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+// #include <string>
 #include <unordered_map>
 #include <sstream>
 #include <memory>
 #include <thread>
 #include <chrono>
+#include <cmath>
 
 #include "../Process/Process.h"
 #include "../CPU/CPU.h"
+#include "./Dispatcher/Dispatcher.h"
 
+static float cpuCycles = 0;
+class Dispatcher;
 class Scheduler{
     public:
         static Scheduler* get();
@@ -49,10 +54,10 @@ class Scheduler{
 
         void addProcess(std::shared_ptr<Process>);
         std::shared_ptr<Process> findProcess(std::string );
+        void runFCFS( float);
         void startFCFS(float);
-        void runFCFS(float);
+        void runRR(float, int);
         void startRR(float, int);
-        void runRR();
 
         void run();
         void stop(); 
@@ -80,10 +85,10 @@ class Scheduler{
         typedef std::queue<std::shared_ptr<Process>> ProcessQueue;
         typedef std::vector<std::shared_ptr<Process>> ProcessList;
         typedef std::unordered_map<std::string, std::shared_ptr<Process>> ProcessMap;
+
         ProcessQueue _readyQueue;
         ProcessList _processList;
         ProcessMap _processMap;
-
 
         SchedulingAlgorithm algo;
         int pid;
@@ -92,6 +97,9 @@ class Scheduler{
         // Config settings
 
         std::vector<std::shared_ptr<CPU>> _CPUList;
+        std::shared_ptr<Dispatcher> d;
+
+        float delayTime;
         float batchProcessFreq;
         int minIns;
         int maxIns;
@@ -102,6 +110,7 @@ class Scheduler{
         bool running = false;
 
         friend class ConsoleUI;
+        friend class Dispatcher;
 };
 
 #endif

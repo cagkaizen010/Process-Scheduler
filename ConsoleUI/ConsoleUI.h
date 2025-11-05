@@ -5,6 +5,7 @@
 #include "./MainMenuUI/MainMenuUI.h"
 #include "./AConsoleUI/AConsoleUI.h"
 #include "./ProcessUI/ProcessUI.h"
+#include "../CPU/CPU.h"
 
 #include <cstdio>
 #include <memory>
@@ -31,7 +32,7 @@ class ConsoleUI {
     private:
         static ConsoleUI* ptrConsoleUI;
 
-        // Current running consoles?
+        // Current running consoles
         std::unordered_map<std::string, AConsoleUI_> _ConsoleUIMap;
 
         // Define Abstract Template of ConsoleUI object.

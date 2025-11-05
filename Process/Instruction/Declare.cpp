@@ -11,7 +11,7 @@ Declare::Declare(std::string var, int value) : Instruction(DECLARE){
 
 
 void Declare::execute(int cpu) {
-    std::cout << this->var << " = " << this->value << std::endl;
+    // std::cout << this->var << " = " << this->value << std::endl;
 }
 
 std::string Declare::getInstructionType() {

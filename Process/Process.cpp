@@ -49,7 +49,7 @@ bool Process::isEmpty(){
     // if (this->text.size() == 0) return true;
     // else return false;
 
-    if (this->text.size() <= this->pcb.progCounter )
+    if (this->text.size() == this->pcb.progCounter )
         return true;
     else return false; 
 
@@ -124,9 +124,23 @@ void Process::deleteTopInstruction(){
 std::shared_ptr<Instruction> Process::getInstruction() {
     return this->text.front();}
 
+
+    // YOU ARE HERE
 void Process::execute() {
     if(!this->isEmpty()){
         this->text.at(pcb.progCounter)->execute(pcb.CPUCoreID);
         this->pcb.progCounter++;
+        // system("cls");
+
+        // std::cout << this->pcb.pname << std::endl;
+        // std::cout << std::to_string(this->pcb.progCounter) + " < " + std::to_string(this->text.size())<<std::endl;
+        // std::cout << "pcb.CPUCoreID: " + std::to_string(pcb.CPUCoreID) <<std::endl; 
+
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
+    else {
+        this->pcb.pstate =TERMINATED;
+    }
+
 }

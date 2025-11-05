@@ -19,6 +19,7 @@ class CPU {
         ~CPU() = default;
 
         void setProcess(std::shared_ptr<Process> process);
+        std::shared_ptr<Process> getProcess();
         std::string getProcessName();
         CPUStatus checkStatus();
 

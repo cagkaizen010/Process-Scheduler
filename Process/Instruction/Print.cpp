@@ -6,7 +6,7 @@ Print::Print(std::string msg) : Instruction(PRINT){
 
 void Print::execute(int cpu) {
 
-    std::cout << msg << std::endl;
+    // std::cout << msg << std::endl;
 }
 
 std::string Print::getInstructionType(){

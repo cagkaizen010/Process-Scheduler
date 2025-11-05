@@ -24,84 +24,103 @@ void Scheduler::initialize(int cpuNum, std::string scheduler, int quantumCycles,
     for(int i = 0; i < cpuNum; i++)
         _staticSchedulerPtr-> _CPUList.push_back(std::make_shared<CPU>());
 
+    // Defining dispatcher
+    _staticSchedulerPtr->d = std::make_shared<Dispatcher>();
+    _staticSchedulerPtr->d->setScheduler(_staticSchedulerPtr);
+    _staticSchedulerPtr->d->setCPUList(_staticSchedulerPtr->_CPUList);
+
     _staticSchedulerPtr->batchProcessFreq = batchProcessFreq;
     _staticSchedulerPtr->minIns= minIns;
     _staticSchedulerPtr->maxIns= maxIns;
 }
 
-// Scheduler::Scheduler(SchedulingAlgorithm algo, int pid, std::string processName ){
-//     this->algo = algo;
-//     this->pid = pid;
-//     this->processName = processName;
-//     this->running = true;
-// }
 
 void Scheduler::schedulerTest(){
-    this->_schedulerRunning = true;   
+    this->running = true;
+    this->d->startDispatcher();
     std::thread t(&Scheduler::schedulerRun, this);
     t.detach();
+    this->_schedulerRunning = true;   
 }
 
 void Scheduler::schedulerRun() {
         // std::vector<std::shared_ptr<Instruction>> text;
-    while(this->_schedulerRunning){
-        int randNum = getRandomInt(1, 100);
-        ProcessControlBlock pcb = ProcessControlBlock{randNum, "process_" + std::to_string(randNum)};
-        std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
-        p->generateInstruction();
-        
-        this->addProcess(p);
-        // std::cout << "ProcessQueue: " << this->_readyQueue.front()->getName() << std::endl;
-        // std::cout << "ProcessList: ";
-        // std::cout << "ProcessMap: ";
+        int randNum =0;
+        cpuCycles = 0;
+        while(this->running){
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(int(this->batchProcessFreq*1000)));
-    }
+
+            if(fmod(cpuCycles,this->batchProcessFreq) ==float(0)){
+                ProcessControlBlock pcb = ProcessControlBlock{randNum, "p_" + std::to_string(randNum),-1};
+                std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
+        
+                p->generateInstruction();
+                // std::cout << p->getName()<< std::endl;
+                this->addProcess(p);
+
+
+                randNum++;
+            }
+            // std::cout << "INSIDE SCHEDULER: " << this->_processList.size() << std::endl;
+            cpuCycles++;
+        }
+        std::cout << "Finished generating processes!" << std::endl;
+
+
 }
 
 void Scheduler::addProcess(std::shared_ptr<Process> process){
-    this->_readyQueue.push(process);
+    // this->_readyQueue.push(process);
     this->_processList.push_back(process);
     this->_processMap[process->getName()] = process;
-    // std::cout << process->getName() + " added to _readyQueue" << std::endl;
-    // std::cout << process->getName() + " added to _processList" << std::endl;
-    // std::cout << process->getName() + " added to _processMap" << std::endl;
 
 
 }
 
 void Scheduler::runFCFS(float delayTime) {
-    int setDelay = 25;
-    if(!this->running ){
+    if(!this->running){
         this->running = true;
-        std::thread t(&Scheduler::startFCFS, this, delayTime);
+        // Dispatcher d(_CPUList, this);
+        std::thread t(&Scheduler::startFCFS, this,  delayTime);
         t.detach();
 
+        std::cout <<"FCFS is running" << std::endl;
     }
-};
+}
 void Scheduler::startFCFS(float delayTime){
-    std::cout <<"FCFS is running" << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    while (this->running){
 
-        for (std::shared_ptr<CPU> i: _CPUList){
-            if (i->checkStatus() == CPU::READY){
-                if(this->_readyQueue.size() > 0){
-                    i->setProcess(this->_readyQueue.front());
-                    _readyQueue.pop();
-                    this->running=true;
-                }
+    while (this->running){
+        while(this->_schedulerRunning){
+            if(this->_processList.size()!=0){
+                this->_readyQueue.push(this->_processList.front());
+                this->_processList.erase(this->_processList.begin());
             }
+            
+            // std::this_thread::sleep_for(std::chrono::milliseconds(int(delayTime)));
+
         }
     }
 }
 
+void Scheduler::runRR(float delayTime, int quantumCycles){
+    if(!this->running){
+        this->running = true;
+        // Dispatcher d(_CPUList, this);
+        std::thread t(&Scheduler::startRR, this,  delayTime, quantumCycles);
+        t.detach();
+
+        std::cout <<"RR is running" << std::endl;
+    }
+}
 void Scheduler::startRR(float delayTime, int quantumCycles){
 
 }
 
+// Does not work properly
 void Scheduler::stop(){
+    this->_schedulerRunning =false;
     this->running = false;
+    this->d->stopDispatcher();
 }
 
 std::shared_ptr<Process> Scheduler::findProcess(std::string processName){
@@ -117,10 +136,10 @@ std::shared_ptr<Process> Scheduler::findProcess(std::string processName){
 void Scheduler::printStatus() {
     for(std::shared_ptr<CPU> i : _CPUList){
         if(i->checkStatus()==CPU::READY){
-            std::cout <<"Idle\tCore: " << std::to_string(i->getID()) << std::endl;
+            std::cout <<"Idle\t\t\tCore: " << std::to_string(i->getID()) << std::endl;
         }
         else{
-            std::cout << i->getProcessName()+"\tCore: "<< std::to_string(i->getID())<< std::endl;
+            std::cout << i->getProcessName()+"\t\tCore: "<< std::to_string(i->getID())<< std::endl;
             // std::cout << "List the busy processors" << std::endl;
         }
     }

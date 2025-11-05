@@ -22,7 +22,6 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
     };
 
     this->_commandMap["scheduler-start"] = [consoleUI](_Argument args){
-        std::cout << "Inside scheduler-start command!" << std::endl;
         consoleUI->_scheduler->schedulerTest();
     };
     this->_commandMap["t"] = [consoleUI](_Argument args){
@@ -30,32 +29,11 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
         std::cout << "RUNNING TEST COMMAND" << std::endl;
 
 
-        // ProcessControlBlock pcb = ProcessControlBlock{ 1,"p1",0,READY};
-
-        // Declare inst_1 = Declare();
-
-        // // std::vector<std::unique_ptr<Instruction>> *text;
-        // std::vector<std::shared_ptr<Instruction>> text;
-        // text.emplace_back(std::make_unique<Declare>());
-
-        // Making process and generating instruction
-        // Process p1 = Process(pcb, text);
-        // p1.generateInstruction();
-        // p1.listInstructions();
-
-        // // Utilizing CPU and Process
-        // CPU cpu1 = CPU();
-        // Process p1 = Process(pcb );
-        // while(!p1.isEmpty()){
-        //     // cpu1.CPUExecute(p1.getInstruction().get());
-        //     p1.listInstructions();
-        //     p1.deleteTopInstruction();
-        //     std::cout << "----" << std::endl;
-        // }
     };
 
     this->_commandMap["scheduler-stop"] = [consoleUI](_Argument args){
         std::cout << "Inside scheduler-stop command!" << std::endl;
+        consoleUI->_scheduler->stop();
     };
 
     this->_commandMap["process-smi"] = [consoleUI](_Argument args){
@@ -96,6 +74,7 @@ void MainMenuUI::run() {
             );
 
             Scheduler* s= Scheduler::get();
+            // std::make_shared<Scheduler> s = Scheduler::get();
 
             this->_consoleUI->_scheduler = s;
 
@@ -109,9 +88,12 @@ void MainMenuUI::run() {
             if (sType == "fcfs"){
                 s->runFCFS(config.get_delaysPerExec());
             }
+            if (sType == "rr"){
+                s->runRR(config.get_delaysPerExec(), config.get_quantumCycle());
+            }
 
-            std::cout<< this->_active << "Initialization finished." << std::endl;
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            // std::cout<< this->_active << "Initialization finished." << std::endl;
+            // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             this->_initialized=true;
             this->_active=true;
             // std::cout<<std::to_string(config.get_numCpu());
