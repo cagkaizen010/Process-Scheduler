@@ -21,8 +21,13 @@ Scheduler* Scheduler::get(){
 void Scheduler::initialize(int cpuNum, std::string scheduler, int quantumCycles, int batchProcessFreq, int minIns, int maxIns, int delaysPerExec){
     _staticSchedulerPtr = new Scheduler();
 
-    for(int i = 0; i < cpuNum; i++)
+    _staticSchedulerPtr->cpuCycles = 0;
+    for(int i = 0; i < cpuNum; i++){
+
         _staticSchedulerPtr-> _CPUList.push_back(std::make_shared<CPU>());
+        _staticSchedulerPtr-> _CPUList.at(i)->setDelayTime(delaysPerExec);
+        // _staticSchedulerPtr-> _CPUList.at(i)->setCPUCycles(_staticSchedulerPtr->cpuCycles);
+    }
 
     // Defining dispatcher
     _staticSchedulerPtr->d = std::make_shared<Dispatcher>();
@@ -46,7 +51,9 @@ void Scheduler::schedulerTest(){
 void Scheduler::schedulerRun() {
         // std::vector<std::shared_ptr<Instruction>> text;
         int randNum =0;
-        cpuCycles = 0;
+        // cpuCycles = 0;
+
+        // Root of all timing
         while(this->running){
 
 
@@ -54,7 +61,7 @@ void Scheduler::schedulerRun() {
                 ProcessControlBlock pcb = ProcessControlBlock{randNum, "p_" + std::to_string(randNum),-1};
                 std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
         
-                p->generateInstruction();
+                p->generateInstruction(this->minIns, this->maxIns);
                 // std::cout << p->getName()<< std::endl;
                 this->addProcess(p);
 
@@ -63,6 +70,11 @@ void Scheduler::schedulerRun() {
             }
             // std::cout << "INSIDE SCHEDULER: " << this->_processList.size() << std::endl;
             cpuCycles++;
+            CPU::cpuCycles = cpuCycles;
+
+            // std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            // std::cout << "cpuCycles:\t" << cpuCycles<< std::endl;
+            // std::cout << "CPU::cpuCycles:\t" << CPU::cpuCycles<<std::endl;
         }
         std::cout << "Finished generating processes!" << std::endl;
 
@@ -72,6 +84,7 @@ void Scheduler::schedulerRun() {
 void Scheduler::addProcess(std::shared_ptr<Process> process){
     // this->_readyQueue.push(process);
     this->_processList.push_back(process);
+    this->_processListHistory.push_back(this->_processList.front());
     this->_processMap[process->getName()] = process;
 
 
@@ -134,14 +147,46 @@ std::shared_ptr<Process> Scheduler::findProcess(std::string processName){
 // }
 
 void Scheduler::printStatus() {
+    int cpuReadyCount = 0;
+    for (std::shared_ptr<CPU> cpu : this->_CPUList) 
+        if (cpu->checkStatus() == CPU::READY) cpuReadyCount++;
+    
+    float CPUUtil = 100.0 * (this->_CPUList.size() - cpuReadyCount)/(this->_CPUList.size());
+    
+    std::cout <<
+        "CPU utilization: " + std::to_string(CPUUtil) + "\n" +
+        "Cores used: " + std::to_string(this->_CPUList.size() - cpuReadyCount) + "\n" +
+        "Cores available: " + std::to_string(cpuReadyCount) <<
+    std::endl;
+    
+    std::cout <<
+        "-------------------------" << "\n"  <<
+        "Running Processes:"<<
+    std::endl;
+
     for(std::shared_ptr<CPU> i : _CPUList){
         if(i->checkStatus()==CPU::READY){
             std::cout <<"Idle\t\t\tCore: " << std::to_string(i->getID()) << std::endl;
         }
         else{
-            std::cout << i->getProcessName()+"\t\tCore: "<< std::to_string(i->getID())<< std::endl;
+            std::cout << i->getProcessName()+"\t\tCore: "<< std::to_string(i->getID())<< 
+            "\t\t" << std::to_string(i->getProcess()->getProgramCounter()) << " / " << std::to_string(i->getProcess()->getInstructionSetSize())<<std::endl;
             // std::cout << "List the busy processors" << std::endl;
         }
+    }
+
+
+    std::cout <<
+        "\n-------------------------" << "\n"  <<
+        "Finished Processes:"<<
+    std::endl;
+    for(std::shared_ptr<Process> pastProcess : _processListHistory){
+            if(pastProcess->getState() == ProcessState::TERMINATED){
+                std::cout << pastProcess->getName()+"\t\tFinished" << 
+                "\t\t" << std::to_string(pastProcess->getProgramCounter()) << " / " << std::to_string(pastProcess->getInstructionSetSize())<<std::endl;
+                // std::cout << "List the busy processors" << std::endl;
+
+            } 
     }
 }
 

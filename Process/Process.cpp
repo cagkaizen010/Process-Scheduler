@@ -33,7 +33,7 @@ static std::string getRandomString(size_t length) {
 Process::Process( ProcessControlBlock pcb)  {
     this->pcb = pcb;
     // this->text = text;
-    this->generateInstruction();
+    // this->generateInstruction();
     // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 }
 
@@ -89,11 +89,12 @@ int Process::getInstructionSetSize() {
     return this->text.size();
 }
 
-void Process::generateInstruction(){
+void Process::generateInstruction(int minIns, int maxIns){
 
     int randomNumber;
+    int numberOfInstructions= getRandomInt(minIns, maxIns);
     // std::cout << "Generating instructions.." << std::endl;
-    for (int i = 0; i < 2; i++){
+    for (int i = 0; i < numberOfInstructions; i++){
         randomNumber = getRandomInt(1, 4);
 
         if(randomNumber == 1) 
@@ -108,7 +109,6 @@ void Process::generateInstruction(){
         if(randomNumber == 4)
             this->text.emplace_back(std::make_unique<Print>(getRandomString(10)));
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(25));
 }
 
 
@@ -137,7 +137,7 @@ void Process::execute() {
         // std::cout << "pcb.CPUCoreID: " + std::to_string(pcb.CPUCoreID) <<std::endl; 
 
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
     else {
         this->pcb.pstate =TERMINATED;

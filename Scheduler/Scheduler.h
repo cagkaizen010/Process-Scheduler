@@ -17,7 +17,7 @@
 #include "../CPU/CPU.h"
 #include "./Dispatcher/Dispatcher.h"
 
-static float cpuCycles = 0;
+// static float cpuCycles=0;
 class Dispatcher;
 class Scheduler{
     public:
@@ -89,6 +89,7 @@ class Scheduler{
         ProcessQueue _readyQueue;
         ProcessList _processList;
         ProcessMap _processMap;
+        ProcessList _processListHistory;
 
         SchedulingAlgorithm algo;
         int pid;
@@ -103,7 +104,7 @@ class Scheduler{
         float batchProcessFreq;
         int minIns;
         int maxIns;
-        
+        float cpuCycles;
 
 
         bool _schedulerRunning = false;

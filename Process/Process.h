@@ -63,7 +63,7 @@ class Process {
         int getCPUCoreID();
 
         int getInstructionSetSize();
-        void generateInstruction();
+        void generateInstruction(int, int);
         void listInstructions();
         void deleteTopInstruction();
         std::shared_ptr<Instruction> getInstruction();

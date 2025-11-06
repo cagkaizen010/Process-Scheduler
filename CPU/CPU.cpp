@@ -1,5 +1,6 @@
 #include "CPU.h"
 int CPU::dynamicID = 0;
+float CPU::cpuCycles = 0;
 
 CPU::CPU() {
     if (CPU::dynamicID < 4){
@@ -52,32 +53,30 @@ void CPU::CPURun(){
     this->halt = false;
     while(!this->halt){
         // this->CPUExecute();
-        if (this->_process != nullptr ){
-            // std::cout << "CPU " <<this->getID()<< " is processing"<< std::endl;
+        {
+        if((fmod(cpuCycles, 1+this->delayTime ) == float(0)) || (this->delayTime == 0)){
+            // std::cout << "this->cpuCycles: " << cpuCycles<< std::endl;
+            if (this->_process != nullptr ){
+                // std::cout << "CPU " <<this->getID()<< " is processing"<< std::endl;
 
-            if(this->_process->getCPUCoreID() == -1)
-                this->_process->setCPUCoreID(this->getID());
-            if(this->_process->getCPUCoreID() == this->getID()){
-                this->_process->execute();
-                if( this->_process->getState() == ProcessState::TERMINATED){
-                    this->setProcess(nullptr);
-                    this->status= CPUStatus::READY;
+                if(this->_process->getCPUCoreID() == -1)
+                    this->_process->setCPUCoreID(this->getID());
+                if(this->_process->getCPUCoreID() == this->getID()){
+                    this->_process->execute();
+                    if( this->_process->getState() == ProcessState::TERMINATED){
+                        this->setProcess(nullptr);
+                        this->status= CPUStatus::READY;
+                    }
+                    // std::cout <<"Executing.."<< std::endl;
                 }
-                // std::cout <<"Executing.."<< std::endl;
             }
-
-            
+        // std::cout << "this->delayTime: " << this->delayTime << std::endl;
         }
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+        // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
     std::cout << "CPU is now ready" << std::endl;
     this->status = CPUStatus::READY;
 }
-
-// void CPU::CPUExecute(){
-    // this->status = CPUStatus::BUSY;
-// }
-
 
 
