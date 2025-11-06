@@ -10,6 +10,7 @@
 #include <sstream>
 #include <memory>
 #include <thread>
+#include <mutex>
 #include <chrono>
 #include <cmath>
 
@@ -53,11 +54,14 @@ class Scheduler{
         void schedulerStop();
 
         void addProcess(std::shared_ptr<Process>);
+        void addToReadyQueue(std::shared_ptr<Process> p){this->_readyQueue.push(p);};
         std::shared_ptr<Process> findProcess(std::string );
         void runFCFS( float);
         void startFCFS(float);
         void runRR(float, int);
         void startRR(float, int);
+
+        bool isRunning(){ return _schedulerRunning;};
 
         void run();
         void stop(); 

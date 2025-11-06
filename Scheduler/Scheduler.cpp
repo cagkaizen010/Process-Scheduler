@@ -49,15 +49,13 @@ void Scheduler::schedulerTest(){
 }
 
 void Scheduler::schedulerRun() {
-        // std::vector<std::shared_ptr<Instruction>> text;
         int randNum =0;
-        // cpuCycles = 0;
 
         // Root of all timing
         while(this->running){
 
 
-            if(fmod(cpuCycles,this->batchProcessFreq) ==float(0)){
+            if(fmod(CPU::cpuCycles,this->batchProcessFreq) ==float(0)){
                 ProcessControlBlock pcb = ProcessControlBlock{randNum, "p_" + std::to_string(randNum),-1};
                 std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
         
@@ -69,8 +67,11 @@ void Scheduler::schedulerRun() {
                 randNum++;
             }
             // std::cout << "INSIDE SCHEDULER: " << this->_processList.size() << std::endl;
-            cpuCycles++;
-            CPU::cpuCycles = cpuCycles;
+            // cpuCycles++;
+            // std::unique_lock<std::mutex> lock(CPU::mtx);
+            // CPU::cpuCycles = cpuCycles;
+            std::cout << CPU::cpuCycles<<std::endl;
+            // lock.unlock();
 
             // std::this_thread::sleep_for(std::chrono::milliseconds(100));
             // std::cout << "cpuCycles:\t" << cpuCycles<< std::endl;
@@ -126,7 +127,9 @@ void Scheduler::runRR(float delayTime, int quantumCycles){
     }
 }
 void Scheduler::startRR(float delayTime, int quantumCycles){
+    if(!this-> running){
 
+    }
 }
 
 // Does not work properly
@@ -163,7 +166,7 @@ void Scheduler::printStatus() {
         "-------------------------" << "\n"  <<
         "Running Processes:"<<
     std::endl;
-
+// 
     for(std::shared_ptr<CPU> i : _CPUList){
         if(i->checkStatus()==CPU::READY){
             std::cout <<"Idle\t\t\tCore: " << std::to_string(i->getID()) << std::endl;
@@ -176,18 +179,18 @@ void Scheduler::printStatus() {
     }
 
 
-    std::cout <<
-        "\n-------------------------" << "\n"  <<
-        "Finished Processes:"<<
-    std::endl;
-    for(std::shared_ptr<Process> pastProcess : _processListHistory){
-            if(pastProcess->getState() == ProcessState::TERMINATED){
-                std::cout << pastProcess->getName()+"\t\tFinished" << 
-                "\t\t" << std::to_string(pastProcess->getProgramCounter()) << " / " << std::to_string(pastProcess->getInstructionSetSize())<<std::endl;
-                // std::cout << "List the busy processors" << std::endl;
+    // std::cout <<
+    //     "\n-------------------------" << "\n"  <<
+    //     "Finished Processes:"<<
+    // std::endl;
+    // for(std::shared_ptr<Process> pastProcess : _processListHistory){
+    //         if(pastProcess->getState() == ProcessState::TERMINATED){
+    //             std::cout << pastProcess->getName()+"\t\tFinished" << 
+    //             "\t\t" << std::to_string(pastProcess->getProgramCounter()) << " / " << std::to_string(pastProcess->getInstructionSetSize())<<std::endl;
+    //             // std::cout << "List the busy processors" << std::endl;
 
-            } 
-    }
+    //         } 
+    // }
 }
 
 void Scheduler::processSMI() {

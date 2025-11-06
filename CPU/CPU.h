@@ -13,6 +13,7 @@
 class CPU {
     public:
         static float cpuCycles;
+        static std::mutex mtx;
         enum CPUStatus{
             READY,
             BUSY
@@ -38,6 +39,7 @@ class CPU {
         void CPURun();
         int _id;
         float delayTime;
+
 
         bool halt = false;
         static int dynamicID;

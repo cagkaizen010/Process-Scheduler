@@ -31,6 +31,10 @@ void ConsoleUI::createNewConsole(std::string consoleName, AConsoleUI_ console){
         std::cout << "Process already running" << std::endl;
         return;
     }
+    if(this->_scheduler->findProcess(consoleName) == nullptr){
+        std::cout << "Process not found, and could not be established" <<std::endl;
+        return;
+    }
 
     bool isFound = false;
     if (console == nullptr){

@@ -5,8 +5,37 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
 
     this->_commandMap["screen"] = [consoleUI](_Argument args){
 
-        if(args.at(1) == "-s")
-            consoleUI->createNewConsole(args.at(2));
+        
+        if(args.at(1) == "-s"){
+            std::cout << args.size() << std::endl;
+            if(args.size() == 3 ) {
+                if(consoleUI->_scheduler->findProcess(args.at(2)) == nullptr){
+
+                    std::cout <<"Creating process " + args.at(2)<<std::endl;
+
+                    ProcessControlBlock pcb = ProcessControlBlock{69420, "p_" + args.at(2),-1};
+                    std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
+        
+                    p->generateInstruction(1,400);
+                    consoleUI->_scheduler->addProcess(p);
+                    consoleUI->_scheduler->addToReadyQueue(p);
+
+                    // if scheduler is not active
+                    // consoleUI->_scheduler->_CPUList
+
+                    // consoleUI->_scheduler->schedulerTest();
+                    // consoleUI->createNewConsole("p_" +args.at(2));
+                    // consoleUI->_scheduler->stop();
+                //     // if (consoleUI->_scheduler->isRunning())
+                }
+                else {
+                    // consoleUI->_scheduler->schedulerTest();
+                    consoleUI->createNewConsole(args.at(2));
+                    // consoleUI->_scheduler->stop();
+                }
+            }
+            
+        }
         else if(args.at(1) == "-r")
             consoleUI->switchConsole(args.at(2));
         else if(args.at(1) == "-ls")

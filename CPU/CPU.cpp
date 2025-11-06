@@ -1,6 +1,7 @@
 #include "CPU.h"
 int CPU::dynamicID = 0;
 float CPU::cpuCycles = 0;
+std::mutex CPU::mtx;
 
 CPU::CPU() {
     if (CPU::dynamicID < 4){
@@ -53,7 +54,7 @@ void CPU::CPURun(){
     this->halt = false;
     while(!this->halt){
         // this->CPUExecute();
-        {
+        std::unique_lock<std::mutex> lock(mtx);
         if((fmod(cpuCycles, 1+this->delayTime ) == float(0)) || (this->delayTime == 0)){
             // std::cout << "this->cpuCycles: " << cpuCycles<< std::endl;
             if (this->_process != nullptr ){
@@ -71,8 +72,10 @@ void CPU::CPURun(){
                 }
             }
         // std::cout << "this->delayTime: " << this->delayTime << std::endl;
+        
         }
-    }
+        cpuCycles++;
+        lock.unlock();
         // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
     std::cout << "CPU is now ready" << std::endl;
