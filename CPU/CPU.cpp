@@ -65,6 +65,7 @@ void CPU::CPURun(){
             // std::unique_lock<std::mutex> lock(Clock::clockMutex);
             if((Clock::getCycle() % (1 + static_cast<int>(this->delayTime)))== 0 || (this->delayTime == 0)){
 
+                // std::cout <<"random string" << std::endl;
                 // std::unique_lock<std::mutex> lock(Clock::clockMutex);
                 if (this->_process != nullptr ){
 
