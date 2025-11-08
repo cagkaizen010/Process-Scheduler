@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <thread>
+#include <atomic>
 #include <mutex>
 #include "../Process/Instruction/Instruction.h"
 #include "../Process/Process.h"
@@ -12,7 +13,7 @@
 
 class CPU {
     public:
-        static float cpuCycles;
+        static std::atomic<float> cpuCycles;
         static std::mutex mtx;
         enum CPUStatus{
             READY,
@@ -27,7 +28,9 @@ class CPU {
         std::shared_ptr<Process> getProcess();
         std::string getProcessName();
 
-
+        // void startCPUCycle();
+        // void stopCPUCycle();
+        void executeCPUCycle();
 
         CPUStatus checkStatus();
 
@@ -48,7 +51,4 @@ class CPU {
 
         friend class Scheduler;
 };
-
-
-
 #endif

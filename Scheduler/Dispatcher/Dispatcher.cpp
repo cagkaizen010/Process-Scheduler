@@ -35,8 +35,9 @@ void Dispatcher::startDispatcher() {
 
 }
 
+
+
 void Dispatcher::run(){
-    // std::cout <<"Dispatcher started"<< std::endl;
     while(this->_dispatcherRunningFlag){
         if(this->_scheduler == nullptr){
             std::cout << "ERROR! _scheduler is nullptr!"<< std::endl;
@@ -47,38 +48,20 @@ void Dispatcher::run(){
             break;
         }
 
-
-
-        // std::cout << "dispatcher thread running..."<< std::endl;
-        // while (!_scheduler->_readyQueue.empty()){
-            // std::cout << "Executing: " << _scheduler->_readyQueue.front()->getName()<< std::endl;
-            // _scheduler->_readyQueue.front();
-
-            for( std::shared_ptr<CPU> i: _CPUList){
-                if((i->checkStatus() == CPU::READY) ){
-                    if(!_scheduler->_readyQueue.empty()){
-                        i->setProcess(_scheduler->_readyQueue.front());
-                        _scheduler->_readyQueue.pop();
-                    }
+        // Scan through CPU list to check which is available
+        // If CPU is READY, assign it a process: (setProcess(Process))
+        for( std::shared_ptr<CPU> cpu: _CPUList){
+            if((cpu->checkStatus() == CPU::READY) ){
+                if(!_scheduler->_readyQueue.empty()){
+                    cpu->setProcess(_scheduler->_readyQueue.front());
+                    _scheduler->_readyQueue.pop();
                 }
             }
-
-
-            // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        // }
-        // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        }
 
     }
 
 
-    // for (std::shared_ptr<CPU> cpu : this->_CPUList){
-    //     if(cpu->checkStatus() == CPU::READY)
-    //         if(_scheduler->_readyQueue.size() > 0) {
-    //             cpu->setProcess(_scheduler->_readyQueue.front());
-    //             _scheduler->_readyQueue.pop();
-    //             _scheduler->running=true;
-    //         }
-    // }
 }
 
 void Dispatcher::stopDispatcher() {

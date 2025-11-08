@@ -1,5 +1,6 @@
-
 #include "Scheduler.h"
+
+
 
 int Scheduler::getRandomInt(int min, int max) {
     std::random_device rd;
@@ -53,7 +54,7 @@ void Scheduler::schedulerRun() {
 
         // Root of all timing
         while(this->running){
-
+            std::unique_lock<std::mutex> lock(CPU::mtx);
 
             if(fmod(CPU::cpuCycles,this->batchProcessFreq) ==float(0)){
                 ProcessControlBlock pcb = ProcessControlBlock{randNum, "p_" + std::to_string(randNum),-1};
@@ -68,10 +69,13 @@ void Scheduler::schedulerRun() {
             }
             // std::cout << "INSIDE SCHEDULER: " << this->_processList.size() << std::endl;
             // cpuCycles++;
-            // std::unique_lock<std::mutex> lock(CPU::mtx);
             // CPU::cpuCycles = cpuCycles;
-            std::cout << CPU::cpuCycles<<std::endl;
-            // lock.unlock();
+            // std::string garbage;
+            // CPU::cpuCycles++;
+            // std::getline(std::cin,garbage);
+            std::cout <<CPU::cpuCycles << std::endl;
+            // std::cout << CPU::cpuCycles<<std::endl;
+            lock.unlock();
 
             // std::this_thread::sleep_for(std::chrono::milliseconds(100));
             // std::cout << "cpuCycles:\t" << cpuCycles<< std::endl;

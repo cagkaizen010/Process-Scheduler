@@ -1,6 +1,6 @@
 #include "CPU.h"
 int CPU::dynamicID = 0;
-float CPU::cpuCycles = 0;
+std::atomic<float> CPU::cpuCycles(0);
 std::mutex CPU::mtx;
 
 CPU::CPU() {
@@ -22,7 +22,7 @@ void CPU::setProcess(std::shared_ptr<Process> process){
 
     // bool tempCPUStatus = (process == nullptr) ? CPU::READY : CPU::BUSY;
     // std::cout << "Setting CPU Process to: " << std::to_string(tempCPUStatus) << std::endl;
-    this->status = (process == nullptr) ? CPU::READY : CPU::BUSY;
+    // this->status = (process == nullptr) ? CPU::READY : CPU::BUSY;
     // std::cout << "CPU Status: " << this->status << std::endl;
 }
 std::shared_ptr<Process> CPU::getProcess(){
@@ -49,34 +49,45 @@ void CPU::toggleStatus(){
         this->status = CPUStatus::BUSY;
 }
 
+void CPU::executeCPUCycle(){
+    cpuCycles = cpuCycles+1;
+}
 
 void CPU::CPURun(){
     this->halt = false;
     while(!this->halt){
         // this->CPUExecute();
-        std::unique_lock<std::mutex> lock(mtx);
         if((fmod(cpuCycles, 1+this->delayTime ) == float(0)) || (this->delayTime == 0)){
             // std::cout << "this->cpuCycles: " << cpuCycles<< std::endl;
             if (this->_process != nullptr ){
-                // std::cout << "CPU " <<this->getID()<< " is processing"<< std::endl;
 
+                // If the process hasn't been assigned a CPU,
+                // assign the current process to the current CPU
                 if(this->_process->getCPUCoreID() == -1)
                     this->_process->setCPUCoreID(this->getID());
+
+                // If the process has an assigned CPU,
+                // execute the process
                 if(this->_process->getCPUCoreID() == this->getID()){
                     this->_process->execute();
-                    if( this->_process->getState() == ProcessState::TERMINATED){
-                        this->setProcess(nullptr);
-                        this->status= CPUStatus::READY;
-                    }
-                    // std::cout <<"Executing.."<< std::endl;
+                    this->status = CPUStatus::BUSY;
                 }
+                // If process is finished,
+                // setProcess to null, and set the CPU to READY
+                if( this->_process->getState() == ProcessState::TERMINATED){
+                    this->setProcess(nullptr);
+                    this->status= CPUStatus::READY;
+                }
+                
             }
-        // std::cout << "this->delayTime: " << this->delayTime << std::endl;
-        
+            
+        // CPU detects if its time to execute
         }
-        cpuCycles++;
-        lock.unlock();
-        // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        // std::unique_lock<std::mutex> lock(mtx);
+        // cpuCycles = cpuCycles + 1;
+        // lock.unlock();
+
+        // CPU stops completely
     }
     std::cout << "CPU is now ready" << std::endl;
     this->status = CPUStatus::READY;
