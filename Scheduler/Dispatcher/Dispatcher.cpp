@@ -38,26 +38,46 @@ void Dispatcher::startDispatcher() {
 
 
 void Dispatcher::run(){
-    while(this->_dispatcherRunningFlag){
-        if(this->_scheduler == nullptr){
-            std::cout << "ERROR! _scheduler is nullptr!"<< std::endl;
-            break;
-        }
-        if(this->_CPUList.empty()){
-            std::cout << "ERROR! _CPUList is empty!"<< std::endl;
-            break;
-        }
+    static int lastCycle = 0;
 
-        // Scan through CPU list to check which is available
-        // If CPU is READY, assign it a process: (setProcess(Process))
-        for( std::shared_ptr<CPU> cpu: _CPUList){
-            if((cpu->checkStatus() == CPU::READY) ){
-                if(!_scheduler->_readyQueue.empty()){
-                    cpu->setProcess(_scheduler->_readyQueue.front());
-                    _scheduler->_readyQueue.pop();
-                }
+    while(this->_dispatcherRunningFlag){
+
+        int currentCycle = Clock::getCycle();
+
+        if(currentCycle > lastCycle){
+            if(this->_scheduler == nullptr){
+                std::cout << "ERROR! _scheduler is nullptr!"<< std::endl;
+                break;
             }
+            if(this->_CPUList.empty()){
+                std::cout << "ERROR! _CPUList is empty!"<< std::endl;
+                break;
+            }
+            
+            if(!_scheduler->_readyQueue.empty())
+            // std::cout << "[Cycle " << Clock::getCycle() <<"]: "
+            // << "_scheduler->_readyQueue.front()->getName() "+ _scheduler->_readyQueue.front()->getName() << std::endl;
+
+            // Scan through CPU list to check which is available
+            // If CPU is READY, assign it a process: (setProcess(Process))
+            
+                // std::unique_lock<std::mutex> lock(Clock::clockMutex);
+                for( std::shared_ptr<CPU> cpu: _CPUList){
+                    if((cpu->checkStatus() == CPU::READY) ){
+                        if(!_scheduler->_readyQueue.empty()){
+                            // std::cout << "_readyQueue.popped: " << _scheduler->_readyQueue.front()->getName()<<std::endl;
+                            cpu->setProcess(_scheduler->_readyQueue.front());
+
+                            // std::cout << "Set into CPU #" << cpu->getProcess()->getCPUCoreID()<<std::endl;
+                            _scheduler->_readyQueue.pop();
+                        }
+
+                    }
+                }
+            
+            lastCycle=currentCycle;
         }
+        
 
     }
 

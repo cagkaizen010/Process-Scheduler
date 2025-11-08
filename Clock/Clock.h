@@ -12,7 +12,7 @@ public:
     static std::mutex clockMutex;
     static bool running;
 
-    static void start(unsigned int tickMs = 10) {
+    static void start(unsigned int tickMs = 0) {
         running = true;
         std::thread([tickMs]() {
             while (running) {

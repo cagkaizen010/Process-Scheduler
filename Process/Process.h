@@ -15,7 +15,7 @@
 #include "./Instruction/Add.h"
 #include "./Instruction/Sub.h"
 #include "./Instruction/Print.h"
-
+#include "../Clock/Clock.h"
 
 
 enum ProcessState{

@@ -38,25 +38,30 @@ void ConsoleUI::createNewConsole(std::string consoleName, AConsoleUI_ console){
 
     bool isFound = false;
     if (console == nullptr){
-         
-        std::vector<std::shared_ptr<CPU>> tempList = this->_scheduler->_CPUList;
+        
+        std::vector<std::shared_ptr<Process>> tempList;
+        if(this->_scheduler != nullptr)
+            tempList = this->_scheduler->_processListHistory;
+        else std::cout << "this->_scheduler is nullptr..." << std::endl;
         // Implement scheduler first.
 
-            std::cout << "Listning currently running processes." << std::endl;
-            std::cout << tempList.size() << std::endl;
-            for(std::shared_ptr<CPU> cpu: tempList){
-                std::cout << cpu->getProcessName() << std::endl;
-            }
+            // std::cout << "Listning previously running processes." << std::endl;
+            // std::cout << tempList.size() << std::endl;
+            // for(std::shared_ptr<Process> process: tempList){
+            //     std::cout << "Process Name: "<<process->getName()<< std::endl;
+            //     std::cout << "Process State: "<<process->getState()<< " = " << ProcessState::TERMINATED<< std::endl;
+            // }
 
             // std::cout << this->_scheduler->_processList.size() << std::endl;
-        for(std::shared_ptr<CPU> cpu : tempList){
+        for(std::shared_ptr<Process> process: tempList){
             // if ( )std::cout << i->getName() << std::endl;
-
-            if(consoleName == cpu->getProcessName() && !(cpu->checkStatus()==CPU::READY)) {
+            std::cout <<"consoleName: " << consoleName << std::endl;
+            std::cout <<"process->getName(): " << process->getName() <<std::endl;
+            if(consoleName == process->getName() && (process->getState()==ProcessState::TERMINATED)) {
 
                 // Implement ProcessUI for this to work, type its accepting is a Process
-
-                console = std::make_shared<ProcessUI>(cpu->getProcess());
+                std::cout << "Console has been found!" << std::endl;
+                console = std::make_shared<ProcessUI>(process);
 
                 
                 isFound=true;

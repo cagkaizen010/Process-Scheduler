@@ -8,6 +8,7 @@
 #include "../../Process/Process.h"
 #include "../../Process/Instruction/Declare.h"
 #include "../../CPU/CPU.h"
+#include "../../Clock/Clock.h"
 #include <unordered_map>
 #include <functional>
 #include <vector>

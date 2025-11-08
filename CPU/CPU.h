@@ -7,14 +7,13 @@
 #include <mutex>
 #include "../Process/Instruction/Instruction.h"
 #include "../Process/Process.h"
+#include "../Clock/Clock.h"
 // #include "../Scheduler/Scheduler.h"
 
 // Executes the instruction inside the Process
 
 class CPU {
     public:
-        static std::atomic<float> cpuCycles;
-        static std::mutex mtx;
         enum CPUStatus{
             READY,
             BUSY

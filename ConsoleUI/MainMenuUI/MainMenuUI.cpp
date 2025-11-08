@@ -72,6 +72,7 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
     
     this->_commandMap["report-util"] = [consoleUI](_Argument args){
         std::cout << "Inside report-util command!" << std::endl;
+        consoleUI->_scheduler->reportUtil();
     };
 
 }
@@ -89,6 +90,7 @@ void MainMenuUI::run() {
         std::getline(std::cin, inputString);
 
         if(inputString == "initialize"){
+            Clock::start(100);
             Config config = Config();
             config.initialize();
 

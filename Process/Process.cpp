@@ -127,9 +127,28 @@ std::shared_ptr<Instruction> Process::getInstruction() {
 
     // YOU ARE HERE
 void Process::execute() {
+    static uint64_t lastCycle = 0;
     if(!this->isEmpty()){
-        this->text.at(pcb.progCounter)->execute(pcb.CPUCoreID);
-        this->pcb.progCounter++;
+        // std::cout << "[Cycle " << Clock::getCycle() << "]: "
+        // << "this->_process->getName() "+ this->getName() << std::endl;
+
+        // uint64_t currentCycle = Clock::getCycle();
+
+        // if(currentCycle > lastCycle){
+            this->text.at(pcb.progCounter)->execute(pcb.CPUCoreID);
+            this->pcb.progCounter++;
+            if (this -> isEmpty()) this->pcb.pstate =TERMINATED;
+            // lastCycle = currentCycle;
+            
+        // }
+            // std::cout << Clock::getCycle() << std::endl;
+
+        // std::cout << "[Cycle " << Clock::getCycle()
+        //   << "] CPU#" << pcb.CPUCoreID
+        //   << " executing instruction #" << pcb.progCounter
+        //   << " of process " << pcb.pname << std::endl;
+
+
         // system("cls");
 
         // std::cout << this->pcb.pname << std::endl;
@@ -140,6 +159,7 @@ void Process::execute() {
         // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
     else {
+        std::cout << "PROCESS IS EMPTY" << std::endl;
         this->pcb.pstate =TERMINATED;
     }
 

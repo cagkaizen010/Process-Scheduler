@@ -13,7 +13,9 @@
 #include <mutex>
 #include <chrono>
 #include <cmath>
+#include <fstream>
 
+#include "../Clock/Clock.h"
 #include "../Process/Process.h"
 #include "../CPU/CPU.h"
 #include "./Dispatcher/Dispatcher.h"
@@ -68,6 +70,7 @@ class Scheduler{
 
         void printStatus() ;
         void processSMI();
+        void reportUtil();
         // virtual void init() = 0;
         // virtual void execute() = 0;
 
