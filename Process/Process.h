@@ -42,7 +42,7 @@ typedef std::vector<std::shared_ptr<Instruction>> InstructionSet;
 
 class Process {
     public:
-
+        std::mutex mutex;
         Process(ProcessControlBlock );
 
         std::string randStr();

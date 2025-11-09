@@ -50,7 +50,7 @@ void ProcessUI::display(){
     std::string out = 
     "Process " + this->_process->getName()+ "\n" +"ID: " + std::to_string(this->_process->getID()) + "\n";
 
-    if(this->_process->getState() == ProcessState::TERMINATED)
+    if(this->_process->isEmpty() )
         std::cout << this->_process->getName() << " finished successfully"<< std::endl;
     else{
         std::cout << this->_process->getName() << " is " << std::to_string(this->_process->getState())<< std::endl;
