@@ -32,6 +32,8 @@ struct ProcessControlBlock{
     int pid;
     std::string pname;
     int CPUCoreID;
+    std::string schedulingType;
+    int quantumCycles;
     int progCounter=0;
     ProcessState pstate=NEW;
 };
@@ -62,6 +64,8 @@ class Process {
         void setCPUCoreID(int coreID);
         int getCPUCoreID();
 
+        std::string getSchedulingType();
+        int getQuantumCycles();
         int getInstructionSetSize();
         void generateInstruction(int, int);
         void listInstructions();

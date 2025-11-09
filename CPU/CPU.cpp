@@ -17,11 +17,16 @@ CPU::CPU() {
 }
 
 void CPU::setProcess(std::shared_ptr<Process> process){
+    // if((this->_process != nullptr) && process == nullptr){
+    //     this->_process->setCPUCoreID(-1);
+    // }
+
     this->_process = process;
 
     if((process != nullptr)  ) 
         process->setCPUCoreID(this->_id);
-    
+
+
     // bool tempCPUStatus = (process == nullptr) ? CPU::READY : CPU::BUSY;
     // std::cout << "Setting CPU Process to: " << std::to_string(tempCPUStatus) << std::endl;
     this->status = (process == nullptr) ? CPU::READY : CPU::BUSY;
@@ -84,26 +89,54 @@ void CPU::CPURun(){
                         // << " of process " << this->_process->getName() << std::endl;
                     // }
 
-                    // If the process has an assigned CPU,
-                    // execute the instruction
-                    if((this->_process->getCPUCoreID() == this->getID()) && !(this->_process->isEmpty()) ){
-                        std::cout << "EXECUTING [Cycle " << currentCycle << " @ CPU #" << this->getID()<<"]: "
-                        << "this->_process->getName() "+ this->_process->getName() << std::endl;
-                        this->_process->execute();
+                    // // If the process has an assigned CPU,
+                    // // execute the instruction
+                    // if( ((this->_process->getCPUCoreID() == this->getID()) && !(this->_process->isEmpty())) 
+                    // && (!((Clock::getCycle() % this->_process->getQuantumCycles())==0) )
+                    // ){
+                        // std::cout << "EXECUTING [Cycle " << currentCycle << " @ CPU #" << this->getID()<<"]: "
+                        // << "this->_process->getName() "+ this->_process->getName() << std::endl;
+                        // this->_process->execute();
+// 
+                    // }
 
+                    if(this->_process->getSchedulingType() == "rr"){
+                        // if(this->_process != nullptr)
+                        if(!((Clock::getCycle() % ( this->_process->getQuantumCycles() ))==0)){
+                            if (((this->_process->getCPUCoreID() == this->getID()) && !(this->_process->isEmpty()))){
+                                std::cout << "EXECUTING [Cycle " << currentCycle << " @ CPU #" << this->getID()<<"]: "
+                                << "this->_process->getName() "+ this->_process->getName() 
+                                << " this->_process->getProgramCounter() " << this->_process->getProgramCounter() <<std::endl;
+
+                                if(this->_process != nullptr ) this->_process->execute();
+                            }
+                        }
+                        else{
+                            std::cout << "Process inside during quantum cycle: " << this->_process->getName() <<std::endl; 
+                        }
+                    }
+                    else {
+                        if (((this->_process->getCPUCoreID() == this->getID()) && !(this->_process->isEmpty()))){
+                            std::cout << "EXECUTING [Cycle " << currentCycle << " @ CPU #" << this->getID()<<"]: "
+                            << " this->_process->getName() "+ this->_process->getName() << std::endl;
+                            this->_process->execute();
+                        }
 
                     }
+                    
 
 
                     // If process is finished,
                     // setProcess to null, and set the CPU to READY
                     if( this->_process->getState() == ProcessState::TERMINATED){
-                        // std::cout << "TERMINATED [Cycle " << currentCycle << " @ CPU #" << this->getID()<<"]: "
-                        // << "this->_process->getName() "+ this->_process->getName() << std::endl;
+                        std::cout << "TERMINATED [Cycle " << currentCycle << " @ CPU #" << this->getID()<<"]: "
+                        << "this->_process->getName() "+ this->_process->getName() << std::endl;
                         this->setProcess(nullptr);
                         this->status= CPUStatus::READY;
                     }
                     else if (this->_process->isEmpty()){
+                        std::cout << "TERMINATED [Cycle " << currentCycle << " @ CPU #" << this->getID()<<"]: "
+                        << "this->_process->getName() "+ this->_process->getName() << std::endl;
                         this->_process->setState(ProcessState::TERMINATED);
                         this->setProcess(nullptr);
                         this->status= CPUStatus::READY;
@@ -112,7 +145,7 @@ void CPU::CPURun(){
 
                 // if((this->_process == nullptr) )
                 //     std::cout << "[Cycle " << Clock::getCycle()<< "] Empty" << std::endl;
-                    // std::cout << "INSIDE Clock::getCycle(): " << Clock::getCycle() << std::endl;
+                //     std::cout << "INSIDE Clock::getCycle(): " << Clock::getCycle() << std::endl;
 
                 // // VERIFICATION FOR DELAY PER EXEC
                 // std::cout << "[Cycle " << Clock::getCycle()<< "] Empty" << std::endl;

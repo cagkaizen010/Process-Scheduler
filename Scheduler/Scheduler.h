@@ -109,6 +109,8 @@ class Scheduler{
 
         float delayTime;
         float batchProcessFreq;
+        std::string schedulerType;
+        int quantumCycle;
         int minIns;
         int maxIns;
         float cpuCycles;

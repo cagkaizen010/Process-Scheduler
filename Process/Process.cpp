@@ -85,6 +85,14 @@ int Process::getCPUCoreID(){
     return this->pcb.CPUCoreID;
 }
 
+std::string Process::getSchedulingType() {
+    return this->pcb.schedulingType;
+}
+
+int Process::getQuantumCycles(){
+    return this->pcb.quantumCycles;
+}
+
 int Process::getInstructionSetSize() {
     return this->text.size();
 }

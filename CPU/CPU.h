@@ -7,6 +7,7 @@
 #include <mutex>
 #include "../Process/Instruction/Instruction.h"
 #include "../Process/Process.h"
+#include "../Config/config.h"
 #include "../Clock/Clock.h"
 // #include "../Scheduler/Scheduler.h"
 

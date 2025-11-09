@@ -1,62 +1,39 @@
-CPU utilization: 25.000000
-Cores used: 1
-Cores available: 3
+CPU utilization: 0.000000
+Cores used: 0
+Cores available: 1
 -------------------------
 Running Processes:
 Idle			Core: 0
-Idle			Core: 1
-p_50		Core: 2		0 / 1	Core #:2
-Idle			Core: 3
 
 -------------------------
 Finished Processes:
-p_0		Finished		1 / 1	Core #:0
-p_1		Finished		1 / 1	Core #:1
-p_2		Finished		1 / 1	Core #:2
-p_3		Finished		1 / 1	Core #:0
-p_4		Finished		1 / 1	Core #:1
-p_5		Finished		1 / 1	Core #:0
-p_6		Finished		1 / 1	Core #:1
-p_7		Finished		1 / 1	Core #:0
-p_8		Finished		1 / 1	Core #:1
-p_9		Finished		1 / 1	Core #:0
-p_10		Finished		1 / 1	Core #:1
-p_11		Finished		1 / 1	Core #:0
-p_12		Finished		1 / 1	Core #:1
-p_13		Finished		1 / 1	Core #:0
-p_14		Finished		1 / 1	Core #:1
-p_15		Finished		1 / 1	Core #:0
-p_16		Finished		1 / 1	Core #:1
-p_17		Finished		1 / 1	Core #:1
-p_18		Finished		1 / 1	Core #:2
-p_19		Finished		1 / 1	Core #:0
-p_20		Finished		1 / 1	Core #:1
-p_21		Finished		1 / 1	Core #:0
-p_22		Finished		1 / 1	Core #:1
-p_23		Finished		1 / 1	Core #:0
-p_24		Finished		1 / 1	Core #:1
-p_25		Finished		1 / 1	Core #:0
-p_26		Finished		1 / 1	Core #:1
-p_27		Finished		1 / 1	Core #:0
-p_28		Finished		1 / 1	Core #:1
-p_29		Finished		1 / 1	Core #:0
-p_30		Finished		1 / 1	Core #:1
-p_31		Finished		1 / 1	Core #:0
-p_32		Finished		1 / 1	Core #:1
-p_33		Finished		1 / 1	Core #:0
-p_34		Finished		1 / 1	Core #:2
-p_35		Finished		1 / 1	Core #:0
-p_36		Finished		1 / 1	Core #:1
-p_37		Finished		1 / 1	Core #:2
-p_38		Finished		1 / 1	Core #:0
-p_39		Finished		1 / 1	Core #:1
-p_40		Finished		1 / 1	Core #:0
-p_41		Finished		1 / 1	Core #:1
-p_42		Finished		1 / 1	Core #:2
-p_43		Finished		1 / 1	Core #:1
-p_44		Finished		1 / 1	Core #:0
-p_45		Finished		1 / 1	Core #:1
-p_46		Finished		1 / 1	Core #:0
-p_47		Finished		1 / 1	Core #:1
-p_48		Finished		1 / 1	Core #:0
-p_49		Finished		1 / 1	Core #:1
+CPU utilization: 100.000000
+Cores used: 1
+Cores available: 0
+-------------------------
+Running Processes:
+p_21		Core: 0		2 / 10	Core #:0
+
+-------------------------
+Finished Processes:
+p_0		Finished		10 / 10	Core #:0
+p_1		Finished		10 / 10	Core #:0
+p_2		Finished		10 / 10	Core #:0
+p_3		Finished		10 / 10	Core #:0
+p_4		Finished		10 / 10	Core #:0
+p_5		Finished		10 / 10	Core #:0
+p_6		Finished		10 / 10	Core #:0
+p_7		Finished		10 / 10	Core #:0
+p_8		Finished		10 / 10	Core #:0
+p_9		Finished		10 / 10	Core #:0
+p_10		Finished		10 / 10	Core #:0
+p_11		Finished		10 / 10	Core #:0
+p_12		Finished		10 / 10	Core #:0
+p_13		Finished		10 / 10	Core #:0
+p_14		Finished		10 / 10	Core #:0
+p_15		Finished		10 / 10	Core #:0
+p_16		Finished		10 / 10	Core #:0
+p_17		Finished		10 / 10	Core #:0
+p_18		Finished		10 / 10	Core #:0
+p_19		Finished		10 / 10	Core #:0
+p_20		Finished		10 / 10	Core #:0

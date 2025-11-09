@@ -34,6 +34,8 @@ void Scheduler::initialize(int cpuNum, std::string scheduler, int quantumCycles,
     _staticSchedulerPtr->d->setCPUList(_staticSchedulerPtr->_CPUList);
 
     _staticSchedulerPtr->batchProcessFreq = batchProcessFreq;
+    _staticSchedulerPtr->schedulerType = scheduler;
+    _staticSchedulerPtr->quantumCycle= quantumCycles;
     _staticSchedulerPtr->minIns= minIns;
     _staticSchedulerPtr->maxIns= maxIns;
 }
@@ -60,7 +62,7 @@ void Scheduler::schedulerRun() {
             if((Clock::getCycle() % static_cast<int>(this->batchProcessFreq)) == 0){
 
                 // std::unique_lock<std::mutex> lock(Clock::clockMutex);
-                ProcessControlBlock pcb = ProcessControlBlock{randNum, "p_" + std::to_string(randNum),-1};
+                ProcessControlBlock pcb = ProcessControlBlock{randNum, "p_" + std::to_string(randNum),-1, this->schedulerType, this->quantumCycle};
                 std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
     
                 p->generateInstruction(this->minIns, this->maxIns);
@@ -112,7 +114,8 @@ void Scheduler::runFCFS(float delayTime) {
 void Scheduler::startFCFS(float delayTime){
     static int lastCycle_fcfs = 0;
 
-    while (this->running){
+    while (this->running)
+    while(this->_schedulerRunning){
         int currentCycle_fcfs = Clock::getCycle();
         if(currentCycle_fcfs > lastCycle_fcfs){
         // while(this->_schedulerRunning){
@@ -143,9 +146,44 @@ void Scheduler::runRR(float delayTime, int quantumCycles){
     }
 }
 void Scheduler::startRR(float delayTime, int quantumCycles){
-    while (this-> running){
-        if(!(Clock::getCycle() % quantumCycles == 0)){
+    static int lastCycle_fcfs = 0;
+
+    while (this->running)
+    while (this-> _schedulerRunning){
+        int currentCycle_fcfs = Clock::getCycle();
+        if(currentCycle_fcfs > lastCycle_fcfs){
+            if(!(Clock::getCycle() % (quantumCycles) == 0)){
+                // std::cout << "[Cycle " << Clock::getCycle()<< "] Empty" << std::endl;
+                if(this->_processList.size()!=0){
+                    this->_readyQueue.push(this->_processList.front());
+                    // std::cout << "_readyQueue.pushed: " << this->_processList.front()->getName() << std::endl;
+                    this->_processList.erase(this->_processList.begin());
+                    // std::cout <<"_processList.size() > 0" << std::endl;
+                }
+
+            }
+            else{
+                if(this->_processList.size()!=0){
+                    this->_readyQueue.push(this->_processList.front());
+                    // std::cout << "_readyQueue.pushed: " << this->_processList.front()->getName() << std::endl;
+                    this->_processList.erase(this->_processList.begin());
+                    // std::cout <<"_processList.size() > 0" << std::endl;
+                }
+
+                // std::cout << "[Cycle " << Clock::getCycle()<< "] Quantum Cycle" << std::endl;
+                // std::cout << "" << std::endl;
+                for(std::shared_ptr<CPU> cpu : this->_CPUList){
+                    if(cpu->getProcess() != nullptr){
+                        this->_readyQueue.push(cpu->getProcess());
+                        cpu->setProcess(nullptr);
+                        // cpu->setProcess(this->_readyQueue.front());
+                        // this->_readyQueue.pop();
+                    }
+                }
+            }
         }
+
+        lastCycle_fcfs = currentCycle_fcfs;
     }
 }
 
@@ -198,6 +236,13 @@ void Scheduler::printStatus() {
         }
     }
 
+    ProcessQueue tempReadyQueue = this->_readyQueue;
+    while(!tempReadyQueue.empty()){
+        std::cout << tempReadyQueue.front()->getName()+"\t\tCore: "<< std::to_string(tempReadyQueue.front()->getCPUCoreID())<< 
+        "\t\t" << std::to_string(tempReadyQueue.front()->getProgramCounter()) << " / " << std::to_string(tempReadyQueue.front()->getInstructionSetSize())<< 
+        std::endl;
+        tempReadyQueue.pop();
+    }
 
     std::cout <<
         "\n-------------------------" << "\n"  <<
@@ -211,6 +256,7 @@ void Scheduler::printStatus() {
                 // std::cout << "List the busy processors" << std::endl;
 
             } 
+            // else std::cout << pastProcess->getName() << " IS NOT TERMINATED YET"<< std::endl;
     }
 }
 
