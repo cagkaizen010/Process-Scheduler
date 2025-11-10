@@ -54,10 +54,10 @@ class Scheduler{
         void schedulerTest();
         void schedulerRun();
         void schedulerStop();
-
         void addProcess(std::shared_ptr<Process>);
         void addToReadyQueue(std::shared_ptr<Process> p){this->_readyQueue.push(p);};
         std::shared_ptr<Process> findProcess(std::string );
+        void createProcess(std::string);
         void runFCFS( float);
         void startFCFS(float);
         void runRR(float, int);

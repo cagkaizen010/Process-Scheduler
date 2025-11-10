@@ -202,6 +202,20 @@ std::shared_ptr<Process> Scheduler::findProcess(std::string processName){
     else return nullptr;
 }
 
+void Scheduler::createProcess(std::string processName){
+    int randomNumber = getRandomInt(1000, 999999);
+    std::cout <<"Creating process " + processName <<std::endl;
+
+    ProcessControlBlock pcb = ProcessControlBlock{randomNumber, "p_" + processName,-1, this->schedulerType, this->quantumCycle};
+    std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
+
+    p->generateInstruction(this->minIns, this->maxIns);
+
+    this->addProcess(p);
+    this->_readyQueue.push(p);
+
+}
+
 // std::vector<Scheduler::ProcessInfo> Scheduler::getRunningProcessInfo() const{
 //     return ;
 // }
@@ -236,13 +250,13 @@ void Scheduler::printStatus() {
         }
     }
 
-    ProcessQueue tempReadyQueue = this->_readyQueue;
-    while(!tempReadyQueue.empty()){
-        std::cout << tempReadyQueue.front()->getName()+"\t\tCore: "<< std::to_string(tempReadyQueue.front()->getCPUCoreID())<< 
-        "\t\t" << std::to_string(tempReadyQueue.front()->getProgramCounter()) << " / " << std::to_string(tempReadyQueue.front()->getInstructionSetSize())<< 
-        std::endl;
-        tempReadyQueue.pop();
-    }
+    // ProcessQueue tempReadyQueue = this->_readyQueue;
+    // while(!tempReadyQueue.empty()){
+    //     std::cout << tempReadyQueue.front()->getName()+"\t\tCore: "<< std::to_string(tempReadyQueue.front()->getCPUCoreID())<< 
+    //     "\t\t" << std::to_string(tempReadyQueue.front()->getProgramCounter()) << " / " << std::to_string(tempReadyQueue.front()->getInstructionSetSize())<< 
+    //     std::endl;
+    //     tempReadyQueue.pop();
+    // }
 
     std::cout <<
         "\n-------------------------" << "\n"  <<

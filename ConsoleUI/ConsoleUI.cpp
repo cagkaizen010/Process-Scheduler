@@ -42,7 +42,10 @@ void ConsoleUI::createNewConsole(std::string consoleName, AConsoleUI_ console){
         std::vector<std::shared_ptr<Process>> tempList;
         if(this->_scheduler != nullptr)
             tempList = this->_scheduler->_processListHistory;
-        else std::cout << "this->_scheduler is nullptr..." << std::endl;
+        else{
+            std::cout << "this->_scheduler is nullptr..." << std::endl;
+            return;
+        }
         // Implement scheduler first.
 
             // std::cout << "Listning previously running processes." << std::endl;
@@ -99,10 +102,7 @@ void ConsoleUI::switchConsole(std::string consoleName) {
 
 
     while(this->_currentConsole->isActive()){
-        // std::cout << consoleName << " is RUNNING" <<  std::endl;
     }
-    // std::cout << "break";
-    // std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
     if(this->_currentConsole->removable())
         this->_ConsoleUIMap.erase(consoleName);
