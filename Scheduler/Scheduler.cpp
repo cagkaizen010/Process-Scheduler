@@ -175,7 +175,7 @@ void Scheduler::startRR(float delayTime, int quantumCycles){
                 for(std::shared_ptr<CPU> cpu : this->_CPUList){
                     if(cpu->getProcess() != nullptr){
                         this->_readyQueue.push(cpu->getProcess());
-                        // cpu->setProcess(nullptr);
+                        cpu->setProcess(nullptr);
                         // cpu->setProcess(this->_readyQueue.front());
                         // this->_readyQueue.pop();
                     }
