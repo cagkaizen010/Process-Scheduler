@@ -1,6 +1,8 @@
 #ifndef ADD_H
 #define ADD_H
 
+#include <cstdio>
+#include <iostream>
 #include "./Instruction.h"
 
 class Instruction;

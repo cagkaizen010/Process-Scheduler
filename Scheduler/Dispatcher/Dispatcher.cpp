@@ -2,22 +2,9 @@
 
 Dispatcher::Dispatcher(){
 
-    // std::thread dispatcherThread(&Dispatcher::run, this );
-    // dispatcherThread.detach();
 }
 
-// Dispatcher::Dispatcher(std::vector<std::shared_ptr<CPU>> _CPUList, Scheduler* scheduler){
-//     this->_CPUList = _CPUList;
-//     this->_scheduler = scheduler;
-//     std::thread dispatcherThread(&Dispatcher::run, this );
-//     dispatcherThread.detach();
 
-//     this->startDispatcher();
-// }
-
-// void Dispatcher::initialize(std::vector<std::shared_ptr<CPU>> _CPUList, Scheduler* scheduler){
-//     this->_CPUList = _CPUList; 
-// }
 
 void Dispatcher::setScheduler(Scheduler* s){
     this->_scheduler = s;
@@ -34,8 +21,6 @@ void Dispatcher::startDispatcher() {
     dispatcherThread.detach();
 
 }
-
-
 
 void Dispatcher::run(){
     static int lastCycle = 0;
@@ -55,9 +40,6 @@ void Dispatcher::run(){
             }
             
             if(!_scheduler->_readyQueue.empty())
-            // std::cout << "[Cycle " << Clock::getCycle() <<"]: "
-            // << "_scheduler->_readyQueue.front()->getName() "+ _scheduler->_readyQueue.front()->getName() << std::endl;
-
             // Scan through CPU list to check which is available
             // If CPU is READY, assign it a process: (setProcess(Process))
             
@@ -74,14 +56,9 @@ void Dispatcher::run(){
 
                     }
                 }
-            
             lastCycle=currentCycle;
         }
-        
-
     }
-
-
 }
 
 void Dispatcher::stopDispatcher() {

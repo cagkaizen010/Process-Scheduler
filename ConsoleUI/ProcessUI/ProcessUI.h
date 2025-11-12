@@ -13,6 +13,7 @@ class ProcessUI : public AConsoleUI {
         void stop() override ;
     private:
         void display() override;
+        void processSMI();
         std::string _pastDisplays;
 
         std::shared_ptr<Process> _process;

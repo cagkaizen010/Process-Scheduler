@@ -47,8 +47,7 @@ class Scheduler{
             int linesOfCode;
 
         };
-        // Scheduler(SchedulingAlgorithm, int, std::string); 
-        Scheduler();
+        Scheduler(){};
         ~Scheduler() = default; 
 
         void schedulerTest();
@@ -69,15 +68,10 @@ class Scheduler{
         void stop(); 
 
         void printStatus() ;
-        void processSMI();
         void reportUtil();
-        // virtual void init() = 0;
-        // virtual void execute() = 0;
 
-        // std::vector<ProcessInfo> getRunningProcessInfo() const;
 
         std::string getName();
-        std::string getLatestMsg();
 
     protected:
 

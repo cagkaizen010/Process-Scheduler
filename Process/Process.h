@@ -47,7 +47,6 @@ class Process {
 
         std::string randStr();
 
-        // void print(std::string msg);
         int getID();
         void setID(int pid);
         bool isEmpty();
@@ -69,6 +68,7 @@ class Process {
         int getInstructionSetSize();
         void generateInstruction(int, int);
         void listInstructions();
+        // void listCurrentlyRunningInstructions();
         void deleteTopInstruction();
         std::shared_ptr<Instruction> getInstruction();
 

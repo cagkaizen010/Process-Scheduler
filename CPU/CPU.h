@@ -24,13 +24,9 @@ class CPU {
 
         void setProcess(std::shared_ptr<Process> process);
         void setDelayTime(float delayTime) {this->delayTime=delayTime;};
-        // void setCPUCycles(float cpuCycles) {this->cpuCycles=cpuCycles;};
         std::shared_ptr<Process> getProcess();
         std::string getProcessName();
 
-        // void startCPUCycle();
-        // void stopCPUCycle();
-        void executeCPUCycle();
 
         CPUStatus checkStatus();
 

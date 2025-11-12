@@ -121,8 +121,15 @@ void Process::generateInstruction(int minIns, int maxIns){
 
 
 void Process::listInstructions() {
-    for( std::shared_ptr<Instruction> i : text)
+    if(text.size() > 15) {
+        for (int i = 0; i < 15; i++){
+            std::cout << text[i]->getInstructionType() << std::endl;
+        }
+        std::cout <<".\n.\n.\n"<< std::endl;
+    } else for( std::shared_ptr<Instruction> i : text)
         std::cout << i->getInstructionType() << std::endl;
+
+
 }
 
 void Process::deleteTopInstruction(){

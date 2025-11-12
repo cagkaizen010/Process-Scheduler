@@ -1,7 +1,6 @@
 #include "./MainMenuUI.h"
 
 MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _consoleUI(consoleUI) {
-    // this->InputHandler(consoleUI);
 
     this->_commandMap["screen"] = [consoleUI](_Argument args){
 
@@ -12,13 +11,11 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
                 if(consoleUI->_scheduler->findProcess(args.at(2)) == nullptr){
 
                    consoleUI->_scheduler->createProcess(args.at(2));
-
                 }
-                else {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
                     // consoleUI->_scheduler->schedulerTest();
                     consoleUI->createNewConsole(args.at(2));
                     // consoleUI->_scheduler->stop();
-                }
             }
             
         }
@@ -50,11 +47,6 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
         std::cout << "Inside scheduler-stop command!" << std::endl;
         consoleUI->_scheduler->stop();
     };
-
-    this->_commandMap["process-smi"] = [consoleUI](_Argument args){
-        std::cout << "Inside process-smi command!" << std::endl;
-        consoleUI->_scheduler->processSMI();
-    };
     
     this->_commandMap["report-util"] = [consoleUI](_Argument args){
         std::cout << "Inside report-util command!" << std::endl;
@@ -65,10 +57,6 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
 
 void MainMenuUI::run() {
     std::string inputString;
-
-    // Remove this after testing
-    // this->_active = true;
-    // this->_initialized=true;
 
     while(!this->_initialized){
         std::cout << "Input 'initialize' to begin..." << std::endl;

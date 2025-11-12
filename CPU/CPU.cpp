@@ -9,28 +9,18 @@ CPU::CPU() {
         this->_id=CPU::dynamicID;
         CPU::dynamicID++;
     }
-    // else CPU::dynamicID = 0;
-    
-
     std::thread tickThread(&CPU::CPURun, this);
     tickThread.detach();
 }
 
 void CPU::setProcess(std::shared_ptr<Process> process){
-    // if((this->_process != nullptr) && process == nullptr){
-    //     this->_process->setCPUCoreID(-1);
-    // }
-
     this->_process = process;
 
     if((process != nullptr)  ) 
         process->setCPUCoreID(this->_id);
 
 
-    // bool tempCPUStatus = (process == nullptr) ? CPU::READY : CPU::BUSY;
-    // std::cout << "Setting CPU Process to: " << std::to_string(tempCPUStatus) << std::endl;
     this->status = (process == nullptr) ? CPU::READY : CPU::BUSY;
-    // std::cout << "CPU Status: " << this->status << std::endl;
 }
 std::shared_ptr<Process> CPU::getProcess(){
     return this->_process;
@@ -58,34 +48,34 @@ void CPU::toggleStatus(){
 
 
 void CPU::CPURun(){
-    this->halt = false;
+     this->halt = false;
     static int lastCycle = 0;
     while(!this->halt){
-        // this->CPUExecute();
-        // if((fmod(Clock::getCycle(), 1+this->delayTime ) == float(0)) || (this->delayTime == 0)){
-            // std::cout << Clock::getCycle() << std::endl;
 
+        // Safety to prevent more than one execution on a clock cycle
         int currentCycle = Clock::getCycle();
         if(currentCycle > lastCycle){
+
+            // Check if CPU is on a delay cycle
             if((Clock::getCycle() % (1 + static_cast<int>(this->delayTime)))== 0 || (this->delayTime == 0)){
 
-                // std::cout <<"random string" << std::endl;
-                // std::unique_lock<std::mutex> lock(Clock::clockMutex);
+                // First check to see if assigned process is null
                 if (this->_process != nullptr ){
 
+                    // Check to see if current Scheduler is in round-robin mode
+                    // else do FCFS mode and execute the current cycle
                     if(this->_process->getSchedulingType() == "rr"){
-                        // if(this->_process != nullptr)
+
+                        // Check if current cycle is on a quantum cycle
+                        // If it is, do nothing.
+                        // if not, call execute on current process
                         if(!((Clock::getCycle() % ( this->_process->getQuantumCycles() ))==0)){
                             if (((this->_process->getCPUCoreID() == this->getID()) && !(this->_process->isEmpty()))){
-                                std::cout << "EXECUTING [Cycle " << currentCycle << " @ CPU #" << this->getID()<<"]: "
-                                << "this->_process->getName() "+ this->_process->getName() 
-                                << " this->_process->getProgramCounter() " << this->_process->getProgramCounter() <<std::endl;
 
                                 if(this->_process != nullptr ) this->_process->execute();
                             }
                         }
                         else{
-                            // this->setProcess(nullptr);
                             lastCycle = currentCycle;
                             continue;
                             // std::cout << "Process inside during quantum cycle: " << this->_process->getName() <<std::endl; 
@@ -93,52 +83,34 @@ void CPU::CPURun(){
                     }
                     else {
                         if (((this->_process->getCPUCoreID() == this->getID()) && !(this->_process->isEmpty()))){
-                            // std::cout << "EXECUTING [Cycle " << currentCycle << " @ CPU #" << this->getID()<<"]: "
-                            // << " this->_process->getName() "+ this->_process->getName() << std::endl;
+
                             this->_process->execute();
                         }
 
                     }
-                    
-
 
                     // If process is finished,
                     // setProcess to null, and set the CPU to READY
-                    if(this->_process != nullptr)
-                    if( this->_process->getState() == ProcessState::TERMINATED){
-                        // std::cout << "TERMINATED [Cycle " << currentCycle << " @ CPU #" << this->getID()<<"]: "
-                        // << "this->_process->getName() "+ this->_process->getName() << std::endl;
-                        this->setProcess(nullptr);
-                        this->status= CPUStatus::READY;
+                    if(this->_process != nullptr){
+                        if( this->_process->getState() == ProcessState::TERMINATED){
+
+                            this->setProcess(nullptr);
+                            this->status= CPUStatus::READY;
+                        }
+                        else if (this->_process->isEmpty()){
+
+                            this->_process->setState(ProcessState::TERMINATED);
+                            this->setProcess(nullptr);
+                            this->status= CPUStatus::READY;
+                        }
                     }
-                    else if (this->_process->isEmpty()){
-                        // std::cout << "TERMINATED [Cycle " << currentCycle << " @ CPU #" << this->getID()<<"]: "
-                        // << "this->_process->getName() "+ this->_process->getName() << std::endl;
-                        this->_process->setState(ProcessState::TERMINATED);
-                        this->setProcess(nullptr);
-                        this->status= CPUStatus::READY;
-                    }
+
                 }
-
-                // if((this->_process == nullptr) )
-                //     std::cout << "[Cycle " << Clock::getCycle()<< "] Empty" << std::endl;
-                //     std::cout << "INSIDE Clock::getCycle(): " << Clock::getCycle() << std::endl;
-
-                // // VERIFICATION FOR DELAY PER EXEC
-                // std::cout << "[Cycle " << Clock::getCycle()<< "] Empty" << std::endl;
-                // std::cout << "Conditional: "<< (Clock::getCycle() % (1 + static_cast<int>(this->delayTime)))<< std::endl;
-                // std::cout << "Denominator: "<<1 + static_cast<int>(this->delayTime) << std::endl;
-
             }
             // if((this->_process == nullptr) )
             lastCycle = currentCycle;
             // lock.unlock();
         }
-        // std::cout << "OUTSIDE Clock::getCycle(): " << Clock::getCycle() << std::endl;
-        // std::unique_lock<std::mutex> lock(mtx);
-        // cpuCycles = cpuCycles + 1;
-        // lock.unlock();
-
         // CPU stops completely
     }
     std::cout << "CPU is now ready" << std::endl;
