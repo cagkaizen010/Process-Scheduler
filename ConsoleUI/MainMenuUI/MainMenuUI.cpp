@@ -24,6 +24,9 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
         else if(args.at(1) == "-ls")
             // std::cout<< "Implement consoleUI->_scheduler->printStatus()" << std::endl;
             consoleUI->_scheduler->printStatus();
+        else if(args.at(1) == "-c"){
+            
+        }
         else {
             std::cout << "Invalid input" << std::endl;
             std::cout << "args.at(0): " << args.at(0) << std::endl;
@@ -52,7 +55,14 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
         std::cout << "Inside report-util command!" << std::endl;
         consoleUI->_scheduler->reportUtil();
     };
+    
+    this->_commandMap["process-smi"] = [consoleUI](_Argument args) {
+        std::cout << "Inside process-smi in main" << std::endl;
+    };
 
+    this->_commandMap["vmstat"] = [consoleUI](_Argument args) {
+        std::cout << "Inside vmstat in main" << std::endl;
+    };
 }
 
 void MainMenuUI::run() {
