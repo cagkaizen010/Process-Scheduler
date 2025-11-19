@@ -9,7 +9,7 @@
 #include "../Process/Process.h"
 #include "../Config/config.h"
 #include "../Clock/Clock.h"
-// #include "../Scheduler/Scheduler.h"
+#include "../Scheduler/Scheduler.h"
 
 // Executes the instruction inside the Process
 

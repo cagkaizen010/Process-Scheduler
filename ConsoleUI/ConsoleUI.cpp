@@ -28,7 +28,7 @@ void ConsoleUI::start() {
 
 void ConsoleUI::createNewConsole(std::string consoleName, AConsoleUI_ console){
     if(this->_ConsoleUIMap.find(consoleName) != this->_ConsoleUIMap.end()){
-        std::cout << "Process already running" << std::endl;
+        std::cout << "Console for process already running" << std::endl;
         return;
     }
     if(this->_scheduler->findProcess(consoleName) == nullptr){
@@ -40,47 +40,47 @@ void ConsoleUI::createNewConsole(std::string consoleName, AConsoleUI_ console){
     if (console == nullptr){
         
         std::vector<std::shared_ptr<Process>> tempList;
-        if(this->_scheduler != nullptr)
-            tempList = this->_scheduler->_processListHistory;
+        if(this->_scheduler != nullptr){
+            tempList = this->_scheduler->_processListHistory;              // _processList
+
+        }
+
         else{
             std::cout << "this->_scheduler is nullptr..." << std::endl;
             return;
         }
         // Implement scheduler first.
 
+        // First see if the process exists
         for(std::shared_ptr<Process> process: tempList){
             if(consoleName == process->getName() ) {
 
-                std::cout << "Console has been found!" << std::endl;
                 console = std::make_shared<ProcessUI>(process);
-
                 
                 isFound=true;
                 break;
             }
         }
 
-        if (isFound) this->_ConsoleUIMap[consoleName] = console;
+        if (isFound){
+            
+            this->_ConsoleUIMap[consoleName] = console;
+            this->switchConsole(consoleName);
+        }
+        else {
+            std::cout << "Process cannot be found or has finished, cannot initialize screen for process..." << std::endl;
+            return;
+        }
 
-        std::cout << "isFound: " << isFound << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        this->_ConsoleUIMap[consoleName] = console;
-        this->switchConsole(consoleName);
     }
-    else {
-        this->_ConsoleUIMap[consoleName] = console;
-
-
-        std::cout<<"else block" << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    }
+    
 }
 
 void ConsoleUI::switchConsole(std::string consoleName) {
     // Check for the console's existence, or release console if marked removable.
-    if((this->_ConsoleUIMap.find(consoleName) == this->_ConsoleUIMap.end()) && (this->_ConsoleUIMap[consoleName] == nullptr)){
+    
+    if((this->_ConsoleUIMap.find(consoleName) == this->_ConsoleUIMap.end()) ){ // && (this->_ConsoleUIMap[consoleName] == nullptr)){
         std::cout << "Process " << consoleName << " is not found" << std::endl;
-        std::cout << this->_ConsoleUIMap[consoleName]->isActive() << std::endl;
         return;
     }
     else if (this->_ConsoleUIMap[consoleName]->removable()){

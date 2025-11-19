@@ -6,16 +6,18 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
 
         
         if(args.at(1) == "-s"){
-            std::cout << args.size() << std::endl;
+            // for (std::string s : args){
+            //     std::cout << s << std::endl;
+            // }
             if(args.size() == 3 ) {
                 if(consoleUI->_scheduler->findProcess(args.at(2)) == nullptr){
-
-                   consoleUI->_scheduler->createProcess(args.at(2));
+                    // std::cout << "Process is not found, creating new one named " + args.at(2) << std::endl;
+                    consoleUI->_scheduler->createProcess(args.at(2));
                 }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-                    // consoleUI->_scheduler->schedulerTest();
-                    consoleUI->createNewConsole(args.at(2));
-                    // consoleUI->_scheduler->stop();
+
+                // consoleUI->_scheduler->schedulerTest();
+                consoleUI->createNewConsole(args.at(2));
+                // consoleUI->_scheduler->stop();
             }
             
         }
@@ -24,8 +26,9 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
         else if(args.at(1) == "-ls")
             // std::cout<< "Implement consoleUI->_scheduler->printStatus()" << std::endl;
             consoleUI->_scheduler->printStatus();
+
         else if(args.at(1) == "-c"){
-            
+
         }
         else {
             std::cout << "Invalid input" << std::endl;

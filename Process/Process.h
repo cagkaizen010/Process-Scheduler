@@ -55,7 +55,7 @@ class Process {
         void setName(std::string);
 
         int getProgramCounter();
-        void incrementProgramCounter(int progCounter);
+        void incrementProgramCounter();
 
         ProcessState getState();
         void setState(ProcessState );

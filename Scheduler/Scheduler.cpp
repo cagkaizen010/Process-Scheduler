@@ -1,13 +1,12 @@
 #include "Scheduler.h"
 
+
 int Scheduler::getRandomInt(int min, int max) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distrib(min, max);
     return distrib(gen);
 }
-
-
 
 Scheduler* Scheduler::_staticSchedulerPtr = nullptr;
 Scheduler* Scheduler::get(){
@@ -56,13 +55,13 @@ void Scheduler::schedulerRun() {
         if(currentCycle >lastCycle ){
             if((Clock::getCycle() % static_cast<int>(this->batchProcessFreq)) == 0){
 
-                ProcessControlBlock pcb = ProcessControlBlock{randNum, "p_" + std::to_string(randNum),-1, this->schedulerType, this->quantumCycle};
-                std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
+                // ProcessControlBlock pcb = ProcessControlBlock{randNum, "p_" + std::to_string(randNum),-1, this->schedulerType, this->quantumCycle};
+                // std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
     
-                p->generateInstruction(this->minIns, this->maxIns);
-                this->addProcess(p);
+                // p->generateInstruction(this->minIns, this->maxIns);
+                // this->addProcess(p);
 
-                randNum++;
+                // randNum++;
             }
             lastCycle = currentCycle;
         }
@@ -72,10 +71,25 @@ void Scheduler::schedulerRun() {
 
 }
 
+void Scheduler::addToReadyQueue(std::shared_ptr<Process> p){
+
+            std::lock_guard<std::mutex> lock(schedulerMutex);
+            this->_readyQueue.push(p);
+}
+
+std::shared_ptr<Process> Scheduler::retrieveFromReadyQueue() {
+    std::lock_guard<std::mutex> lock(schedulerMutex);
+
+    std::shared_ptr<Process> temp = this->_readyQueue.front();
+    this->_readyQueue.pop();
+
+    return temp;
+}
+
 void Scheduler::addProcess(std::shared_ptr<Process> process){
     // this->_readyQueue.push(process);
     this->_processList.push_back(process);
-    this->_processListHistory.push_back(this->_processList.front());
+    this->_processListHistory.push_back(process);
     this->_processMap[process->getName()] = process;
 
 
@@ -99,7 +113,8 @@ void Scheduler::startFCFS(float delayTime){
         int currentCycle_fcfs = Clock::getCycle();
         if(currentCycle_fcfs > lastCycle_fcfs){
             if(this->_processList.size()!=0){
-                this->_readyQueue.push(this->_processList.front());
+                this->addToReadyQueue(this->_processList.front());
+                // this->_readyQueue.push(this->_processList.front());
                 this->_processList.erase(this->_processList.begin());
             }
 
@@ -182,7 +197,12 @@ void Scheduler::createProcess(std::string processName){
 void Scheduler::printStatus() {
     int cpuReadyCount = 0;
     for (std::shared_ptr<CPU> cpu : this->_CPUList) 
-        if (cpu->checkStatus() == CPU::READY) cpuReadyCount++;
+        if (cpu->checkStatus() == CPU::READY) {
+            cpuReadyCount++;
+        }
+        else {
+            std::cout << "CPU #" << cpu->getID() << " is still running" << std::endl;
+        }
     
     float CPUUtil = 100.0 * (this->_CPUList.size() - cpuReadyCount)/(this->_CPUList.size());
     
@@ -198,13 +218,15 @@ void Scheduler::printStatus() {
     std::endl;
 // 
     for(std::shared_ptr<CPU> i : _CPUList){
-        if(i->checkStatus()==CPU::READY){
+        if(i->checkStatus()==CPU::READY || (i->getProcess() == nullptr)){
             std::cout <<"Idle\t\t\tCore: " << std::to_string(i->getID()) << std::endl;
         }
         else{
-            std::cout << i->getProcessName()+"\t\tCore: "<< std::to_string(i->getID())<< 
-            "\t\t" << std::to_string(i->getProcess()->getProgramCounter()) << " / " << std::to_string(i->getProcess()->getInstructionSetSize())<< 
-            "\t" << "Core #:" + std::to_string(i->getProcess()->getCPUCoreID()) <<std::endl;
+            if (i->getProcess() != nullptr){
+                std::cout << i->getProcessName()+"\t\tCore: "<< std::to_string(i->getID())<< 
+                "\t\t" << std::to_string(i->getProcess()->getProgramCounter()) << " / " << std::to_string(i->getProcess()->getInstructionSetSize())<< 
+                "\t" << "Core #:" + std::to_string(i->getProcess()->getCPUCoreID()) <<std::endl;
+            }
         }
     }
 

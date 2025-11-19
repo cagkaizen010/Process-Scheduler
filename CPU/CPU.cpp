@@ -14,11 +14,17 @@ CPU::CPU() {
 }
 
 void CPU::setProcess(std::shared_ptr<Process> process){
-    this->_process = process;
+    if((process != nullptr )  ) {
+        if (process->getCPUCoreID() == -1)
+            process->setCPUCoreID(this->_id);
 
-    if((process != nullptr)  ) 
-        process->setCPUCoreID(this->_id);
-
+        if (process->getCPUCoreID() == this->_id)
+            this->_process = process;
+    }
+    else {
+        this->_process= process;
+    }
+    
 
     this->status = (process == nullptr) ? CPU::READY : CPU::BUSY;
 }
@@ -72,7 +78,9 @@ void CPU::CPURun(){
                         if(!((Clock::getCycle() % ( this->_process->getQuantumCycles() ))==0)){
                             if (((this->_process->getCPUCoreID() == this->getID()) && !(this->_process->isEmpty()))){
 
-                                if(this->_process != nullptr ) this->_process->execute();
+                                if(this->_process != nullptr ) {
+                                    this->_process->execute();
+                                }
                             }
                         }
                         else{
@@ -92,6 +100,7 @@ void CPU::CPURun(){
                     // If process is finished,
                     // setProcess to null, and set the CPU to READY
                     if(this->_process != nullptr){
+                        std::cout << "CPU " << this->_id << " RUNNING" << std::endl;
                         if( this->_process->getState() == ProcessState::TERMINATED){
 
                             this->setProcess(nullptr);

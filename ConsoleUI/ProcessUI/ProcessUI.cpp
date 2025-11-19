@@ -35,8 +35,8 @@ void ProcessUI::run() {
 }
 
 void ProcessUI::stop() {
-    std::cout << "Exiting from process: " << this->_process->getName() << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    // std::cout << "Exiting from process: " << this->_process->getName() << std::endl;
+    // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     if (this->_process->isEmpty()) this->_removable= true;
     this->_active = false;
 }

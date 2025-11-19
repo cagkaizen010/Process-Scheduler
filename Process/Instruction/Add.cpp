@@ -8,8 +8,6 @@ Add::Add(int var, int var1, int var2) : Instruction(ADD){
 
 void Add::execute(int cpu) {
     this->var = this->var1 + this->var2;   
-    // std::cout << "Adding " << this->var1<< " and "
-    // << this->var2 << " onto " << this->var << std::endl;
 }
 
 

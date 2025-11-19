@@ -32,9 +32,6 @@ static std::string getRandomString(size_t length) {
 
 Process::Process( ProcessControlBlock pcb)  {
     this->pcb = pcb;
-    // this->text = text;
-    // this->generateInstruction();
-    // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 }
 
 int Process::getID(){
@@ -66,7 +63,7 @@ void Process::setName(std::string name){
 int Process::getProgramCounter(){
     return this->pcb.progCounter;
 }
-void Process::incrementProgramCounter(int progCounter){
+void Process::incrementProgramCounter(){
     this->pcb.progCounter = this->getProgramCounter()+1;
 }
 
@@ -142,36 +139,12 @@ std::shared_ptr<Instruction> Process::getInstruction() {
 
     // YOU ARE HERE
 void Process::execute() {
-    static uint64_t lastCycle = 0;
     if(!this->isEmpty()){
-        // std::cout << "[Cycle " << Clock::getCycle() << "]: "
-        // << "this->_process->getName() "+ this->getName() << std::endl;
+ 
+        this->text.at(pcb.progCounter)->execute(pcb.CPUCoreID);
+        this->incrementProgramCounter();
+        if (this -> isEmpty()) this->pcb.pstate =TERMINATED;
 
-        // uint64_t currentCycle = Clock::getCycle();
-
-        // if(currentCycle > lastCycle){
-            this->text.at(pcb.progCounter)->execute(pcb.CPUCoreID);
-            this->pcb.progCounter++;
-            if (this -> isEmpty()) this->pcb.pstate =TERMINATED;
-            // lastCycle = currentCycle;
-            
-        // }
-            // std::cout << Clock::getCycle() << std::endl;
-
-        // std::cout << "[Cycle " << Clock::getCycle()
-        //   << "] CPU#" << pcb.CPUCoreID
-        //   << " executing instruction #" << pcb.progCounter
-        //   << " of process " << pcb.pname << std::endl;
-
-
-        // system("cls");
-
-        // std::cout << this->pcb.pname << std::endl;
-        // std::cout << std::to_string(this->pcb.progCounter) + " < " + std::to_string(this->text.size())<<std::endl;
-        // std::cout << "pcb.CPUCoreID: " + std::to_string(pcb.CPUCoreID) <<std::endl; 
-
-
-        // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
     else {
         std::cout << "PROCESS IS EMPTY" << std::endl;

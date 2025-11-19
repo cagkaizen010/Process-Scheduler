@@ -21,9 +21,12 @@
 #include "./Dispatcher/Dispatcher.h"
 
 // static float cpuCycles=0;
+
 class Dispatcher;
 class Scheduler{
     public:
+
+        std::mutex schedulerMutex;
         static Scheduler* get();
         static void initialize(
             int cpuNum,
@@ -54,7 +57,9 @@ class Scheduler{
         void schedulerRun();
         void schedulerStop();
         void addProcess(std::shared_ptr<Process>);
-        void addToReadyQueue(std::shared_ptr<Process> p){this->_readyQueue.push(p);};
+
+        void addToReadyQueue(std::shared_ptr<Process> p);
+        std::shared_ptr<Process> retrieveFromReadyQueue();
         std::shared_ptr<Process> findProcess(std::string );
         void createProcess(std::string);
         void runFCFS( float);

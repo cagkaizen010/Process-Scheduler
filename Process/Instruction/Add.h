@@ -5,12 +5,13 @@
 #include <iostream>
 #include "./Instruction.h"
 
+
+// COnvert all to uint16_t for memory portion
 class Instruction;
 class Add : public Instruction {
     public:
         Add(int, int, int);
         ~Add() override = default;
-
 
         void execute(int cpu) override ;
         std::string getInstructionType() override ;

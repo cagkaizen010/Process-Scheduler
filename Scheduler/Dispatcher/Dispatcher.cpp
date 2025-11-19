@@ -39,7 +39,7 @@ void Dispatcher::run(){
                 break;
             }
             
-            if(!_scheduler->_readyQueue.empty())
+            // if(!_scheduler->_readyQueue.empty())
             // Scan through CPU list to check which is available
             // If CPU is READY, assign it a process: (setProcess(Process))
             
