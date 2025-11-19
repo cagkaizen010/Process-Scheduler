@@ -9,7 +9,6 @@
 #include "../Process/Process.h"
 #include "../Config/config.h"
 #include "../Clock/Clock.h"
-#include "../Scheduler/Scheduler.h"
 
 // Executes the instruction inside the Process
 
@@ -23,7 +22,8 @@ class CPU {
         ~CPU() = default;
 
         void setProcess(std::shared_ptr<Process> process);
-        void setDelayTime(float delayTime) {this->delayTime=delayTime;};
+        void setDelayTime(float delayTime) {
+            this->delayTime=delayTime;};
         std::shared_ptr<Process> getProcess();
         std::string getProcessName();
 
@@ -34,6 +34,8 @@ class CPU {
 
         void toggleStatus();
     private:
+        std::mutex cpuMutex;
+
         CPUStatus status = CPUStatus::READY;       
         void CPURun();
         int _id;

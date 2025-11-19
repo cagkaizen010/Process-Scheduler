@@ -2,6 +2,7 @@
 CC = g++
 # CFLAGS = -I./ConsoleUI -g  # Include the ConsoleUI folder for headers
 CFLAGS = -g -O0 -Wall -Wextra 
+# CFLAGS = -g -O0 -Wall -Wextra -fsanitize=thread 
 # CFLAGS =  -g
 
 # File locations
@@ -15,8 +16,12 @@ OBJECTS = $(SOURCES:.cpp=.o)
 EXEC = main # Name of the output executable
 
 # Default target to compile and link
+# $(EXEC): $(OBJECTS)
+# 	$(CC) $(OBJECTS) -o $(EXEC)
+
+# For use with fsanitize
 $(EXEC): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(EXEC)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(EXEC)
 
 # Rule to compile each .cpp file to .o object files
 %.o: %.cpp

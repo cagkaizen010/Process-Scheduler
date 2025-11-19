@@ -73,18 +73,30 @@ void Scheduler::schedulerRun() {
 
 void Scheduler::addToReadyQueue(std::shared_ptr<Process> p){
 
-            std::lock_guard<std::mutex> lock(schedulerMutex);
-            this->_readyQueue.push(p);
+    std::lock_guard<std::mutex> lock(schedulerMutex);
+    this->_readyQueue.push(p);
 }
 
 std::shared_ptr<Process> Scheduler::retrieveFromReadyQueue() {
     std::lock_guard<std::mutex> lock(schedulerMutex);
+    std::string placeholder;
+    std::getline(std::cin, placeholder);
 
     std::shared_ptr<Process> temp = this->_readyQueue.front();
+    std::cout << "Someone took a copy of temp" << std::endl;
     this->_readyQueue.pop();
+    // std::cout << this->_readyQueue.size()<< std::endl;
 
     return temp;
 }
+
+bool Scheduler::isReadyQueueEmpty(){
+    std::lock_guard<std::mutex> lock(schedulerMutex);
+    return this->_readyQueue.empty();
+
+}
+
+
 
 void Scheduler::addProcess(std::shared_ptr<Process> process){
     // this->_readyQueue.push(process);

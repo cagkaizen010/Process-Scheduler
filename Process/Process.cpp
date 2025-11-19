@@ -139,6 +139,7 @@ std::shared_ptr<Instruction> Process::getInstruction() {
 
     // YOU ARE HERE
 void Process::execute() {
+    // std::lock_guard<std::mutex> lock(processMutex);
     if(!this->isEmpty()){
  
         this->text.at(pcb.progCounter)->execute(pcb.CPUCoreID);

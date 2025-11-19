@@ -10,7 +10,7 @@
 class Instruction;
 class Add : public Instruction {
     public:
-        Add(int, int, int);
+        Add(uint16_t, uint16_t, uint16_t);
         ~Add() override = default;
 
         void execute(int cpu) override ;

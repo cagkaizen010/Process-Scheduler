@@ -46,14 +46,21 @@ void Dispatcher::run(){
                 // std::unique_lock<std::mutex> lock(Clock::clockMutex);
                 for( std::shared_ptr<CPU> cpu: _CPUList){
                     if((cpu->checkStatus() == CPU::READY) ){
-                        if(!_scheduler->_readyQueue.empty()){
-                            // std::cout << "_readyQueue.popped: " << _scheduler->_readyQueue.front()->getName()<<std::endl;
-                            cpu->setProcess(_scheduler->_readyQueue.front());
+                        // std::cout << "flag status: " << _scheduler->isReadyQueueEmpty()<< std::endl;
+                        if(_scheduler->isReadyQueueEmpty() == 0){
+                            // cpu->setProcess(_scheduler->_readyQueue.front());
+                            cpu->setProcess(_scheduler->retrieveFromReadyQueue());
+                            // std::cout << "CPU #" + cpu->getID() << "got Process " << cpu->getProcess() << std::endl;
+
 
                             // std::cout << "Set into CPU #" << cpu->getProcess()->getCPUCoreID()<<std::endl;
-                            _scheduler->_readyQueue.pop();
                         }
 
+                    }else
+                    {
+                        if (cpu->checkStatus() == CPU::BUSY){
+                            // std::cout << "CPU #" << cpu->getID() << " is still running, " << cpu->getProcessName()<< std::endl;
+                        }
                     }
                 }
             lastCycle=currentCycle;

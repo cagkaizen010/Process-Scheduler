@@ -14,6 +14,8 @@ CPU::CPU() {
 }
 
 void CPU::setProcess(std::shared_ptr<Process> process){
+    std::lock_guard<std::mutex> lock(cpuMutex);
+
     if((process != nullptr )  ) {
         if (process->getCPUCoreID() == -1)
             process->setCPUCoreID(this->_id);
@@ -117,8 +119,9 @@ void CPU::CPURun(){
                 }
             }
             // if((this->_process == nullptr) )
+            std::unique_lock<std::mutex> lock(Clock::clockMutex);
             lastCycle = currentCycle;
-            // lock.unlock();
+            lock.unlock();
         }
         // CPU stops completely
     }

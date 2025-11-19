@@ -74,6 +74,7 @@ class Process {
 
         void execute();
     private:
+        std::mutex processMutex;
         static int getRandomInt(int, int);
         ProcessControlBlock pcb;
 
