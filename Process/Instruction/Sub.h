@@ -7,7 +7,7 @@ class Instruction;
 
 class Sub : public Instruction {
     public:
-        Sub(int, int, int);
+        Sub(uint16_t, uint16_t, uint16_t);
         ~Sub() override= default;
 
         void execute(int cpu) override;

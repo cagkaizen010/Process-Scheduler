@@ -58,6 +58,26 @@ void Config::initialize() {
                 this->_delaysPerExec = std::stof(value);
             } catch (...) { std::cerr << "Error parsing delay-per-exec." << std::endl; }
         }
+        else if (key == "max-overall-mem") {
+            try {
+                this->_maxOverallMem = std::stoi(value);
+            } catch (...) { std::cerr << "Error parsing max-overall-mem." << std::endl; }
+        }
+        else if (key == "mem-per-frame"){
+            try{
+                this-> _memPerFrame= std::stoi(value);
+            } catch(...) { std::cerr << "Error parsing " << std::endl;}
+        }
+        else if (key == "min-mem-per-proc"){
+            try{
+                this->_minMemPerProc= std::stoi(value);
+            } catch(...) { std::cerr << "Error parsing " << std::endl;}
+        }
+        else if (key == "max-mem-per-proc"){
+            try{
+                this->_maxMemPerProc= std::stoi(value);
+            } catch(...) { std::cerr << "Error parsing " << std::endl;}
+        }
     }
 
     inputFile.close();

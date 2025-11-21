@@ -10,6 +10,7 @@ CONSOLE_SOURCE = ConsoleUI/ConsoleUI.cpp ConsoleUI/AConsoleUI/AConsoleUI.cpp Con
 PROCESS_SOURCE= Process/Process.cpp Process/Instruction/Instruction.cpp Process/Instruction/Add.cpp Process/Instruction/Declare.cpp Process/Instruction/Print.cpp Process/Instruction/Sub.cpp
 SCHEDULER_SOURCE = Scheduler/Scheduler.cpp
 DISPATCHER_SOURCE = Scheduler/Dispatcher/Dispatcher.cpp
+MEMORY_SOURCE = Memory/MemoryManager.cpp Memory/Allocator/Allocator.cpp Memory/Allocator/FlatAllocator.cpp Memory/Allocator/PagingAllocator.cpp
 SOURCES = main.cpp Clock/Clock.cpp $(SCHEDULER_SOURCE) $(DISPATCHER_SOURCE) $(PROCESS_SOURCE) $(CONSOLE_SOURCE) Config/config.cpp  CPU/CPU.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)

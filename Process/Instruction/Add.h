@@ -17,9 +17,9 @@ class Add : public Instruction {
         std::string getInstructionType() override ;
 
     private:
-        int var;
-        int var1=0;
-        int var2=0;
+        uint16_t var;
+        uint16_t var1=0;
+        uint16_t var2=0;
 };
 
 #endif

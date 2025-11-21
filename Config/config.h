@@ -15,6 +15,10 @@ private:
     int _minIns;                // Process
     int _maxIns;                // Process
     float _delaysPerExec;       // Scheduler
+    int _maxOverallMem;
+    int _memPerFrame;
+    int _minMemPerProc;
+    int _maxMemPerProc;
     
 public:
     Config(); 
@@ -27,6 +31,10 @@ public:
     int get_minIns(){return _minIns;}
     int get_maxIns(){return _maxIns;}
     float get_delaysPerExec(){return _delaysPerExec;}
+    int get_maxOverallMem(){return _maxOverallMem;};
+    int get_memPerFrame(){return _memPerFrame;};
+    int get_minMemPerProc(){return _minMemPerProc;};
+    int get_maxMemPerProc(){return _maxMemPerProc;};
     void initialize();
     
 //     void printConfig() const {

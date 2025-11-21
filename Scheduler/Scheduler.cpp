@@ -13,7 +13,10 @@ Scheduler* Scheduler::get(){
     return _staticSchedulerPtr;
 }
 
-void Scheduler::initialize(int cpuNum, std::string scheduler, int quantumCycles, int batchProcessFreq, int minIns, int maxIns, int delaysPerExec){
+void Scheduler::initialize(int cpuNum, std::string scheduler, 
+    int quantumCycles, int batchProcessFreq, int minIns, int maxIns, int delaysPerExec,
+    int maxOverallmem, int memPerFrame, int minMemPerProc, int maxMemPerProc
+    ){
     _staticSchedulerPtr = new Scheduler();
 
     _staticSchedulerPtr->cpuCycles = 0;

@@ -4,7 +4,7 @@
 // Declare::Declare(std::string varName = "var", int var) : Instruction(DECLARE){
 // }
 
-Declare::Declare(std::string var, int value) : Instruction(DECLARE){
+Declare::Declare(std::string var, uint16_t value) : Instruction(DECLARE){
     this->var = var;
     this->value = value;
 }

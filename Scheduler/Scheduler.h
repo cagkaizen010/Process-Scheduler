@@ -33,7 +33,11 @@ class Scheduler{
             int batchProcessFreq,
             int minIns,
             int maxIns,
-            int delaysPerExec
+            int delaysPerExec,
+            int maxOverallmem, 
+            int memPerFrame, 
+            int minMemPerProc, 
+            int maxMemPerProc
         );
 
         enum SchedulingAlgorithm{
@@ -83,12 +87,9 @@ class Scheduler{
         std::stringstream outputBuffer;
 
     private:
-
         std::mutex schedulerMutex;
         static Scheduler* _staticSchedulerPtr ;
         static int getRandomInt(int, int);
-
-        
 
         typedef std::queue<std::shared_ptr<Process>> ProcessQueue;
         typedef std::vector<std::shared_ptr<Process>> ProcessList;

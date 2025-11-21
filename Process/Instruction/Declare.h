@@ -9,7 +9,7 @@
 class Instruction;
 class Declare: public Instruction {
     public:
-        Declare(std::string, int);
+        Declare(std::string, uint16_t);
         // Declare()  ;
         ~Declare() override = default;
 

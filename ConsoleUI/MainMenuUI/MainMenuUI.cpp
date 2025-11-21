@@ -88,7 +88,11 @@ void MainMenuUI::run() {
                 config.get_batchProcessFreq(),
                 config.get_minIns(),
                 config.get_maxIns(),
-                config.get_delaysPerExec()
+                config.get_delaysPerExec(),
+                config.get_maxOverallMem(),
+                config.get_memPerFrame(),
+                config.get_minMemPerProc(),
+                config.get_maxMemPerProc()
             );
 
             Scheduler* s= Scheduler::get();
