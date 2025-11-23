@@ -21,6 +21,9 @@ class FlatAllocator : public AAllocator {
     bool allocate(std::shared_ptr<Process> process) override;
     void deallocate(std::shared_ptr<Process> process) override;
 
+    void printMem() override;
+    void printProcesses() override;
+    void vmstat() override;
 
     private:
         typedef std::vector<std::pair<std::shared_ptr<Process>, std::pair<int,int>>> Memory;

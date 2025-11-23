@@ -1,6 +1,7 @@
 #ifndef INSTRUCTION_H
 #define INSTRUCTION_H
 #include <string>
+#include <cstdint>
 
 enum InstructionType{
     DECLARE, ADD, SUB, PRINT

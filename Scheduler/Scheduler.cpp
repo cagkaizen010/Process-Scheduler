@@ -37,8 +37,17 @@ void Scheduler::initialize(int cpuNum, std::string scheduler,
     _staticSchedulerPtr->quantumCycle= quantumCycles;
     _staticSchedulerPtr->minIns= minIns;
     _staticSchedulerPtr->maxIns= maxIns;
-}
+    _staticSchedulerPtr->maxOverallmem = maxOverallmem;
+    _staticSchedulerPtr->memPerFrame = memPerFrame;
+    _staticSchedulerPtr->minMemPerProc = minMemPerProc;
+    _staticSchedulerPtr->maxMemPerProc = maxMemPerProc;
+    _staticSchedulerPtr->_memoryManager= new MemoryManager(
+        maxOverallmem, 
+        minMemPerProc/memPerFrame, 
+        maxMemPerProc/memPerFrame 
+    );
 
+}
 
 void Scheduler::schedulerTest(){
     this->running = true;
@@ -69,7 +78,7 @@ void Scheduler::schedulerRun() {
             lastCycle = currentCycle;
         }
     }
-    std::cout << "Finished generating processes!" << std::endl;
+    // std::cout << "Finished generating processes!" << std::endl;
 
 
 }
@@ -83,10 +92,10 @@ void Scheduler::addToReadyQueue(std::shared_ptr<Process> p){
 std::shared_ptr<Process> Scheduler::retrieveFromReadyQueue() {
     std::lock_guard<std::mutex> lock(schedulerMutex);
     std::string placeholder;
-    std::getline(std::cin, placeholder);
+    // std::getline(std::cin, placeholder);
 
     std::shared_ptr<Process> temp = this->_readyQueue.front();
-    std::cout << "Someone took a copy of temp" << std::endl;
+    // std::cout << "Someone took a copy of temp" << std::endl;
     this->_readyQueue.pop();
     // std::cout << this->_readyQueue.size()<< std::endl;
 
@@ -196,11 +205,15 @@ std::shared_ptr<Process> Scheduler::findProcess(std::string processName){
 }
 
 void Scheduler::createProcess(std::string processName){
-    int randomNumber = getRandomInt(1000, 999999);
+    // this  a random 
+    int randomPID= getRandomInt(1000, 999999);
     std::cout <<"Creating process " + processName <<std::endl;
 
-    ProcessControlBlock pcb = ProcessControlBlock{randomNumber, processName,-1, this->schedulerType, this->quantumCycle};
-    std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
+    ProcessControlBlock pcb = ProcessControlBlock{randomPID, processName,-1, this->schedulerType, this->quantumCycle};
+    int randomMemDistribution = getRandomInt(this->minMemPerProc, this->maxMemPerProc);
+    int randomPageDistribution = getRandomInt(0, (int)(this->maxOverallmem/this->memPerFrame));
+
+    std::shared_ptr<Process> p = std::make_shared<Process>(pcb, randomMemDistribution, randomPageDistribution );
 
     p->generateInstruction(this->minIns, this->maxIns);
 

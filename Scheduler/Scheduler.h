@@ -18,6 +18,7 @@
 #include "../Clock/Clock.h"
 #include "../Process/Process.h"
 #include "../CPU/CPU.h"
+#include "../Memory/MemoryManager.h"
 #include "./Dispatcher/Dispatcher.h"
 
 // static float cpuCycles=0;
@@ -88,7 +89,9 @@ class Scheduler{
 
     private:
         std::mutex schedulerMutex;
-        static Scheduler* _staticSchedulerPtr ;
+        static Scheduler* _staticSchedulerPtr;
+        MemoryManager* _memoryManager = nullptr;
+
         static int getRandomInt(int, int);
 
         typedef std::queue<std::shared_ptr<Process>> ProcessQueue;
@@ -116,7 +119,10 @@ class Scheduler{
         int minIns;
         int maxIns;
         float cpuCycles;
-
+        int maxOverallmem; 
+        int memPerFrame; 
+        int minMemPerProc; 
+        int maxMemPerProc;
 
         bool _schedulerRunning = false;
         bool running = false;

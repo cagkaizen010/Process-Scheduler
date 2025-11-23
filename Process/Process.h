@@ -43,7 +43,7 @@ typedef std::vector<std::shared_ptr<Instruction>> InstructionSet;
 class Process {
     public:
         std::mutex mutex;
-        Process(ProcessControlBlock );
+        Process(ProcessControlBlock, int, int );
 
         std::string randStr();
 
@@ -73,12 +73,23 @@ class Process {
         std::shared_ptr<Instruction> getInstruction();
 
         void execute();
+        static int getRandomInt(int, int);
+
+        static int setRequiredPages(int, int);
+        static int setRequiredMemory(int, int);
+        static int getRequiredPages();
+        int getRequiredMemory();
     private:
         std::mutex processMutex;
-        static int getRandomInt(int, int);
         ProcessControlBlock pcb;
 
         InstructionSet text; 
+
+        // Should not change throughout any process instance
+        int _requiredMemory  ;
+        static int requiredPages;
+        static int currentMemory;
+
 };
 
 #endif

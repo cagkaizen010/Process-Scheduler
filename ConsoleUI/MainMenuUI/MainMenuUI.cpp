@@ -1,5 +1,6 @@
 #include "./MainMenuUI.h"
 
+
 MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _consoleUI(consoleUI) {
 
     this->_commandMap["screen"] = [consoleUI](_Argument args){
@@ -9,7 +10,10 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
             // for (std::string s : args){
             //     std::cout << s << std::endl;
             // }
-            if(args.size() == 3 ) {
+            if(args.size() == 4){
+                std::cout << "You want to allocate " << args.at(3)<< " bytes of memory?" << std::endl;
+            }
+            else if(args.size() == 3 ) {
                 if(consoleUI->_scheduler->findProcess(args.at(2)) == nullptr){
                     // std::cout << "Process is not found, creating new one named " + args.at(2) << std::endl;
                     consoleUI->_scheduler->createProcess(args.at(2));
@@ -80,6 +84,9 @@ void MainMenuUI::run() {
             Clock::start(100);
             Config config = Config();
             config.initialize();
+
+            if ( (config.get_minMemPerProc()/config.get_memPerFrame()) != 1 && (config.get_maxMemPerProc()/config.get_memPerFrame()) != 1)
+                Process::setRequiredMemory(config.get_minMemPerProc()/config.get_memPerFrame(), config.get_maxMemPerProc()/config.get_memPerFrame());
 
             Scheduler::initialize(
                 config.get_numCpu(),
