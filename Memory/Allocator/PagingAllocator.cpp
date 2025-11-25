@@ -7,10 +7,15 @@ PagingAllocator::PagingAllocator(int memMax){
 
 
     std::cout << memMax << std::endl;
+    // std::cout << requiredMem << std::endl;
     std::cout << requiredMem << std::endl;
     std::cout << Process::getRequiredPages()<< std::endl;
 
-    for (int i = 0; i < memMax/(requiredMem/Process::getRequiredPages()); i++)
+    // std::cout << Process::getRequiredPages()<< std::endl;
+    // std::cout << "Division: "<< ((float)requiredMem/(float)Process::getRequiredPages()) << std::endl;
+
+
+    for (int i = 0; i < memMax/((float)requiredMem/(float)Process::getRequiredPages()); i++)
         _freeFrameQueue.push(i);
     
 }
@@ -41,8 +46,9 @@ bool PagingAllocator::allocate(std::shared_ptr<Process> process){
         return true;
     }
     return false;
-
 }
+
+
 void PagingAllocator::deallocate(std::shared_ptr<Process> process){
     if (_pageTable.find(process->getName()) != _pageTable.end()){
         for (int i = 0; i < _pageTable[process->getName()].size(); i++){
@@ -54,11 +60,37 @@ void PagingAllocator::deallocate(std::shared_ptr<Process> process){
 }
 
 void PagingAllocator::printMem() {
-
+    std::cout <<"Needs implemented" << std::endl;
 }
 void PagingAllocator::printProcesses() {
+    std::vector<std::string> processNameListOutputStrings;
+    int reqMem = Process::setRequiredMemory(0,0);
+
+
+    int total;
+
+    // for (std::pair<std::shared_ptr<Process>, std::pair<int,int>> key : this->_memory){
+    //     processNameListOutputStrings.push_back(key.first->getName() + 
+    //         " " + std::to_string(key.second.second- key.second.first));
+
+    //     total += key.second.second - key.second.first;
+    //     std::cout << key.first->getName();
+    // }
+
+
+    std::cout << "-------------" << std::endl;
+    std::cout << "Memory Usage: " << total << " / " << this->_maxMemory*1024<< std::endl;
+    std::cout << "Memory Util: " << ((float)total / (this->_maxMemory*1024)) * 100 << "%" << std::endl;
+    
+    std::cout << "Processes and memory usage" <<std::endl;
+
+    for(std::string out : processNameListOutputStrings)
+        std::cout << out << std::endl;
+
+
 
 }
 void PagingAllocator::vmstat() {
+    std::cout <<"Needs implemented" << std::endl;
 
 }

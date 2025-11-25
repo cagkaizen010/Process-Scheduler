@@ -90,6 +90,7 @@ class Process {
         static int requiredPages;
         static int currentMemory;
 
+        
 };
 
 #endif

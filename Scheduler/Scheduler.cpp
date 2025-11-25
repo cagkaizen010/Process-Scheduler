@@ -204,22 +204,25 @@ std::shared_ptr<Process> Scheduler::findProcess(std::string processName){
     else return nullptr;
 }
 
-void Scheduler::createProcess(std::string processName){
+void Scheduler::createProcess(std::string processName, int allocatedMemory){
     // this  a random 
     int randomPID= getRandomInt(1000, 999999);
     std::cout <<"Creating process " + processName <<std::endl;
 
     ProcessControlBlock pcb = ProcessControlBlock{randomPID, processName,-1, this->schedulerType, this->quantumCycle};
-    int randomMemDistribution = getRandomInt(this->minMemPerProc, this->maxMemPerProc);
-    int randomPageDistribution = getRandomInt(0, (int)(this->maxOverallmem/this->memPerFrame));
+    // int randomMemDistribution = getRandomInt(this->minMemPerProc, this->maxMemPerProc);
+    // int randomPageDistribution = getRandomInt(0, (int)(this->maxOverallmem/this->memPerFrame));
 
-    std::shared_ptr<Process> p = std::make_shared<Process>(pcb, randomMemDistribution, randomPageDistribution );
+    std::shared_ptr<Process> p = std::make_shared<Process>(pcb, allocatedMemory, allocatedMemory/this->memPerFrame);
 
     p->generateInstruction(this->minIns, this->maxIns);
 
     this->addProcess(p);
     this->_readyQueue.push(p);
 
+}
+std::vector<std::shared_ptr<Process>> Scheduler::getProcesses(){
+    return _processListHistory;
 }
 
 void Scheduler::printStatus() {
@@ -325,6 +328,14 @@ void Scheduler::reportUtil() {
             } 
     }
 
+}
+
+
+void Scheduler::processSMI(){
+    this->_memoryManager->getAllocator()->printProcesses();
+}
+void Scheduler::vmstat(){
+    this->_memoryManager->getAllocator()->vmstat();
 }
 
 std::string Scheduler::getName() {

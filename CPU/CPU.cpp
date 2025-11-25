@@ -101,20 +101,20 @@ void CPU::CPURun(){
 
                     // If process is finished,
                     // setProcess to null, and set the CPU to READY
-                    if(this->_process != nullptr){
-                        std::cout << "CPU " << this->_id << " RUNNING" << std::endl;
-                        if( this->_process->getState() == ProcessState::TERMINATED){
+                    // if(this->_process != nullptr){
+                    //     // std::cout << "CPU " << this->_id << " RUNNING" << std::endl;
+                    //     if( this->_process->getState() == ProcessState::TERMINATED){
 
-                            this->setProcess(nullptr);
-                            this->status= CPUStatus::READY;
-                        }
-                        else if (this->_process->isEmpty()){
+                    //         this->setProcess(nullptr);
+                    //         this->status= CPUStatus::READY;
+                    //     }
+                    //     else if (this->_process->isEmpty()){
 
-                            this->_process->setState(ProcessState::TERMINATED);
-                            this->setProcess(nullptr);
-                            this->status= CPUStatus::READY;
-                        }
-                    }
+                    //         this->_process->setState(ProcessState::TERMINATED);
+                    //         this->setProcess(nullptr);
+                    //         this->status= CPUStatus::READY;
+                    //     }
+                    // }
 
                 }
             }

@@ -10,13 +10,10 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
             // for (std::string s : args){
             //     std::cout << s << std::endl;
             // }
-            if(args.size() == 4){
-                std::cout << "You want to allocate " << args.at(3)<< " bytes of memory?" << std::endl;
-            }
-            else if(args.size() == 3 ) {
+            if(args.size() == 4 ) {
                 if(consoleUI->_scheduler->findProcess(args.at(2)) == nullptr){
-                    // std::cout << "Process is not found, creating new one named " + args.at(2) << std::endl;
-                    consoleUI->_scheduler->createProcess(args.at(2));
+                    std::cout << "Allocating " << args.at(3) << " bytes of memory to Process " << args.at(2) << std::endl;
+                    consoleUI->_scheduler->createProcess(args.at(2), stoi(args.at(3)));
                 }
 
                 // consoleUI->_scheduler->schedulerTest();
@@ -59,16 +56,21 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
     };
     
     this->_commandMap["report-util"] = [consoleUI](_Argument args){
-        std::cout << "Inside report-util command!" << std::endl;
         consoleUI->_scheduler->reportUtil();
     };
     
     this->_commandMap["process-smi"] = [consoleUI](_Argument args) {
-        std::cout << "Inside process-smi in main" << std::endl;
+
+        consoleUI->_scheduler->processSMI();
+        
+        // for (std::shared_ptr<Process> process : consoleUI->_scheduler->getProcesses())
+        //     std::cout << process->getName() << "\t" << process->getRequiredMemory() <<std::endl;
+        
+
     };
 
     this->_commandMap["vmstat"] = [consoleUI](_Argument args) {
-        std::cout << "Inside vmstat in main" << std::endl;
+        consoleUI->_scheduler->vmstat();
     };
 }
 
@@ -162,6 +164,7 @@ void MainMenuUI::run() {
 void MainMenuUI::stop() {
     this->_active = false;
 }
+
 
 void MainMenuUI::display(){
     std::cout << "MainMenuUI" << std::endl;

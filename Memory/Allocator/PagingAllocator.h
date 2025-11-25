@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <queue>
 
+class AAllocator;
 class PagingAllocator : public AAllocator{
     public:
         PagingAllocator(int);
@@ -17,11 +18,11 @@ class PagingAllocator : public AAllocator{
 
         bool allocate(std::shared_ptr<Process> ) override;
         void deallocate(std::shared_ptr<Process> ) override;
-
         void printMem() override;
         void printProcesses() override;
         void vmstat() override;
     private:
+        int _maxMemory;
         std::queue<int> _freeFrameQueue;
         std::unordered_map<std::string, std::vector<int>> _pageTable;
         int _pagesIn = 0;

@@ -5,6 +5,7 @@
 #include "./Allocator/FlatAllocator.h"
 #include "./Allocator/PagingAllocator.h"
 
+
 class MemoryManager{
     public:
         MemoryManager(int, int, int);
@@ -15,7 +16,9 @@ class MemoryManager{
 
         // void printMem();
 
-        AAllocator* getAllocator();
+        AAllocator* getAllocator() {
+            return this->_allocator;
+        };
 
 
     private:

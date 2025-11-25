@@ -23,6 +23,7 @@
 
 // static float cpuCycles=0;
 class Dispatcher;
+class MemoryManager;
 class Scheduler{
     public:
 
@@ -66,7 +67,9 @@ class Scheduler{
         bool isReadyQueueEmpty();
 
         std::shared_ptr<Process> findProcess(std::string );
-        void createProcess(std::string);
+        void createProcess(std::string, int);
+        std::vector<std::shared_ptr<Process>> getProcesses();
+
         void runFCFS( float);
         void startFCFS(float);
         void runRR(float, int);
@@ -79,7 +82,8 @@ class Scheduler{
 
         void printStatus() ;
         void reportUtil();
-
+        void processSMI();
+        void vmstat();
 
         std::string getName();
 
@@ -129,6 +133,7 @@ class Scheduler{
 
         friend class ConsoleUI;
         friend class Dispatcher;
+        friend class MemoryManager;
 };
 
 #endif

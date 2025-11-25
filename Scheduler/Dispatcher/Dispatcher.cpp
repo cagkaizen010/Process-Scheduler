@@ -49,7 +49,9 @@ void Dispatcher::run(){
                         // std::cout << "flag status: " << _scheduler->isReadyQueueEmpty()<< std::endl;
                         if(_scheduler->isReadyQueueEmpty() == 0){
                             // cpu->setProcess(_scheduler->_readyQueue.front());
-                            cpu->setProcess(_scheduler->retrieveFromReadyQueue());
+                            std::shared_ptr<Process> process = _scheduler->retrieveFromReadyQueue();
+                            if (_scheduler->_memoryManager->allocate(process))
+                                cpu->setProcess(process);
                             // std::cout << "CPU #" + cpu->getID() << "got Process " << cpu->getProcess() << std::endl;
 
 
@@ -59,7 +61,14 @@ void Dispatcher::run(){
                     }else
                     {
                         if (cpu->checkStatus() == CPU::BUSY){
-                            // std::cout << "CPU #" << cpu->getID() << " is still running, " << cpu->getProcessName()<< std::endl;
+                            // std::cout << "CPU #" << cpu->getID() << " is still running, " << std::endl;
+                            if(cpu->getProcess() != nullptr && cpu->getProcess()->isEmpty()){
+                                // std::cout << "Deallocating process " << cpu->getProcess()->getName()<< std::endl;
+                                cpu->getProcess()->setState(ProcessState::TERMINATED);
+                                _scheduler->_memoryManager->deallocate(cpu->getProcess());
+                                cpu->setProcess(nullptr);
+                                cpu->toggleStatus();
+                            }   
                         }
                     }
                 }

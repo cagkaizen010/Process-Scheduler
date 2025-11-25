@@ -13,6 +13,7 @@
 #include <vector>
 #include <unordered_map>
 
+class AAllocator;
 class FlatAllocator : public AAllocator {
     public:
     FlatAllocator(int maxMemory);
@@ -20,7 +21,6 @@ class FlatAllocator : public AAllocator {
 
     bool allocate(std::shared_ptr<Process> process) override;
     void deallocate(std::shared_ptr<Process> process) override;
-
     void printMem() override;
     void printProcesses() override;
     void vmstat() override;

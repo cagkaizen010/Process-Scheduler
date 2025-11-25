@@ -30,6 +30,7 @@ class MainMenuUI : public AConsoleUI {
         void stop() override;
     private:
         void display() override ;
+        void processSMI();
         // void InputHandler(ConsoleUI* consoleUI);
 
         std::unordered_map<std::string, std::function<void(_Argument)>> _commandMap;

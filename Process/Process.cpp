@@ -29,12 +29,12 @@ static std::string getRandomString(size_t length) {
     return result;
 }
 
-Process::Process( ProcessControlBlock pcb, int randomMemDistribution, int randomPageDistribution)  {
+Process::Process( ProcessControlBlock pcb, int memAllocation, int pageAllocation)  {
     this->pcb = pcb;
 
     if(Process::currentMemory== -1){
         int base2Memory = 1;
-        while(base2Memory < randomMemDistribution)
+        while(base2Memory < memAllocation)
             base2Memory *=2;
         this->_requiredMemory = base2Memory;
 
@@ -44,7 +44,7 @@ Process::Process( ProcessControlBlock pcb, int randomMemDistribution, int random
     if(Process::requiredPages == -1){
         int base2Pages = 1;
 
-        while(base2Pages < randomPageDistribution)
+        while(base2Pages < pageAllocation)
             base2Pages*=2;
         Process::requiredPages = base2Pages;
     }
@@ -93,7 +93,7 @@ void Process::generateInstruction(int minIns, int maxIns){
 
     int randomNumber;
     int numberOfInstructions= getRandomInt(minIns, maxIns);
-    // std::cout << "Generating instructions.." << std::endl;
+
     for (int i = 0; i < numberOfInstructions; i++){
         randomNumber = getRandomInt(1, 4);
 
@@ -120,11 +120,8 @@ void Process::listInstructions() {
         std::cout <<".\n.\n.\n"<< std::endl;
     } else for( std::shared_ptr<Instruction> i : text)
         std::cout << i->getInstructionType() << std::endl;
-
-
 }
 
-    // YOU ARE HERE
 void Process::execute() {
     // std::lock_guard<std::mutex> lock(processMutex);
     if(!this->isEmpty()){

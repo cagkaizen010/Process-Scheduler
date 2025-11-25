@@ -8,10 +8,11 @@ CFLAGS = -g -O0 -Wall -Wextra
 # File locations
 CONSOLE_SOURCE = ConsoleUI/ConsoleUI.cpp ConsoleUI/AConsoleUI/AConsoleUI.cpp ConsoleUI/ProcessUI/ProcessUI.cpp ConsoleUI/MainMenuUI/MainMenuUI.cpp
 PROCESS_SOURCE= Process/Process.cpp Process/Instruction/Instruction.cpp Process/Instruction/Add.cpp Process/Instruction/Declare.cpp Process/Instruction/Print.cpp Process/Instruction/Sub.cpp
+MEMORY_SOURCE = Memory/MemoryManager.cpp Memory/Allocator/AAllocator.cpp Memory/Allocator/FlatAllocator.cpp Memory/Allocator/PagingAllocator.cpp
 SCHEDULER_SOURCE = Scheduler/Scheduler.cpp
 DISPATCHER_SOURCE = Scheduler/Dispatcher/Dispatcher.cpp
-MEMORY_SOURCE = Memory/MemoryManager.cpp Memory/Allocator/AAllocator.cpp Memory/Allocator/FlatAllocator.cpp Memory/Allocator/PagingAllocator.cpp
-SOURCES = main.cpp Clock/Clock.cpp $(SCHEDULER_SOURCE) $(MEMORY_SOURCE) $(DISPATCHER_SOURCE) $(PROCESS_SOURCE) $(CONSOLE_SOURCE) Config/config.cpp  CPU/CPU.cpp
+SOURCES = main.cpp Clock/Clock.cpp $(MEMORY_SOURCE) $(DISPATCHER_SOURCE) $(SCHEDULER_SOURCE)  $(PROCESS_SOURCE) $(CONSOLE_SOURCE) Config/config.cpp  CPU/CPU.cpp
+
 
 OBJECTS = $(SOURCES:.cpp=.o)
 EXEC = main # Name of the output executable

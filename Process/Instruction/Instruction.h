@@ -4,7 +4,7 @@
 #include <cstdint>
 
 enum InstructionType{
-    DECLARE, ADD, SUB, PRINT
+    DECLARE, ADD, SUB, PRINT, READ, WRITE
 };
 
 class Instruction {
