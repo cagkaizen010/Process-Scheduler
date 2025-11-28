@@ -12,12 +12,13 @@ MemoryManager::MemoryManager(int maxMem, int minPages, int maxPages) {
 
     if (minPages == 1 && maxPages ==1){
         std::cout<< "Using Flat Allocator" << std::endl;
-
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         this->_allocator = new FlatAllocator(maxMem);
     }
     else {
         std::cout<< "Using Paging Allocator" << std::endl;
         Process::setRequiredPages(minPages, maxPages);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         this->_allocator = new PagingAllocator(maxMem);
     }
 }

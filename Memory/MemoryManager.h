@@ -4,7 +4,8 @@
 #include "./Allocator/AAllocator.h"
 #include "./Allocator/FlatAllocator.h"
 #include "./Allocator/PagingAllocator.h"
-
+#include <thread>
+#include <chrono>
 
 class MemoryManager{
     public:
@@ -19,7 +20,6 @@ class MemoryManager{
         AAllocator* getAllocator() {
             return this->_allocator;
         };
-
 
     private:
         AAllocator* _allocator;

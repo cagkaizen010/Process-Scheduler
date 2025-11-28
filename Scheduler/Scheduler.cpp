@@ -68,12 +68,13 @@ void Scheduler::schedulerRun() {
             if((Clock::getCycle() % static_cast<int>(this->batchProcessFreq)) == 0){
 
                 // ProcessControlBlock pcb = ProcessControlBlock{randNum, "p_" + std::to_string(randNum),-1, this->schedulerType, this->quantumCycle};
-                // std::shared_ptr<Process> p = std::make_shared<Process>(pcb );
+                // std::shared_ptr<Process> p = std::make_shared<Process>(pcb);
     
                 // p->generateInstruction(this->minIns, this->maxIns);
                 // this->addProcess(p);
 
-                // randNum++;
+                createProcess("p_" + std::to_string(randNum), 2);
+                randNum++;
             }
             lastCycle = currentCycle;
         }
@@ -112,6 +113,7 @@ bool Scheduler::isReadyQueueEmpty(){
 
 void Scheduler::addProcess(std::shared_ptr<Process> process){
     // this->_readyQueue.push(process);
+    std::lock_guard<std::mutex> lock(schedulerMutex);
     this->_processList.push_back(process);
     this->_processListHistory.push_back(process);
     this->_processMap[process->getName()] = process;
@@ -206,8 +208,10 @@ std::shared_ptr<Process> Scheduler::findProcess(std::string processName){
 
 void Scheduler::createProcess(std::string processName, int allocatedMemory){
     // this  a random 
+
+
     int randomPID= getRandomInt(1000, 999999);
-    std::cout <<"Creating process " + processName <<std::endl;
+    // std::cout <<"Creating process " + processName <<std::endl;
 
     ProcessControlBlock pcb = ProcessControlBlock{randomPID, processName,-1, this->schedulerType, this->quantumCycle};
     // int randomMemDistribution = getRandomInt(this->minMemPerProc, this->maxMemPerProc);
@@ -218,7 +222,8 @@ void Scheduler::createProcess(std::string processName, int allocatedMemory){
     p->generateInstruction(this->minIns, this->maxIns);
 
     this->addProcess(p);
-    this->_readyQueue.push(p);
+    // this->addToReadyQueue(p);       // IF GENERATING RANDOM PROCESSES
+    // this->_readyQueue.push(p);   // IF GENERATING THROUGH SCREEN
 
 }
 std::vector<std::shared_ptr<Process>> Scheduler::getProcesses(){
