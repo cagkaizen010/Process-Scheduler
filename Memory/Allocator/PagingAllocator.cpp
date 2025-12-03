@@ -3,22 +3,13 @@
 PagingAllocator::PagingAllocator(int memMax, int memPerFrame){
     std::ofstream file("csopesy-backing-store.txt", std::ios::trunc);
     file.close();
-    // int requiredMem = Process::setRequiredMemory(-1, 1);
     this->_memPerFrame = memPerFrame;
     int requiredMem = memPerFrame;
 
     this->_maxMemory = memMax;
 
-    // std::cout << memMax << std::endl;
-    std::cout << requiredMem << std::endl;
-    // std::cout << Process::getRequiredPages()<< std::endl;
 
-    // std::cout << Process::getRequiredPages()<< std::endl;
-    // std::cout << "Division: "<< ((float)requiredMem/(float)Process::getRequiredPages()) << std::endl;
 
-    std::cout << "Pushing in " << memMax/((float)requiredMem/(float)Process::getRequiredPages()) << " pages." << std::endl;
-
-    // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     
     for (int i = 0; i < memMax/((float)requiredMem/(float)Process::getRequiredPages()); i++)
         _freeFrameQueue.push(i);
@@ -28,8 +19,6 @@ PagingAllocator::PagingAllocator(int memMax, int memPerFrame){
 bool PagingAllocator::allocate(std::shared_ptr<Process> process){
     int requiredMem = this->_memPerFrame;
 
-    // int requiredMem = Process::setRequiredMemory(0,0);
-    //  Process::getRequiredMemory();
     int requiredPages = Process::getRequiredPages();
     int pageSize = requiredMem/requiredPages;
     if (_pageTable.find(process->getName()) != _pageTable.end()){
@@ -71,7 +60,6 @@ void PagingAllocator::printMem() {
 }
 void PagingAllocator::printProcesses() {
     std::vector<std::string> processNameListOutputStrings;
-    // int reqMem = Process::setRequiredMemory(0,0) ;
     int reqMem = this->_memPerFrame;
     int reqPages = Process::getRequiredPages();
     int pageSize = reqMem/reqPages;
@@ -79,13 +67,6 @@ void PagingAllocator::printProcesses() {
 
     int total;
 
-    // for (std::pair<std::shared_ptr<Process>, std::pair<int,int>> key : this->_memory){
-    //     processNameListOutputStrings.push_back(key.first->getName() + 
-    //         " " + std::to_string(key.second.second- key.second.first));
-
-    //     total += key.second.second - key.second.first;
-    //     std::cout << key.first->getName();
-    // }
 
 
     std::cout << "-------------" << std::endl;
@@ -126,11 +107,7 @@ void PagingAllocator::vmstat() {
                             bot = (page->second[i] + 1) * pageSize;
                         activeMemory += pageSize;
                     }
-                    
-
-
                 }
-
         }
 
     }

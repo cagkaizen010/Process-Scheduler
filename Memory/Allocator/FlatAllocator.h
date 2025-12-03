@@ -28,7 +28,6 @@ class FlatAllocator : public AAllocator {
     void vmstat() override;
 
     private:
-        // std::mutex allocatorMutex;
         typedef std::vector<std::pair<std::shared_ptr<Process>, std::pair<int,int>>> Memory;
 
         void readBackingStore(std::shared_ptr<Process> process);

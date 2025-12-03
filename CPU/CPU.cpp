@@ -4,7 +4,6 @@ int CPU::dynamicID = 0;
 
 CPU::CPU() {
     if (CPU::dynamicID < 4){
-        // std::cout << "CPU::dynamicID: " + std::to_string(CPU::dynamicID) << std::endl;
 
         this->_id=CPU::dynamicID;
         CPU::dynamicID++;
@@ -89,7 +88,6 @@ void CPU::CPURun(){
                         else{
                             lastCycle = currentCycle;
                             continue;
-                            // std::cout << "Process inside during quantum cycle: " << this->_process->getName() <<std::endl; 
                         }
                     }
                     else {
@@ -100,26 +98,9 @@ void CPU::CPURun(){
 
                     }
 
-                    // If process is finished,
-                    // setProcess to null, and set the CPU to READY
-                    // if(this->_process != nullptr){
-                    //     // std::cout << "CPU " << this->_id << " RUNNING" << std::endl;
-                    //     if( this->_process->getState() == ProcessState::TERMINATED){
-
-                    //         this->setProcess(nullptr);
-                    //         this->status= CPUStatus::READY;
-                    //     }
-                    //     else if (this->_process->isEmpty()){
-
-                    //         this->_process->setState(ProcessState::TERMINATED);
-                    //         this->setProcess(nullptr);
-                    //         this->status= CPUStatus::READY;
-                    //     }
-                    // }
 
                 }
             }
-            // if((this->_process == nullptr) )
             std::unique_lock<std::mutex> lock(Clock::clockMutex);
             lastCycle = currentCycle;
             lock.unlock();

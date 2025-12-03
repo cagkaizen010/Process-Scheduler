@@ -24,7 +24,6 @@ void Scheduler::initialize(int cpuNum, std::string scheduler,
 
         _staticSchedulerPtr-> _CPUList.push_back(std::make_shared<CPU>());
         _staticSchedulerPtr-> _CPUList.at(i)->setDelayTime(delaysPerExec);
-        // _staticSchedulerPtr-> _CPUList.at(i)->setCPUCycles(_staticSchedulerPtr->cpuCycles);
     }
 
     // Defining dispatcher
@@ -68,11 +67,6 @@ void Scheduler::schedulerRun() {
         if(currentCycle >lastCycle ){
             if((Clock::getCycle() % static_cast<int>(this->batchProcessFreq)) == 0){
 
-                // ProcessControlBlock pcb = ProcessControlBlock{randNum, "p_" + std::to_string(randNum),-1, this->schedulerType, this->quantumCycle};
-                // std::shared_ptr<Process> p = std::make_shared<Process>(pcb);
-    
-                // p->generateInstruction(this->minIns, this->maxIns);
-                // this->addProcess(p);
 
                 createProcess("p_" + std::to_string(randNum), maxMemPerProc);
                 randNum++;
@@ -80,9 +74,6 @@ void Scheduler::schedulerRun() {
             lastCycle = currentCycle;
         }
     }
-    // std::cout << "Finished generating processes!" << std::endl;
-
-
 }
 
 void Scheduler::addToReadyQueue(std::shared_ptr<Process> p){
@@ -94,12 +85,9 @@ void Scheduler::addToReadyQueue(std::shared_ptr<Process> p){
 std::shared_ptr<Process> Scheduler::retrieveFromReadyQueue() {
     std::lock_guard<std::mutex> lock(schedulerMutex);
     std::string placeholder;
-    // std::getline(std::cin, placeholder);
 
     std::shared_ptr<Process> temp = this->_readyQueue.front();
-    // std::cout << "Someone took a copy of temp" << std::endl;
     this->_readyQueue.pop();
-    // std::cout << this->_readyQueue.size()<< std::endl;
 
     return temp;
 }
@@ -113,7 +101,6 @@ bool Scheduler::isReadyQueueEmpty(){
 
 
 void Scheduler::addProcess(std::shared_ptr<Process> process){
-    // this->_readyQueue.push(process);
     std::lock_guard<std::mutex> lock(schedulerMutex);
     this->_processList.push_back(process);
     this->_processListHistory.push_back(process);
@@ -125,7 +112,6 @@ void Scheduler::addProcess(std::shared_ptr<Process> process){
 void Scheduler::runFCFS(float delayTime) {
     if(!this->running){
         this->running = true;
-        // Dispatcher d(_CPUList, this);
         std::thread t(&Scheduler::startFCFS, this,  delayTime);
         t.detach();
 
@@ -141,7 +127,6 @@ void Scheduler::startFCFS(float delayTime){
         if(currentCycle_fcfs > lastCycle_fcfs){
             if(this->_processList.size()!=0){
                 this->addToReadyQueue(this->_processList.front());
-                // this->_readyQueue.push(this->_processList.front());
                 this->_processList.erase(this->_processList.begin());
             }
 
@@ -212,19 +197,14 @@ void Scheduler::createProcess(std::string processName, int allocatedMemory){
 
 
     int randomPID= getRandomInt(1000, 999999);
-    // std::cout <<"Creating process " + processName <<std::endl;
 
     ProcessControlBlock pcb = ProcessControlBlock{randomPID, processName,-1, this->schedulerType, this->quantumCycle};
-    // int randomMemDistribution = getRandomInt(this->minMemPerProc, this->maxMemPerProc);
-    // int randomPageDistribution = getRandomInt(0, (int)(this->maxOverallmem/this->memPerFrame));
 
     std::shared_ptr<Process> p = std::make_shared<Process>(pcb, allocatedMemory, allocatedMemory/this->memPerFrame);
 
     p->generateInstruction(this->minIns, this->maxIns);
 
     this->addProcess(p);
-    // this->addToReadyQueue(p);       // IF GENERATING RANDOM PROCESSES
-    // this->_readyQueue.push(p);   // IF GENERATING THROUGH SCREEN
 
 }
 std::vector<std::shared_ptr<Process>> Scheduler::getProcesses(){

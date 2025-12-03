@@ -16,25 +16,16 @@ bool FlatAllocator::allocate(std::shared_ptr<Process> process){
         //                                      process      start address -> end address 
         this->_memory.push_back(std::make_pair(process, std::make_pair(0, reqMem)));
 
-        std::cout << "Allocation success. Empty flat memory, pushed in "<< process->getName() <<std::endl;
         return true;
     }
     else {
-        // std::cout << "_memory.size(): " << _memory.size() << std::endl;
-        for (std::pair<std::shared_ptr<Process>, std::pair<int, int>> mem : _memory){
-            // std::cout << "Process key: " << mem.first->getName()<<std::endl;
-            // std::cout << "Process value, first: " << mem.second.first <<std::endl;
-            // std::cout << "Process value, second: " << mem.second.second <<std::endl;
-            if(mem.first->getName() == process->getName()){
-                std::cout << process->getName() << " found in memory." << std::endl;
+        for (std::pair<std::shared_ptr<Process>, std::pair<int, int>> mem : _memory)
+            if(mem.first->getName() == process->getName())
                 return true;
-            }
-        }
+        
 
         // If the first memory instance in the vector >= required memory of the new process,
         // Rewrite into that region with the new process
-        // std::cout << "this->_memory.at(0).second.first: " << this->_memory.at(0).second.first << std::endl;
-        // std::cout << "reqMem: " << reqMem << std::endl;
         if (this->_memory.at(0).second.first >= reqMem){
             this->_memory.insert(this->_memory.begin(), std::make_pair(process, std::make_pair(0, reqMem)));
 
@@ -45,7 +36,6 @@ bool FlatAllocator::allocate(std::shared_ptr<Process> process){
 
         for(int retryLimit = 0; retryLimit < 5; retryLimit++){
             int counter= 0;
-            // std::cout << "this->_memory.size(): " << this->_memory.size() << std::endl;
             for (int i = 0; i < this->_memory.size(); i++ ){
 
                 if (i == this->_memory.size()-1)
@@ -58,21 +48,18 @@ bool FlatAllocator::allocate(std::shared_ptr<Process> process){
                                 std::make_pair(this->_memory.at(i).second.second, 
                                     this->_memory.at(i).second.second + reqMem)));
 
-                    // std::cout << "Allocation success. Inserting into Address: " << i+1 << std::endl;
                     return true;
                 }
             }
             if (this->_memory.size() > 0){
                 int i = rand() % this->_memory.size();
 
-                    // std::cout << "Writing into backing store.." << std::endl;
                     this->writeBackingStore(this->_memory.at(i).first);
                     this->_memory.erase(this->_memory.begin() + i);
                 // }
             }
         }
     }
-    // std::cout << "Unable to allocate " << process->getName() << " currently assigned to CPU # " << process->getCPUCoreID()  <<std::endl;
     return false;
 }
 
@@ -82,7 +69,6 @@ void FlatAllocator::deallocate(std::shared_ptr<Process> process){
     for (int i = 0; i < this->_memory.size(); i++)
         if (this->_memory.at(i).first->getName() == process->getName())
         {
-            // std::cout << "Deallocating " << process->getName() << std::endl;
             this->_memory.erase(this->_memory.begin() +1);
         }
 }
@@ -102,7 +88,6 @@ void FlatAllocator::readBackingStore(std::shared_ptr<Process> process) {
     while(std::getline(file, line)){
         std::istringstream iss(line);
         iss >>key >>counter >>mem;
-        // std::cout << "Inside backing store: " << key <<counter << mem << std::endl;
         backingStore[key] = std::make_pair(std::stoi(counter), std::stoi(mem));
     }
     file.close();
@@ -178,10 +163,7 @@ void FlatAllocator::printProcesses() {
     
 }
 void FlatAllocator::vmstat() {
-    // int usedMemory = 0;
     int activeMemory = 0;
-    // if (_memory.size() >0)
-    //     usedMemory = _memory[_memory.size()-1].second.second - _memory[0].second.first;
 
     for ( std::pair<std::shared_ptr<Process>, std::pair<int, int>> key : this->_memory)
         activeMemory += key.second.second - key.second.first;

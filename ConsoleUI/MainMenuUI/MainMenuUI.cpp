@@ -7,25 +7,19 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
 
         
         if(args.at(1) == "-s"){
-            // for (std::string s : args){
-            //     std::cout << s << std::endl;
-            // }
             if(args.size() == 4 ) {
                 if(consoleUI->_scheduler->findProcess(args.at(2)) == nullptr){
                     std::cout << "Allocating " << args.at(3) << " bytes of memory to Process " << args.at(2) << std::endl;
                     consoleUI->_scheduler->createProcess(args.at(2), stoi(args.at(3)));
                 }
 
-                // consoleUI->_scheduler->schedulerTest();
                 consoleUI->createNewConsole(args.at(2));
-                // consoleUI->_scheduler->stop();
             }
             
         }
         else if(args.at(1) == "-r")
             consoleUI->switchConsole(args.at(2));
         else if(args.at(1) == "-ls")
-            // std::cout<< "Implement consoleUI->_scheduler->printStatus()" << std::endl;
             consoleUI->_scheduler->printStatus();
 
         else if(args.at(1) == "-c"){
@@ -63,8 +57,6 @@ MainMenuUI::MainMenuUI(ConsoleUI* consoleUI) : AConsoleUI("MAINMENU_CONSOLE"), _
 
         consoleUI->_scheduler->processSMI();
         
-        // for (std::shared_ptr<Process> process : consoleUI->_scheduler->getProcesses())
-        //     std::cout << process->getName() << "\t" << process->getRequiredMemory() <<std::endl;
         
 
     };
@@ -105,7 +97,6 @@ void MainMenuUI::run() {
             );
 
             Scheduler* s= Scheduler::get();
-            // std::make_shared<Scheduler> s = Scheduler::get();
 
             this->_consoleUI->_scheduler = s;
 
@@ -123,11 +114,8 @@ void MainMenuUI::run() {
                 s->runRR(config.get_delaysPerExec(), config.get_quantumCycle());
             }
 
-            // std::cout<< this->_active << "Initialization finished." << std::endl;
-            // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             this->_initialized=true;
             this->_active=true;
-            // std::cout<<std::to_string(config.get_numCpu());
         }
         std::cout<<std::endl;
     }

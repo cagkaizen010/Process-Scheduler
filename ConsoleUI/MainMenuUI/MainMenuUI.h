@@ -17,7 +17,6 @@
 #include <sstream>
 #include <thread>
 #include <chrono>
-// #include <iostream>
 
 class ConsoleUI;
 typedef const std::vector<std::string>& _Argument;
@@ -31,7 +30,6 @@ class MainMenuUI : public AConsoleUI {
     private:
         void display() override ;
         void processSMI();
-        // void InputHandler(ConsoleUI* consoleUI);
 
         std::unordered_map<std::string, std::function<void(_Argument)>> _commandMap;
 
