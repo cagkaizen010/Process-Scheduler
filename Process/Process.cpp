@@ -68,8 +68,9 @@ int Process::setRequiredPages( int minPage, int maxPage){
 int Process::setRequiredMemory(int minMem, int maxMem){
     int randomMemDistribution = getRandomInt(minMem, maxMem);
 
-    std::cout << "randomMemDistribution: " << randomMemDistribution << std::endl;
-    std::cout <<"Process::currentMemory: " << Process::currentMemory << std::endl;
+    // std::cout << "randomMemDistribution: " << randomMemDistribution << std::endl;
+    // std::cout <<"Process::currentMemory: " << Process::currentMemory << std::endl;
+    // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     if(Process::currentMemory== -1){
         int base2Memory = 1;
@@ -78,7 +79,7 @@ int Process::setRequiredMemory(int minMem, int maxMem){
         Process::currentMemory= base2Memory;
 
     }
-    else std::cout <<"Required Memory already set" << std::endl;
+    // else std::cout <<"Required Memory already set" << std::endl;
     return Process::currentMemory;
 }
 

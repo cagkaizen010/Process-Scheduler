@@ -1,27 +1,34 @@
 #include "PagingAllocator.h"
 
-PagingAllocator::PagingAllocator(int memMax){
+PagingAllocator::PagingAllocator(int memMax, int memPerFrame){
     std::ofstream file("csopesy-backing-store.txt", std::ios::trunc);
     file.close();
-    int requiredMem = Process::setRequiredMemory(-1, 1);
+    // int requiredMem = Process::setRequiredMemory(-1, 1);
+    this->_memPerFrame = memPerFrame;
+    int requiredMem = memPerFrame;
 
+    this->_maxMemory = memMax;
 
-    std::cout << memMax << std::endl;
-    // std::cout << requiredMem << std::endl;
+    // std::cout << memMax << std::endl;
     std::cout << requiredMem << std::endl;
-    std::cout << Process::getRequiredPages()<< std::endl;
+    // std::cout << Process::getRequiredPages()<< std::endl;
 
     // std::cout << Process::getRequiredPages()<< std::endl;
     // std::cout << "Division: "<< ((float)requiredMem/(float)Process::getRequiredPages()) << std::endl;
 
+    std::cout << "Pushing in " << memMax/((float)requiredMem/(float)Process::getRequiredPages()) << " pages." << std::endl;
 
+    // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    
     for (int i = 0; i < memMax/((float)requiredMem/(float)Process::getRequiredPages()); i++)
         _freeFrameQueue.push(i);
     
 }
 
 bool PagingAllocator::allocate(std::shared_ptr<Process> process){
-    int requiredMem = Process::setRequiredMemory(0,0);
+    int requiredMem = this->_memPerFrame;
+
+    // int requiredMem = Process::setRequiredMemory(0,0);
     //  Process::getRequiredMemory();
     int requiredPages = Process::getRequiredPages();
     int pageSize = requiredMem/requiredPages;
@@ -64,7 +71,10 @@ void PagingAllocator::printMem() {
 }
 void PagingAllocator::printProcesses() {
     std::vector<std::string> processNameListOutputStrings;
-    int reqMem = Process::setRequiredMemory(0,0);
+    // int reqMem = Process::setRequiredMemory(0,0) ;
+    int reqMem = this->_memPerFrame;
+    int reqPages = Process::getRequiredPages();
+    int pageSize = reqMem/reqPages;
 
 
     int total;
@@ -79,8 +89,11 @@ void PagingAllocator::printProcesses() {
 
 
     std::cout << "-------------" << std::endl;
-    std::cout << "Memory Usage: " << total << " / " << this->_maxMemory*1024<< std::endl;
-    std::cout << "Memory Util: " << ((float)total / (this->_maxMemory*1024)) * 100 << "%" << std::endl;
+
+    std::cout << "this->_pageTable.size(): " << this->_pageTable.size() << std::endl;
+    std::cout << "reqMem: " << reqMem << std::endl;
+    std::cout << "Memory Usage: " << this->_pageTable.size() * reqMem << " / " << this->_maxMemory<< std::endl;
+    std::cout << "Memory Util: " << ((float)(this->_pageTable.size() * reqMem) / (this->_maxMemory))/ this->_maxMemory * 100 << "%" << std::endl;
     
     std::cout << "Processes and memory usage" <<std::endl;
 
@@ -91,6 +104,40 @@ void PagingAllocator::printProcesses() {
 
 }
 void PagingAllocator::vmstat() {
-    std::cout <<"Needs implemented" << std::endl;
+    int reqMem = this->_memPerFrame;
+    int requiredPages = Process::getRequiredPages();
+    int pageSize = reqMem/requiredPages;
+
+    int activeMemory = 0;
+
+
+    if (_pageTable.size() >0) {
+        int top = _maxMemory;
+        int bot = 0;
+
+        for (auto page  = _pageTable.begin(); page != _pageTable.end(); page++){
+            std::string procName = page->first;
+
+                for (int i = 0; i < page->second.size(); i++){
+                    if (page->second.at(i) != -1){
+                        if(page->second[i] * pageSize < top)
+                            top = page->second[i] * pageSize;
+                        if((page->second[i] + 1) * pageSize > bot )
+                            bot = (page->second[i] + 1) * pageSize;
+                        activeMemory += pageSize;
+                    }
+                    
+
+
+                }
+
+        }
+
+    }
+
+    std::cout << _maxMemory * 1024 << " bytes " << "total memory" << std::endl;
+    std::cout <<  activeMemory* 1024 << " bytes " << "used memory" << std::endl;
+    std::cout << (_maxMemory-activeMemory) *1024 << " bytes " << "free memory" << std::endl;
+
 
 }

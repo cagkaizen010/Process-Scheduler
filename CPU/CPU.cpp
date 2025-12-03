@@ -4,7 +4,7 @@ int CPU::dynamicID = 0;
 
 CPU::CPU() {
     if (CPU::dynamicID < 4){
-        std::cout << "CPU::dynamicID: " + std::to_string(CPU::dynamicID) << std::endl;
+        // std::cout << "CPU::dynamicID: " + std::to_string(CPU::dynamicID) << std::endl;
 
         this->_id=CPU::dynamicID;
         CPU::dynamicID++;
@@ -26,6 +26,7 @@ void CPU::setProcess(std::shared_ptr<Process> process){
     else {
         this->_process= process;
     }
+    
     
 
     this->status = (process == nullptr) ? CPU::READY : CPU::BUSY;

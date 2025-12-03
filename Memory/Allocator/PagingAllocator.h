@@ -5,6 +5,8 @@
 #include "../../Process/Process.h"
 #include <cstdio>
 #include <cstdlib>
+// #include <chrono>
+// #include <thread>
 #include <fstream>
 #include <iostream>
 #include <unordered_map>
@@ -13,7 +15,7 @@
 class AAllocator;
 class PagingAllocator : public AAllocator{
     public:
-        PagingAllocator(int);
+        PagingAllocator(int, int);
         ~PagingAllocator() = default;
 
         bool allocate(std::shared_ptr<Process> ) override;
@@ -23,6 +25,7 @@ class PagingAllocator : public AAllocator{
         void vmstat() override;
     private:
         int _maxMemory;
+        int _memPerFrame;
         std::queue<int> _freeFrameQueue;
         std::unordered_map<std::string, std::vector<int>> _pageTable;
         int _pagesIn = 0;

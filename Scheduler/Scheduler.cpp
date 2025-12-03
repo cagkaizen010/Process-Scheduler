@@ -44,7 +44,8 @@ void Scheduler::initialize(int cpuNum, std::string scheduler,
     _staticSchedulerPtr->_memoryManager= new MemoryManager(
         maxOverallmem, 
         minMemPerProc/memPerFrame, 
-        maxMemPerProc/memPerFrame 
+        maxMemPerProc/memPerFrame, 
+        memPerFrame
     );
 
 }
@@ -73,7 +74,7 @@ void Scheduler::schedulerRun() {
                 // p->generateInstruction(this->minIns, this->maxIns);
                 // this->addProcess(p);
 
-                createProcess("p_" + std::to_string(randNum), 2);
+                createProcess("p_" + std::to_string(randNum), maxMemPerProc);
                 randNum++;
             }
             lastCycle = currentCycle;

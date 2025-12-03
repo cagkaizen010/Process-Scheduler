@@ -5,6 +5,8 @@
 #include "../../Process/Process.h"
 
 #include <memory>
+#include <chrono>
+#include <thread>
 
 enum AllocatorType{
     Flat, Paging

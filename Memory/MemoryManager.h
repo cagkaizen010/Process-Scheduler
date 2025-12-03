@@ -9,7 +9,7 @@
 
 class MemoryManager{
     public:
-        MemoryManager(int, int, int);
+        MemoryManager(int, int, int, int);
         ~MemoryManager() = default;
 
         bool allocate(std::shared_ptr<Process> process);

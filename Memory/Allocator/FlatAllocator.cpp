@@ -58,18 +58,14 @@ bool FlatAllocator::allocate(std::shared_ptr<Process> process){
                                 std::make_pair(this->_memory.at(i).second.second, 
                                     this->_memory.at(i).second.second + reqMem)));
 
-                    std::cout << "Allocation success. Inserting into Address: " << i+1 << std::endl;
+                    // std::cout << "Allocation success. Inserting into Address: " << i+1 << std::endl;
                     return true;
                 }
             }
             if (this->_memory.size() > 0){
                 int i = rand() % this->_memory.size();
-                // std::cout << i << std::endl;
-                // std::cout << "this->_memory.size(): " <<this->_memory.front().first->getName() << std::endl;
-                // std::cout << "this->_memory.size(): " <<this->_memory.size() << std::endl;
-                // std::cout << "Writing " << this->_memory.at(i).first->getCPUCoreID() << std::endl;
-                // if (this->_memory.at(i).first->getCPUCoreID() == -1){
-                    std::cout << "Writing into backing store.." << std::endl;
+
+                    // std::cout << "Writing into backing store.." << std::endl;
                     this->writeBackingStore(this->_memory.at(i).first);
                     this->_memory.erase(this->_memory.begin() + i);
                 // }
@@ -158,7 +154,7 @@ void FlatAllocator::printMem() {
 }
 void FlatAllocator::printProcesses() {
     std::vector<std::string> processNameListOutputStrings;
-    int total;
+    int total = 0;
 
     for (std::pair<std::shared_ptr<Process>, std::pair<int,int>> key : this->_memory){
         processNameListOutputStrings.push_back(key.first->getName() + 
@@ -166,11 +162,12 @@ void FlatAllocator::printProcesses() {
 
         total += key.second.second - key.second.first;
         std::cout << key.first->getName();
+        std::cout << "key: " << key.first;
     }
 
     std::cout << "-------------" << std::endl;
-    std::cout << "Memory Usage: " << total << " / " << this->_maxMemory*1024<< std::endl;
-    std::cout << "Memory Util: " << ((float)total / (this->_maxMemory*1024)) * 100 << "%" << std::endl;
+    std::cout << "Memory Usage: " << total*1024 << " / " << this->_maxMemory*1024<< std::endl;
+    std::cout << "Memory Util: " << ((float)total*1024 / (this->_maxMemory*1024)) * 100 << "%" << std::endl;
     
     std::cout << "Processes and memory usage" <<std::endl;
 
@@ -181,17 +178,17 @@ void FlatAllocator::printProcesses() {
     
 }
 void FlatAllocator::vmstat() {
-    int usedMemory = 0;
+    // int usedMemory = 0;
     int activeMemory = 0;
-    if (_memory.size() >0)
-        usedMemory = _memory[_memory.size()-1].second.second - _memory[0].second.first;
+    // if (_memory.size() >0)
+    //     usedMemory = _memory[_memory.size()-1].second.second - _memory[0].second.first;
 
     for ( std::pair<std::shared_ptr<Process>, std::pair<int, int>> key : this->_memory)
         activeMemory += key.second.second - key.second.first;
     
     std::cout << _maxMemory * 1024 << " bytes " << "total memory" << std::endl;
-    std::cout <<  usedMemory * 1024 << " bytes " << "used memory" << std::endl;
-    std::cout << (_maxMemory-usedMemory) *1024 << " bytes " << "free memory" << std::endl;
+    std::cout <<  activeMemory* 1024 << " bytes " << "used memory" << std::endl;
+    std::cout << (_maxMemory-activeMemory) *1024 << " bytes " << "free memory" << std::endl;
 
 
 }
